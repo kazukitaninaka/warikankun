@@ -10,7 +10,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <Heading as="h1">割り勘くん💸</Heading>
           </Box>
         </header>
-        <Box flex="1">
+        <Box flex="1" p={3}>
           <main>{children}</main>
         </Box>
         <footer>
