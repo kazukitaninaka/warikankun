@@ -1,12 +1,14 @@
 import React, { useState, FC } from "react";
 import { Input, Text, Button, Box, Flex } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
+import { useInsertEventMutation } from "../generated/graphql";
 
 const Create: FC = () => {
   const [participants, setParticipants] = useState<{ name: string }[]>([
     { name: "" },
   ]);
   const [eventName, setEventName] = useState<string>("");
+  const [insertEvent, { loading: isInserting }] = useInsertEventMutation();
 
   const addParticipant = () => {
     setParticipants((prev) => [...prev, { name: "" }]);
@@ -28,6 +30,16 @@ const Create: FC = () => {
       if (prev.length === 1) return prev;
       return prev.filter((_, i) => i !== index);
     });
+  };
+
+  const onShare = () => {
+    insertEvent({
+      variables: {
+        eventName,
+        participants: participants.filter((participant) => participant.name), // nameが空のものは除く
+      },
+    });
+    alert("success");
   };
 
   return (
@@ -61,8 +73,8 @@ const Create: FC = () => {
         </Button>
       </Box>
       <Box textAlign="center" mt="10">
-        <Button bgColor="green.400" color="white">
-          グループに共有
+        <Button bgColor="green.400" color="white" onClick={onShare}>
+          {isInserting ? "イベント作成中..." : "グループに共有"}
         </Button>
       </Box>
     </div>
