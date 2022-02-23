@@ -41,7 +41,11 @@ const Event = () => {
     <div>
       <Text fontSize="large">イベント名：{event?.name}</Text>
       <Flex justifyContent="space-evenly" mt="3">
-        <Button bgColor="green.500" color="white">
+        <Button
+          bgColor="green.500"
+          color="white"
+          onClick={() => router.push(`${id}/add`)}
+        >
           支払いを追加
         </Button>
         <Button bgColor="blue.500" color="white">
