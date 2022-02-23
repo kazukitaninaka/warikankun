@@ -12,9 +12,9 @@ import {
 function MyApp({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({
     link: new HttpLink({
-      uri: process.env.GRAPHQL_ENDPOINT,
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
       headers: {
-        "x-hasura-admin-secret": process.env.X_HASURA_ADMIN_SECRET,
+        "x-hasura-admin-secret": process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET,
       },
     }),
     cache: new InMemoryCache(),
