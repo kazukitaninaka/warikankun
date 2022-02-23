@@ -1,0 +1,19 @@
+mutation insertPayment(
+  $amount: Int!
+  $eventId: uuid!
+  $name: String!
+  $whoPaid: Int!
+  $whoShouldPay: [payment_participant_insert_input!]!
+) {
+  insert_payments_one(
+    object: {
+      amount: $amount
+      eventId: $eventId
+      name: $name
+      whoPaid: $whoPaid
+      whoShouldPay: { data: $whoShouldPay }
+    }
+  ) {
+    id
+  }
+}
