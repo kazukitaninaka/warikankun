@@ -10,10 +10,10 @@ module.exports = {
       },
     },
   ],
-  documents: ["./graphql/*.graphql"],
+  documents: ["./src/graphql/*.graphql"],
   overwrite: true,
   generates: {
-    "./generated/graphql.ts": {
+    "./src/generated/graphql.ts": {
       plugins: [
         "typescript",
         "typescript-operations",
