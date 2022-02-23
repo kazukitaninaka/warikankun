@@ -4,7 +4,9 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { useInsertEventMutation } from '../generated/graphql';
 
 const Create: FC = () => {
-  const [participants, setParticipants] = useState<{ name: string }[]>([{ name: '' }]);
+  const [participants, setParticipants] = useState<{ name: string }[]>([
+    { name: '' },
+  ]);
   const [eventName, setEventName] = useState<string>('');
   const [insertEvent, { loading: isInserting }] = useInsertEventMutation();
 
@@ -12,7 +14,10 @@ const Create: FC = () => {
     setParticipants((prev) => [...prev, { name: '' }]);
   };
 
-  const setParticipantName = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const setParticipantName = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setParticipants((prev) => {
       const newParticipants = [...prev];
       newParticipants[index] = { name: e.target.value };

@@ -1,7 +1,12 @@
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import Layout from '../components/Layout';
-import { ApolloClient, InMemoryCache, HttpLink, ApolloProvider } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  ApolloProvider,
+} from '@apollo/client';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({

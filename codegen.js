@@ -4,7 +4,8 @@ module.exports = {
       'https://warikankun.hasura.app/v1/graphql': {
         headers: {
           // TODO: ハードコードすればうまくいく
-          'x-hasura-admin-secret': process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET,
+          'x-hasura-admin-secret':
+            process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET,
         },
       },
     },
@@ -13,7 +14,11 @@ module.exports = {
   overwrite: true,
   generates: {
     './src/generated/graphql.ts': {
-      plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
+      plugins: [
+        'typescript',
+        'typescript-operations',
+        'typescript-react-apollo',
+      ],
       config: {
         skipTypename: false,
         withHooks: true,

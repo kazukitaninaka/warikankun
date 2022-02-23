@@ -1,4 +1,14 @@
-import { Spinner, Text, Center, Flex, Button, Table, Tbody, Tr, Td } from '@chakra-ui/react';
+import {
+  Spinner,
+  Text,
+  Center,
+  Flex,
+  Button,
+  Table,
+  Tbody,
+  Tr,
+  Td,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useQueryEventByIdQuery } from '../../../generated/graphql';
 import { formatNumberToJPY } from '../../../utils';
@@ -19,7 +29,9 @@ const Event = () => {
   }
 
   if (error) {
-    return <Text>エラーが発生しました。時間を置いて再度アクセスしてください。</Text>;
+    return (
+      <Text>エラーが発生しました。時間を置いて再度アクセスしてください。</Text>
+    );
   }
 
   const event = data?.events[0];
