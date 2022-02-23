@@ -1,24 +1,19 @@
 module.exports = {
   schema: [
     {
-      "https://warikankun.hasura.app/v1/graphql": {
+      'https://warikankun.hasura.app/v1/graphql': {
         headers: {
           // TODO: ハードコードすればうまくいく
-          "x-hasura-admin-secret":
-            process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET,
+          'x-hasura-admin-secret': process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET,
         },
       },
     },
   ],
-  documents: ["./src/graphql/*.graphql"],
+  documents: ['./src/graphql/*.graphql'],
   overwrite: true,
   generates: {
-    "./src/generated/graphql.ts": {
-      plugins: [
-        "typescript",
-        "typescript-operations",
-        "typescript-react-apollo",
-      ],
+    './src/generated/graphql.ts': {
+      plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
       config: {
         skipTypename: false,
         withHooks: true,
@@ -26,8 +21,8 @@ module.exports = {
         withComponent: false,
       },
     },
-    "./graphql.schema.json": {
-      plugins: ["introspection"],
+    './graphql.schema.json': {
+      plugins: ['introspection'],
     },
   },
 };

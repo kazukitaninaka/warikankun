@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import React from 'react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
