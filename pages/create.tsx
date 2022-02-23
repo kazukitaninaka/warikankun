@@ -2,10 +2,11 @@ import React, { useState, FC } from "react";
 import { Input, Text, Button, Box, Flex } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 
-const initialMembers = [{ name: "" }];
-
 const Create: FC = () => {
-  const [participants, setParticipants] = useState(initialMembers);
+  const [participants, setParticipants] = useState<{ name: string }[]>([
+    { name: "" },
+  ]);
+  const [eventName, setEventName] = useState<string>("");
 
   const addParticipant = () => {
     setParticipants((prev) => [...prev, { name: "" }]);
@@ -34,7 +35,12 @@ const Create: FC = () => {
       <Text fontSize="lg" fontWeight="bold">
         新規割り勘イベント作成
       </Text>
-      <Input placeholder="イベント名" mt="2"></Input>
+      <Input
+        placeholder="イベント名"
+        value={eventName}
+        onChange={(e) => setEventName(e.target.value)}
+        mt="2"
+      ></Input>
       <Text fontSize="lg" fontWeight="bold" mt="5">
         割り勘参加者
       </Text>
