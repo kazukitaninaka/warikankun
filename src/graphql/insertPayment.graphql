@@ -2,7 +2,7 @@ mutation insertPayment(
   $amount: Int!
   $eventId: uuid!
   $name: String!
-  $whoPaid: Int!
+  $whoPaidId: Int!
   $whoShouldPay: [payment_participant_insert_input!]!
 ) {
   insert_payments_one(
@@ -10,7 +10,7 @@ mutation insertPayment(
       amount: $amount
       eventId: $eventId
       name: $name
-      whoPaid: $whoPaid
+      whoPaidId: $whoPaidId
       whoShouldPay: { data: $whoShouldPay }
     }
   ) {
