@@ -73,7 +73,7 @@ const Event = () => {
             </Tr>
             <Tr>
               <Td>支払った人</Td>
-              <Td>{payment.whoPaid}</Td>
+              <Td>{payment.whoPaid.name}</Td>
             </Tr>
             <Tr>
               <Td>金額</Td>
