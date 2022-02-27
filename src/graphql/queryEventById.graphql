@@ -7,12 +7,15 @@ query queryEventById($eventId: uuid!) {
       name
       amount
       createdAt
-      whoPaid
       whoShouldPay {
         participant {
           id
           name
         }
+      }
+      whoPaid {
+        id
+        name
       }
     }
     payments_aggregate {
