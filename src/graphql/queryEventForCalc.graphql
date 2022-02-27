@@ -1,0 +1,33 @@
+query queryEventForCalc($eventId: uuid!) {
+  events(where: { id: { _eq: $eventId } }) {
+    id
+    name
+    payments {
+      id
+      name
+      amount
+      createdAt
+      whoShouldPay {
+        participant {
+          id
+          name
+        }
+      }
+      whoPaid {
+        id
+        name
+      }
+    }
+    payments_aggregate {
+      aggregate {
+        sum {
+          amount
+        }
+      }
+    }
+    participants {
+      name
+      id
+    }
+  }
+}
