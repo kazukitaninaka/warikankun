@@ -48,7 +48,11 @@ const Event = () => {
         >
           支払いを追加
         </Button>
-        <Button bgColor="blue.500" color="white">
+        <Button
+          bgColor="blue.500"
+          color="white"
+          onClick={() => router.push(`${id}/calc`)}
+        >
           精算
         </Button>
       </Flex>
