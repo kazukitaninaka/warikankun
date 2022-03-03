@@ -1,9 +1,13 @@
 import { Box, Center, Spinner, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useQueryEventForCalcQuery } from '../../../generated/graphql';
+import { useQueryResultQuery } from '../../../generated/graphql';
 
 const Calc = () => {
-  const { loading, error, data } = useCalc();
+  const router = useRouter();
+  const { id } = router.query;
+  const { loading, error, data } = useQueryResultQuery({
+    variables: { eventId: id },
+  });
 
   if (loading) {
     return (
@@ -14,29 +18,37 @@ const Calc = () => {
   }
 
   if (error) {
+    console.log(error);
     return (
       <Text>エラーが発生しました。時間を置いて再度アクセスしてください。</Text>
     );
   }
 
-  const event = data?.events[0];
-  const sumPrice = event?.payments_aggregate.aggregate?.sum?.amount;
+  const result = data?.QueryResult;
 
   return (
     <>
       <Text textAlign="center" fontSize="2xl" mb="5">
         精算
       </Text>
-      {event?.participants.map((participant) => {
+      {result?.transactions.map((transaction, index) => {
         return (
-          <div key={participant.id}>
+          <div key={`transaction-${index}`}>
             <Box bgColor="gray.100">
               <Text p="1.5">
-                {participant.name} (支払うべき合計金額：1000円)
+                {transaction.from.name} (支払うべき合計金額：1000円)
               </Text>
             </Box>
             <Box>
-              <Text></Text>
+              {transaction.to.length === 0 ? (
+                <Text>精算なし</Text>
+              ) : (
+                transaction.to.map((el) => (
+                  <Text key={el.id}>
+                    {el.name}に{el.amount}円
+                  </Text>
+                ))
+              )}
             </Box>
           </div>
         );
@@ -47,12 +59,23 @@ const Calc = () => {
 
 export default Calc;
 
-const useCalc = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  const { loading, error, data } = useQueryEventForCalcQuery({
-    variables: { eventId: id },
-  });
-
-  return { loading, error, data };
+type Data = {
+  id: string;
+  name: string;
+  amount: number;
+  participants: {
+    id: number;
+    name: string;
+    paymentMessage: string;
+  }[];
 };
+
+// const useCalc = () => {
+//   const router = useRouter();
+//   const { id } = router.query;
+//   const { loading, error, data } = useQueryResultQuery({
+//     variables: { eventId: id },
+//   });
+
+//   return { loading, error, data };
+// };
