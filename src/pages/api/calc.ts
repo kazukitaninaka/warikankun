@@ -1,6 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+type Res = {
+  id: string;
+  name: string;
+  sumPrice: number;
+  transactions: Transaction[];
+};
+
 type Transaction = {
   from: {
     id: number;
@@ -9,8 +16,8 @@ type Transaction = {
   to: {
     id: number;
     name: string;
-  };
-  amount: number;
+    amount: number;
+  }[];
 };
 
 type FetchEventResponse = {
@@ -21,10 +28,19 @@ type Event = {
   id: string;
   name: string;
   payments: Payment[];
-  participants: {
-    id: number;
-    name: string;
-  }[];
+  participants: Participant[];
+  payments_aggregate: {
+    aggregate: {
+      sum: {
+        amount: number;
+      };
+    };
+  };
+};
+
+type Participant = {
+  id: number;
+  name: string;
 };
 
 type Payment = {
@@ -112,17 +128,21 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
   return participantBalances;
 };
 
-const resolveBlance = (participantBalances: ParticipantBalance[]) => {
-  const transactions: Transaction[] = [];
-  let _participantBalances = participantBalances;
+const resolveBlance = (
+  participantBalances: ParticipantBalance[],
+  participants: Participant[],
+) => {
+  let transactions: Transaction[] = participants.map((participant) => ({
+    from: { id: participant.id, name: participant.name },
+    to: [],
+  }));
+  let _participantBalances = [...participantBalances];
   while (true) {
     // sort participantBalances by descending order
     _participantBalances.sort((a, b) => b.balance - a.balance);
-    console.log(_participantBalances);
 
     const paidTooMuch = _participantBalances[0]; // 一番多めに払った人
     const paidLess = _participantBalances[_participantBalances.length - 1]; // 一番払っていない人
-    console.log(paidTooMuch, paidLess);
 
     if (paidTooMuch.balance === 0 || paidLess.balance === 0) break;
 
@@ -131,16 +151,28 @@ const resolveBlance = (participantBalances: ParticipantBalance[]) => {
       Math.abs(paidLess.balance),
     );
 
-    transactions.push({
-      from: { id: paidLess.id, name: paidLess.name },
-      to: { id: paidTooMuch.id, name: paidTooMuch.name },
-      amount: transactionAmount,
-    });
+    const indexOfWhoGetsRefunded = transactions.findIndex(
+      (transaction) => transaction.from.id === paidLess.id,
+    );
+
+    // transactionsのtoに支払い先と支払額を追加
+    transactions[indexOfWhoGetsRefunded] = {
+      ...transactions[indexOfWhoGetsRefunded],
+      to: [
+        ...transactions[indexOfWhoGetsRefunded].to,
+        {
+          id: paidTooMuch.id,
+          name: paidTooMuch.name,
+          amount: transactionAmount,
+        },
+      ],
+    };
 
     _participantBalances[0].balance -= transactionAmount;
     _participantBalances[_participantBalances.length - 1].balance +=
       transactionAmount;
   }
+
   return transactions;
 };
 
@@ -148,22 +180,29 @@ const calcTransaction = (event: Event) => {
   // TODO: balanceがゼロサムにならない点を直す（割り勘で割り切れない分の処理）
   // (そんな気にならない程度の差ではあるかも)
   const participantBalances = calcBalance(event);
-  const transactions = resolveBlance(participantBalances);
+  const transactions = resolveBlance(participantBalances, event.participants);
 
   return transactions;
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Transaction[]>,
+  res: NextApiResponse<Res>,
 ) {
-  //   const eventId = req.body.input;
-  const eventId = '203ae659-7222-4311-976e-75ed290e0e7b';
+  const { eventId } = req.body.input;
+  //   const eventId = '203ae659-7222-4311-976e-75ed290e0e7b';
   const { events } = await fetchEventForCalc(eventId);
   const event = events[0];
 
   // TODO: 割り勘ロジックを作ってresultで返す
   const transactions = calcTransaction(event);
 
-  res.status(200).json(transactions);
+  const result = {
+    id: event.id,
+    name: event.name,
+    sumPrice: event.payments_aggregate.aggregate.sum.amount,
+    transactions,
+  };
+
+  res.status(200).json(result);
 }
