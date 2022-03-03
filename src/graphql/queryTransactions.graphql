@@ -1,7 +1,0 @@
-query QueryTransactions($eventId: uuid!) {
-  QueryTransactions(eventId: $eventId) {
-    amount
-    from
-    to
-  }
-}
