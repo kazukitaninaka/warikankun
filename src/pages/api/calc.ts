@@ -63,8 +63,6 @@ const fetchEventForCalc = async (
   return await data.json();
 };
 
-const sortByBalance = (arr: ParticipantBalance[]) => {};
-
 const isInWhoShouldPay = (
   whoShouldPay: WhoShouldPay[],
   participantId: number,
