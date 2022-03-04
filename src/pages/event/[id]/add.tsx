@@ -27,7 +27,7 @@ const Add = () => {
 
   const [name, setName] = useState<string>('');
   const [whoPaidId, setWhoPaidId] = useState<number | undefined>(undefined);
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<number>();
   const [whoShouldNotPay, setWhoShouldNotPay] = useState<number[]>([]);
 
   const [insertPayment] = useInsertPaymentMutation();
@@ -103,6 +103,7 @@ const Add = () => {
         </Text>
         <Select
           value={whoPaidId}
+          required
           onChange={(e) => {
             setWhoPaidId(+e.target.value);
           }}
