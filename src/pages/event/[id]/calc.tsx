@@ -36,7 +36,8 @@ const Calc = () => {
           <div key={`transaction-${index}`}>
             <Box bgColor="gray.100">
               <Text p="1.5">
-                {transaction.from.name} (支払うべき合計金額：1000円)
+                {transaction.from.name} (支払うべき合計金額：
+                {transaction.from.shouldHavePaid}円)
               </Text>
             </Box>
             <Box>

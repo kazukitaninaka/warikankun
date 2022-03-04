@@ -62,6 +62,7 @@ type ParticipantBalance = {
   id: number;
   name: string;
   balance: number;
+  shouldHavePaid: number;
 };
 
 const fetchEventForCalc = async (
@@ -91,6 +92,7 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
     id: participant.id,
     name: participant.name,
     balance: 0,
+    shouldHavePaid: 0,
   }));
 
   event.payments.forEach((payment) => {
@@ -100,40 +102,30 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
     const pricePerParticipant = Math.ceil(payment.amount / numParticipants); // 負担者が若干得するためにceil
 
     participantBalances = participantBalances.map((participantBalance) => {
+      const newParticipantBalance = { ...participantBalance };
       // もし払った人だったらbalanceに支払い分を追加
       if (participantBalance.id === payment.whoPaid.id) {
-        // もしwhoShouldPayに支払った人が含まれているなら、支払った額から一人当たりの金額を引く
-        const amount = isInWhoShouldPay(
-          payment.whoShouldPay,
-          participantBalance.id,
-        )
-          ? payment.amount - pricePerParticipant
-          : payment.amount;
-        return {
-          ...participantBalance,
-          balance: participantBalance.balance + amount,
-        };
+        newParticipantBalance.balance += payment.amount;
       }
-      // もし払うべき人だったらdebtの分引く
+      // もし払うべき人だったらdebtの分引く、shouldHavePaidに一人分の金額を追加
       if (isInWhoShouldPay(payment.whoShouldPay, participantBalance.id)) {
-        return {
-          ...participantBalance,
-          balance: participantBalance.balance - pricePerParticipant,
-        };
+        newParticipantBalance.balance -= pricePerParticipant;
+        newParticipantBalance.shouldHavePaid += pricePerParticipant;
       }
-      // それ以外はそのままreturn
-      return participantBalance;
+
+      return newParticipantBalance;
     });
   });
   return participantBalances;
 };
 
-const resolveBlance = (
-  participantBalances: ParticipantBalance[],
-  participants: Participant[],
-) => {
-  let transactions: Transaction[] = participants.map((participant) => ({
-    from: { id: participant.id, name: participant.name },
+const resolveBlance = (participantBalances: ParticipantBalance[]) => {
+  let transactions: Transaction[] = participantBalances.map((participant) => ({
+    from: {
+      id: participant.id,
+      name: participant.name,
+      shouldHavePaid: participant.shouldHavePaid,
+    },
     to: [],
   }));
   let _participantBalances = [...participantBalances];
@@ -180,7 +172,7 @@ const calcTransaction = (event: Event) => {
   // TODO: balanceがゼロサムにならない点を直す（割り勘で割り切れない分の処理）
   // (そんな気にならない程度の差ではあるかも)
   const participantBalances = calcBalance(event);
-  const transactions = resolveBlance(participantBalances, event.participants);
+  const transactions = resolveBlance(participantBalances);
 
   return transactions;
 };
@@ -189,8 +181,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Res>,
 ) {
-  const { eventId } = req.body.input;
-  //   const eventId = '203ae659-7222-4311-976e-75ed290e0e7b';
+  //   const { eventId } = req.body.input;
+  const eventId = '203ae659-7222-4311-976e-75ed290e0e7b';
   const { events } = await fetchEventForCalc(eventId);
   const event = events[0];
 
