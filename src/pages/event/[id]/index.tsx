@@ -1,3 +1,4 @@
+import { DeleteIcon } from '@chakra-ui/icons';
 import {
   Spinner,
   Text,
@@ -8,6 +9,7 @@ import {
   Tbody,
   Tr,
   Td,
+  Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useQueryEventByIdQuery } from '../../../generated/graphql';
@@ -62,37 +64,41 @@ const Event = () => {
       <Text mt="2">支払い総額：{formatNumberToJPY(sumPrice!)}</Text>
 
       {event?.payments.map((payment) => (
-        <Table
-          variant="simple"
-          bgColor="white"
-          borderRadius="md"
+        <Box
           key={payment.id}
+          borderRadius="md"
           shadow="base"
           my="3"
+          bgColor="white"
         >
-          <Tbody>
-            <Tr>
-              <Td>支払い名</Td>
-              <Td>{payment.name}</Td>
-            </Tr>
-            <Tr>
-              <Td>支払った人</Td>
-              <Td>{payment.whoPaid.name}</Td>
-            </Tr>
-            <Tr>
-              <Td>金額</Td>
-              <Td>{formatNumberToJPY(payment.amount)}</Td>
-            </Tr>
-            <Tr>
-              <Td>割り勘対象</Td>
-              <Td>
-                {payment.whoShouldPay.map((_) => (
-                  <span key={_.participant.id}>{_.participant.name}　</span>
-                ))}
-              </Td>
-            </Tr>
-          </Tbody>
-        </Table>
+          <Box textAlign="right">
+            <DeleteIcon w={5} h={5} mt="3" mr="5" />
+          </Box>
+          <Table variant="simple">
+            <Tbody>
+              <Tr>
+                <Td>支払い名</Td>
+                <Td>{payment.name}</Td>
+              </Tr>
+              <Tr>
+                <Td>支払った人</Td>
+                <Td>{payment.whoPaid.name}</Td>
+              </Tr>
+              <Tr>
+                <Td>金額</Td>
+                <Td>{formatNumberToJPY(payment.amount)}</Td>
+              </Tr>
+              <Tr>
+                <Td>割り勘対象</Td>
+                <Td>
+                  {payment.whoShouldPay.map((_) => (
+                    <span key={_.participant.id}>{_.participant.name}　</span>
+                  ))}
+                </Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </Box>
       ))}
     </div>
   );
