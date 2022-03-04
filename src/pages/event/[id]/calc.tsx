@@ -1,6 +1,7 @@
-import { Box, Center, Spinner, Text } from '@chakra-ui/react';
+import { Box, Center, Divider, Spinner, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useQueryResultQuery } from '../../../generated/graphql';
+import { formatNumberToJPY } from '../../../utils';
 
 const Calc = () => {
   const router = useRouter();
@@ -31,6 +32,8 @@ const Calc = () => {
       <Text textAlign="center" fontSize="2xl" mb="5">
         精算
       </Text>
+      <Text fontSize="large">イベント名：{result!.name}</Text>
+      <Text my="2">支払い総額：{formatNumberToJPY(result!.sumPrice)}</Text>
       {result?.transactions.map((transaction, index) => {
         return (
           <div key={`transaction-${index}`}>
@@ -40,7 +43,7 @@ const Calc = () => {
                 {transaction.from.shouldHavePaid}円)
               </Text>
             </Box>
-            <Box>
+            <Box my="2" pl="1">
               {transaction.to.length === 0 ? (
                 <Text>精算なし</Text>
               ) : (
