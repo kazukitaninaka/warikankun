@@ -1,0 +1,19 @@
+query QueryResult($eventId: uuid!) {
+  QueryResult(eventId: $eventId) {
+    id
+    sumPrice
+    name
+    transactions {
+      from {
+        id
+        name
+        shouldHavePaid
+      }
+      to {
+        id
+        name
+        amount
+      }
+    }
+  }
+}
