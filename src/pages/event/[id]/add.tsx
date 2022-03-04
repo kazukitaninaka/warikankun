@@ -121,7 +121,7 @@ const Add = () => {
           required
           value={amount}
           type="number"
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => setAmount(Number(e.target.value))}
         />
         <Text mb="1" mt="3">
           割り勘対象者
