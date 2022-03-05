@@ -10,10 +10,16 @@ import {
   Tr,
   Td,
   Box,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useQueryEventByIdQuery } from '../../../generated/graphql';
+import {
+  useDeletePaymentMutation,
+  useQueryEventByIdQuery,
+} from '../../../generated/graphql';
 import { formatNumberToJPY } from '../../../utils';
+import Modal from '../../../components/Modal';
+import { useState } from 'react';
 
 const Event = () => {
   const router = useRouter();
@@ -21,6 +27,10 @@ const Event = () => {
   const { loading, error, data } = useQueryEventByIdQuery({
     variables: { eventId: id },
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+  const [Mutation, { loading: isDeleting, error: deleteError }] =
+    useDeletePaymentMutation();
 
   if (loading) {
     return (
@@ -39,8 +49,24 @@ const Event = () => {
   const event = data?.events[0];
   const sumPrice = event?.payments_aggregate.aggregate?.sum?.amount;
 
+  const deletePayment = () => {
+    if (deleteTarget) {
+      Mutation({ variables: { paymentId: deleteTarget } }).then(() => {
+        router.reload();
+      });
+    }
+  };
+
   return (
-    <div>
+    <>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        onClick={deletePayment}
+        setDeleteTarget={setDeleteTarget}
+        loading={isDeleting}
+        error={deleteError}
+      />
       <Text fontSize="large">イベント名：{event?.name}</Text>
       <Flex justifyContent="space-evenly" mt="3">
         <Button
@@ -72,7 +98,16 @@ const Event = () => {
           bgColor="white"
         >
           <Box textAlign="right">
-            <DeleteIcon w={5} h={5} mt="3" mr="5" />
+            <DeleteIcon
+              w={5}
+              h={5}
+              mt="3"
+              mr="5"
+              onClick={() => {
+                setDeleteTarget(payment.id);
+                onOpen();
+              }}
+            />
           </Box>
           <Table variant="simple">
             <Tbody>
@@ -100,7 +135,7 @@ const Event = () => {
           </Table>
         </Box>
       ))}
-    </div>
+    </>
   );
 };
 
