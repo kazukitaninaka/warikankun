@@ -62,24 +62,3 @@ const Calc = () => {
 };
 
 export default Calc;
-
-type Data = {
-  id: string;
-  name: string;
-  amount: number;
-  participants: {
-    id: number;
-    name: string;
-    paymentMessage: string;
-  }[];
-};
-
-// const useCalc = () => {
-//   const router = useRouter();
-//   const { id } = router.query;
-//   const { loading, error, data } = useQueryResultQuery({
-//     variables: { eventId: id },
-//   });
-
-//   return { loading, error, data };
-// };
