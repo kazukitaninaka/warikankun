@@ -1,8 +1,8 @@
-query QueryResult($eventId: uuid!) {
+query Result($eventId: uuid!) {
   QueryResult(eventId: $eventId) {
     id
-    sumPrice
     name
+    sumPrice
     transactions {
       from {
         id
@@ -10,9 +10,9 @@ query QueryResult($eventId: uuid!) {
         shouldHavePaid
       }
       to {
-        id
-        name
         amount
+        name
+        participantId: id #field名はidだとキャッシュが走り、resultがおかしくなるためエイリアスを使う
       }
     }
   }
