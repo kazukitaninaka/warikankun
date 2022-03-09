@@ -52,6 +52,7 @@ const Event = () => {
   const deletePayment = () => {
     if (deleteTarget) {
       Mutation({ variables: { paymentId: deleteTarget } }).then(() => {
+        onClose();
         router.reload();
       });
     }
