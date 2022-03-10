@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading } from '@chakra-ui/react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -13,9 +13,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <Box flex="1" p={3}>
           <main>{children}</main>
         </Box>
-        <footer>
-          <Text>Footer</Text>
-        </footer>
       </Flex>
     </Box>
   );
