@@ -1,12 +1,12 @@
 import { Box, Center, Divider, Spinner, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useQueryResultQuery } from '../../../generated/graphql';
+import { useResultQuery } from '../../../generated/graphql';
 import { formatNumberToJPY } from '../../../utils';
 
 const Calc = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { loading, error, data } = useQueryResultQuery({
+  const { loading, error, data } = useResultQuery({
     variables: { eventId: id },
   });
 
@@ -48,7 +48,7 @@ const Calc = () => {
                 <Text>精算なし</Text>
               ) : (
                 transaction.to.map((el) => (
-                  <Text key={el.id}>
+                  <Text key={el.participantId}>
                     {el.name}に{el.amount}円
                   </Text>
                 ))
