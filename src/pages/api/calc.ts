@@ -181,8 +181,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Res>,
 ) {
-  //   const { eventId } = req.body.input;
-  const eventId = '203ae659-7222-4311-976e-75ed290e0e7b';
+  const { eventId } = req.body.input;
   const { events } = await fetchEventForCalc(eventId);
   const event = events[0];
 
