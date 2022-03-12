@@ -1,9 +1,10 @@
-import React, { useState, FC } from 'react';
+import React, { useState, useRef } from 'react';
 import { Input, Text, Button, Box, Flex } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useInsertEventMutation } from '../generated/graphql';
+import { NextPage } from 'next';
 
-const Create: FC = () => {
+const Create: NextPage = () => {
   const [participants, setParticipants] = useState<{ name: string }[]>([
     { name: '' },
   ]);
@@ -51,6 +52,7 @@ const Create: FC = () => {
         placeholder="イベント名"
         value={eventName}
         onChange={(e) => setEventName(e.target.value)}
+        required
         mt="2"
       ></Input>
       <Text fontSize="lg" fontWeight="bold" mt="5">
@@ -63,8 +65,9 @@ const Create: FC = () => {
             value={participant.name}
             onChange={(e) => setParticipantName(index, e)}
             mt={2}
+            autoFocus
           />
-          <CloseIcon mt="2" onClick={() => deleteParticipant(index)} />
+          <CloseIcon mt="2" mr="2" onClick={() => deleteParticipant(index)} />
         </Flex>
       ))}
       <Box textAlign="center">
