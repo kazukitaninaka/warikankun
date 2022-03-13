@@ -13,6 +13,7 @@ import {
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import {
+  Payment_Participant_Insert_Input,
   useInsertPaymentMutation,
   useQueryEventForAddQuery,
 } from '../../../generated/graphql';
@@ -57,22 +58,22 @@ const Add = () => {
 
   const addPayment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!amount || !whoPaidId || !event) return;
 
     // whoShouldNotPayを元にmutateする形にwhoShouldPayを整形
-    const whoShouldPay = event!.participants
-      .map((participant, index) => {
-        if (!whoShouldNotPay.includes(index)) {
-          return { participantId: participant.id }; // if内に入らない場合undefinedを返すので
-        }
-      })
-      .filter((participant) => participant); // undefinedをfilterで弾く
+    let whoShouldPay: Payment_Participant_Insert_Input[] = [];
+    event.participants.forEach((participant, index) => {
+      if (!whoShouldNotPay.includes(index)) {
+        whoShouldPay.push({ participantId: participant.id });
+      }
+    });
 
     insertPayment({
       variables: {
         eventId: id,
         name,
         amount,
-        whoPaidId: whoPaidId!,
+        whoPaidId,
         whoShouldPay,
       },
     }).then(() => {
