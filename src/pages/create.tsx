@@ -10,8 +10,6 @@ const Create: NextPage = () => {
     { name: '' },
   ]);
   const [eventName, setEventName] = useState<string>('');
-  const [isEventCreated, setIsEventCreated] = useState<boolean>(false);
-  const [eventId, setEventId] = useState<string>('');
   const [insertEvent, { loading: isInserting }] = useInsertEventMutation();
   const { liff } = useLiff();
 
@@ -43,34 +41,20 @@ const Create: NextPage = () => {
         eventName,
         participants: participants.filter((participant) => participant.name), // nameが空のものは除く
       },
-    })
-      .then((res) => {
-        setIsEventCreated(true);
-        setEventId(res.data?.insert_events_one?.id);
-      })
-      .catch(() => {
-        throw new Error('Error: Could not create a new event.');
-      });
-  };
-
-  const handleShareClick = () => {
-    if (!liff) return;
-    if (liff.isApiAvailable('shareTargetPicker')) {
-      console.log('hoge');
+    }).then((res) => {
+      const id = res.data?.insert_events_one?.id;
+      const name = res.data?.insert_events_one?.name;
       liff
-        .shareTargetPicker(
-          [
-            {
-              type: 'text',
-              text: `割り勘イベント「${eventName}」が作成されました！\n以下のリンクから支払いを追加していきましょう！\n${process.env.NEXT_PUBLIC_DEV_LINK}/event/${eventId}`,
-            },
-          ],
-          { isMultiple: true },
-        )
-        .then((res) => {
-          console.log(res);
+        ?.sendMessages([
+          {
+            type: 'text',
+            text: `割り勘イベント「${name}」が作成されました！\n以下のリンクから支払いを追加していきましょう！\nhttps://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}`,
+          },
+        ])
+        .then(() => {
+          liff.closeWindow();
         });
-    }
+    });
   };
 
   return (
@@ -109,25 +93,9 @@ const Create: NextPage = () => {
         <Button
           colorScheme="teal"
           onClick={handleCreateEventClick}
-          disabled={isInserting || isEventCreated}
+          disabled={isInserting}
         >
-          {isInserting
-            ? 'イベント作成中...'
-            : isEventCreated
-            ? 'イベント作成完了'
-            : 'イベント作成'}
-        </Button>
-      </Center>
-      <Center mb="3">
-        <Text>イベントを作成したらグループのみんなにリンクを共有しよう</Text>
-      </Center>
-      <Center>
-        <Button
-          colorScheme="green"
-          onClick={handleShareClick}
-          disabled={!isEventCreated}
-        >
-          LINEでグループに共有
+          {isInserting ? 'イベント作成中...' : 'イベント作成'}
         </Button>
       </Center>
     </div>
