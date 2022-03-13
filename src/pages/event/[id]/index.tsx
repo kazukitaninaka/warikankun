@@ -20,6 +20,7 @@ import {
 import { formatNumberToJPY } from '../../../utils';
 import Modal from '../../../components/Modal';
 import { useState } from 'react';
+import useLiff from '../../../hooks/useLiff';
 
 const Event = () => {
   const router = useRouter();
@@ -31,6 +32,7 @@ const Event = () => {
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
   const [Mutation, { loading: isDeleting, error: deleteError }] =
     useDeletePaymentMutation();
+  const { liff } = useLiff();
 
   if (loading) {
     return (
@@ -58,6 +60,21 @@ const Event = () => {
     }
   };
 
+  const handleShareClick = () => {
+    if (!liff || !event) return;
+    if (liff.isApiAvailable('shareTargetPicker')) {
+      liff.shareTargetPicker(
+        [
+          {
+            type: 'text',
+            text: `割り勘イベント「${event.name}」が作成されました！\n以下のリンクから支払いを追加していきましょう！\nhttps://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${event.id}`,
+          },
+        ],
+        { isMultiple: true },
+      );
+    }
+  };
+
   return (
     <>
       <Modal
@@ -70,17 +87,13 @@ const Event = () => {
       />
       <Text fontSize="large">イベント名：{event?.name}</Text>
       <Flex justifyContent="space-evenly" mt="3">
-        <Button
-          bgColor="green.500"
-          color="white"
-          onClick={() => router.push(`${id}/add`)}
-        >
+        <Button colorScheme="teal" onClick={() => router.push(`${id}/add`)}>
           支払いを追加
         </Button>
         <Button
-          bgColor="blue.500"
-          color="white"
+          colorScheme="blue"
           onClick={() => router.push(`${id}/calc`)}
+          disabled={!event?.payments.length}
         >
           精算
         </Button>
@@ -89,53 +102,59 @@ const Event = () => {
         今までの支払い情報
       </Text>
       <Text mt="2">支払い総額：{formatNumberToJPY(sumPrice!)}</Text>
-
-      {event?.payments.map((payment) => (
-        <Box
-          key={payment.id}
-          borderRadius="md"
-          shadow="base"
-          my="3"
-          bgColor="white"
-        >
-          <Box textAlign="right">
-            <DeleteIcon
-              w={5}
-              h={5}
-              mt="3"
-              mr="5"
-              onClick={() => {
-                setDeleteTarget(payment.id);
-                onOpen();
-              }}
-            />
+      <Box mb="10">
+        {event?.payments.map((payment) => (
+          <Box
+            key={payment.id}
+            borderRadius="md"
+            shadow="base"
+            my="3"
+            bgColor="white"
+          >
+            <Box textAlign="right">
+              <DeleteIcon
+                w={5}
+                h={5}
+                mt="3"
+                mr="5"
+                onClick={() => {
+                  setDeleteTarget(payment.id);
+                  onOpen();
+                }}
+              />
+            </Box>
+            <Table variant="simple">
+              <Tbody>
+                <Tr>
+                  <Td>支払い名</Td>
+                  <Td>{payment.name}</Td>
+                </Tr>
+                <Tr>
+                  <Td>支払った人</Td>
+                  <Td>{payment.whoPaid.name}</Td>
+                </Tr>
+                <Tr>
+                  <Td>金額</Td>
+                  <Td>{formatNumberToJPY(payment.amount)}</Td>
+                </Tr>
+                <Tr>
+                  <Td>割り勘対象</Td>
+                  <Td>
+                    {payment.whoShouldPay.map((_) => (
+                      <span key={_.participant.id}>{_.participant.name}　</span>
+                    ))}
+                  </Td>
+                </Tr>
+              </Tbody>
+            </Table>
           </Box>
-          <Table variant="simple">
-            <Tbody>
-              <Tr>
-                <Td>支払い名</Td>
-                <Td>{payment.name}</Td>
-              </Tr>
-              <Tr>
-                <Td>支払った人</Td>
-                <Td>{payment.whoPaid.name}</Td>
-              </Tr>
-              <Tr>
-                <Td>金額</Td>
-                <Td>{formatNumberToJPY(payment.amount)}</Td>
-              </Tr>
-              <Tr>
-                <Td>割り勘対象</Td>
-                <Td>
-                  {payment.whoShouldPay.map((_) => (
-                    <span key={_.participant.id}>{_.participant.name}　</span>
-                  ))}
-                </Td>
-              </Tr>
-            </Tbody>
-          </Table>
-        </Box>
-      ))}
+        ))}
+      </Box>
+      <Center>
+        <Button colorScheme="green" onClick={handleShareClick}>
+          このページをLINEでグループに共有
+        </Button>
+      </Center>
     </>
   );
 };
