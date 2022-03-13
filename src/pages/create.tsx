@@ -48,7 +48,12 @@ const Create: NextPage = () => {
         ?.sendMessages([
           {
             type: 'text',
-            text: `割り勘イベント「${name}」が作成されました！\n以下のリンクから支払いを追加していきましょう！\nhttps://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}`,
+            text:
+              `割り勘イベント「${name}」が作成されました！\n` +
+              '以下のリンクから支払いを追加していきましょう！\n' +
+              `https://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}\n` +
+              '---------------\n' +
+              '割り勘くん',
           },
         ])
         .then(() => {
