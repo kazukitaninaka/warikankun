@@ -114,7 +114,7 @@ const Event = () => {
             borderRadius="md"
             shadow="base"
             my="3"
-            bgColor="white"
+            bgColor="gray.50"
           >
             <Box textAlign="right">
               <DeleteIcon
