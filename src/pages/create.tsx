@@ -48,7 +48,12 @@ const Create: NextPage = () => {
         ?.sendMessages([
           {
             type: 'text',
-            text: `割り勘イベント「${name}」が作成されました！\n以下のリンクから支払いを追加していきましょう！\nhttps://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}`,
+            text:
+              `割り勘イベント「${name}」が作成されました！\n` +
+              '以下のリンクから支払いを追加していきましょう！\n' +
+              `https://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}\n` +
+              '---------------\n' +
+              '割り勘くん',
           },
         ])
         .then(() => {
@@ -60,7 +65,7 @@ const Create: NextPage = () => {
   return (
     <div>
       <Text fontSize="lg" fontWeight="bold" mb="2">
-        新規割り勘イベント作成
+        新規割り勘イベント名
       </Text>
       <Input
         placeholder="イベント名"
@@ -79,7 +84,7 @@ const Create: NextPage = () => {
               placeholder="参加者名"
               value={participant.name}
               onChange={(e) => setParticipantName(index, e)}
-              autoFocus
+              autoFocus={index >= 1} // 初回レンダー、すなわちindex0の場合のみfocusしないように
               mb="2"
             />
             <CloseIcon mr="2" onClick={() => deleteParticipant(index)} />

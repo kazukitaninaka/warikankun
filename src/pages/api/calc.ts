@@ -99,7 +99,7 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
     // 支払った人は「支払ったトータル金額」ー「自分が払うべき金額」をプラス
     // whoShouldPayの人たちは「自分が払うべき金額」をマイナス
     const numParticipants = payment.whoShouldPay.length;
-    const pricePerParticipant = Math.ceil(payment.amount / numParticipants); // 負担者が若干得するためにceil
+    const pricePerParticipant = payment.amount / numParticipants; // 負担者が若干得するためにceil
 
     participantBalances = participantBalances.map((participantBalance) => {
       const newParticipantBalance = { ...participantBalance };
@@ -124,7 +124,7 @@ const resolveBlance = (participantBalances: ParticipantBalance[]) => {
     from: {
       id: participant.id,
       name: participant.name,
-      shouldHavePaid: participant.shouldHavePaid,
+      shouldHavePaid: Math.ceil(participant.shouldHavePaid),
     },
     to: [],
   }));
@@ -155,7 +155,7 @@ const resolveBlance = (participantBalances: ParticipantBalance[]) => {
         {
           id: paidTooMuch.id,
           name: paidTooMuch.name,
-          amount: transactionAmount,
+          amount: Math.ceil(transactionAmount),
         },
       ],
     };

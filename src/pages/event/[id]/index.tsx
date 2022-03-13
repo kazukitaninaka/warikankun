@@ -21,6 +21,8 @@ import { formatNumberToJPY } from '../../../utils';
 import Modal from '../../../components/Modal';
 import { useState } from 'react';
 import { liffVar } from '../../../components/LiffProvider';
+import AddWarikankun from '../../../components/AddFriend';
+import useFriendship from '../../../hooks/useFriendship';
 
 const Event = () => {
   const router = useRouter();
@@ -33,6 +35,7 @@ const Event = () => {
   const [Mutation, { loading: isDeleting, error: deleteError }] =
     useDeletePaymentMutation();
   const liff = liffVar();
+  const { isFriend } = useFriendship();
 
   if (loading) {
     return (
@@ -155,14 +158,23 @@ const Event = () => {
           </Box>
         ))}
       </Box>
-      <Center mb="3">
-        <Button colorScheme="green" onClick={handleShareClick}>
-          このページをグループに共有
-        </Button>
-      </Center>
-      <Center>
-        <Text fontSize="sm">グループに共有すれば、みんなが見れて便利！</Text>
-      </Center>
+      <Box mb="5">
+        <Center>
+          <Text fontSize="sm" mb="3">
+            グループに共有すれば、みんなが見れて便利！
+          </Text>
+        </Center>
+        <Center>
+          <Button colorScheme="green" onClick={handleShareClick}>
+            このページをグループに共有
+          </Button>
+        </Center>
+      </Box>
+      {!isFriend && (
+        <Center>
+          <AddWarikankun />
+        </Center>
+      )}
     </>
   );
 };
