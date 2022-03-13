@@ -39,5 +39,4 @@ yarn-error.log*
 *.tsbuildinfo
 
 #graphql generated file
-/src/generated
 graphql.schema.json
