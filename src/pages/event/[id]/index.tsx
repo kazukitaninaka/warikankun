@@ -100,7 +100,7 @@ const Event = () => {
           onClick={() => router.push(`${id}/calc`)}
           disabled={!event?.payments.length}
         >
-          精算
+          現在の精算結果を表示
         </Button>
       </Flex>
       <Text fontSize="large" mt="8">
