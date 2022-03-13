@@ -2,7 +2,7 @@ import { Box, Text, Button } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const AddWarikankun = () => {
+const AddFriend = () => {
   const router = useRouter();
   return (
     <Box>
@@ -18,4 +18,4 @@ const AddWarikankun = () => {
   );
 };
 
-export default AddWarikankun;
+export default AddFriend;

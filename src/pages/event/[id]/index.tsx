@@ -21,7 +21,7 @@ import { formatNumberToJPY } from '../../../utils';
 import Modal from '../../../components/Modal';
 import { useState } from 'react';
 import { liffVar } from '../../../components/LiffProvider';
-import AddWarikankun from '../../../components/addWarikankun';
+import AddWarikankun from '../../../components/AddFriend';
 import useFriendship from '../../../hooks/useFriendship';
 
 const Event = () => {
