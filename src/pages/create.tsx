@@ -65,7 +65,7 @@ const Create: NextPage = () => {
   return (
     <div>
       <Text fontSize="lg" fontWeight="bold" mb="2">
-        新規割り勘イベント作成
+        新規割り勘イベント名
       </Text>
       <Input
         placeholder="イベント名"
@@ -84,7 +84,7 @@ const Create: NextPage = () => {
               placeholder="参加者名"
               value={participant.name}
               onChange={(e) => setParticipantName(index, e)}
-              autoFocus
+              autoFocus={index >= 1} // 初回レンダー、すなわちindex0の場合のみfocusしないように
               mb="2"
             />
             <CloseIcon mr="2" onClick={() => deleteParticipant(index)} />
