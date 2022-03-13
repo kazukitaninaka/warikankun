@@ -69,7 +69,7 @@ const fetchEventForCalc = async (
   eventId: string,
 ): Promise<FetchEventResponse> => {
   const data = await fetch(
-    `https://warikankun.hasura.app/api/rest/eventForCalc/${eventId}`,
+    `${process.env.NEXT_PUBLIC_GRAPHQL_REST_ENDPOINT}/api/rest/eventForCalc/${eventId}`,
     {
       headers: {
         'x-hasura-admin-secret': process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET!,
