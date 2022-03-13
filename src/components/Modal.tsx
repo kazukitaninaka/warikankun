@@ -36,6 +36,7 @@ const ModalComponent: React.FC<Props> = ({
         setDeleteTarget(null);
         onClose();
       }}
+      size="sm"
     >
       <ModalOverlay />
       <ModalContent>
