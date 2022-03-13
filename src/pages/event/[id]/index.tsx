@@ -67,7 +67,12 @@ const Event = () => {
         [
           {
             type: 'text',
-            text: `割り勘イベント「${event.name}」が作成されました！\n以下のリンクから支払いを追加していきましょう！\nhttps://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${event.id}`,
+            text:
+              `割り勘イベント「${event.name}」が作成されました！\n` +
+              '以下のリンクから支払いを追加していきましょう！\n' +
+              `https://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${event.id}\n` +
+              '---------------\n' +
+              '「割り勘くん」',
           },
         ],
         { isMultiple: true },
@@ -150,10 +155,13 @@ const Event = () => {
           </Box>
         ))}
       </Box>
-      <Center>
+      <Center mb="3">
         <Button colorScheme="green" onClick={handleShareClick}>
           このページをグループに共有
         </Button>
+      </Center>
+      <Center>
+        <Text fontSize="sm">グループに共有すれば、みんなが見れて便利！</Text>
       </Center>
     </>
   );
