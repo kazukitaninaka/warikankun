@@ -7,6 +7,7 @@ import {
   HttpLink,
   ApolloProvider,
 } from '@apollo/client';
+import LiffProvider from '../components/LiffProvider';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({
@@ -21,9 +22,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
       <ApolloProvider client={client}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <LiffProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </LiffProvider>
       </ApolloProvider>
     </ChakraProvider>
   );

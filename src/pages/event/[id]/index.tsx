@@ -20,7 +20,7 @@ import {
 import { formatNumberToJPY } from '../../../utils';
 import Modal from '../../../components/Modal';
 import { useState } from 'react';
-import useLiff from '../../../hooks/useLiff';
+import { liffVar } from '../../../components/LiffProvider';
 
 const Event = () => {
   const router = useRouter();
@@ -32,7 +32,7 @@ const Event = () => {
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
   const [Mutation, { loading: isDeleting, error: deleteError }] =
     useDeletePaymentMutation();
-  const { liff } = useLiff();
+  const liff = liffVar();
 
   if (loading) {
     return (

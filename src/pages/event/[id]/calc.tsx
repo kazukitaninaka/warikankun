@@ -1,7 +1,7 @@
 import { Box, Center, Button, Spinner, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { liffVar } from '../../../components/LiffProvider';
 import { useResultQuery, To, From } from '../../../generated/graphql';
-import useLiff from '../../../hooks/useLiff';
 import { formatNumberToJPY } from '../../../utils';
 
 type TransactionInCalc = {
@@ -17,7 +17,7 @@ const Calc = () => {
   const { loading, error, data } = useResultQuery({
     variables: { eventId: id },
   });
-  const { liff } = useLiff();
+  const liff = liffVar();
 
   if (loading) {
     return (
@@ -39,8 +39,7 @@ const Calc = () => {
   const makeRefundString = (transactions: TransactionInCalc[]) => {
     let refundString = '';
     transactions.forEach((transaction) => {
-      refundString += `${transaction.from.name} (支払うべき金額：
-        ${transaction.from.shouldHavePaid}円)\n`;
+      refundString += `${transaction.from.name} (支払うべき金額: ${transaction.from.shouldHavePaid}円)\n`;
       if (!transaction.to.length) {
         refundString += '　- 精算なし\n';
       } else {
@@ -86,14 +85,14 @@ const Calc = () => {
         精算
       </Text>
       <Text fontSize="large">イベント名：{result!.name}</Text>
-      <Text my="2">支払い総額：{formatNumberToJPY(result!.sumPrice)}</Text>
+      <Text my="2">支払い総額: {formatNumberToJPY(result!.sumPrice)}</Text>
       <Box mb="10">
         {result?.transactions.map((transaction, index) => {
           return (
             <div key={`transaction-${index}`}>
               <Box bgColor="gray.100">
                 <Text p="1.5">
-                  {transaction.from.name} (支払うべき合計金額：
+                  {transaction.from.name} (支払うべき合計金額:
                   {transaction.from.shouldHavePaid}円)
                 </Text>
               </Box>

@@ -3,7 +3,7 @@ import { Input, Text, Button, Box, Flex, Center } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useInsertEventMutation } from '../generated/graphql';
 import { NextPage } from 'next';
-import useLiff from '../hooks/useLiff';
+import { liffVar } from '../components/LiffProvider';
 
 const Create: NextPage = () => {
   const [participants, setParticipants] = useState<{ name: string }[]>([
@@ -11,7 +11,7 @@ const Create: NextPage = () => {
   ]);
   const [eventName, setEventName] = useState<string>('');
   const [insertEvent, { loading: isInserting }] = useInsertEventMutation();
-  const { liff } = useLiff();
+  const liff = liffVar();
 
   const addParticipant = () => {
     setParticipants((prev) => [...prev, { name: '' }]);
