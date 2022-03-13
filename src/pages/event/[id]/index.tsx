@@ -152,7 +152,7 @@ const Event = () => {
       </Box>
       <Center>
         <Button colorScheme="green" onClick={handleShareClick}>
-          このページをLINEでグループに共有
+          このページをグループに共有
         </Button>
       </Center>
     </>
