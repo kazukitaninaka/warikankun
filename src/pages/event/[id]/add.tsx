@@ -92,7 +92,7 @@ const Add = () => {
       </Text>
       <form onSubmit={addPayment}>
         <Text mb="1" mt="3">
-          名前
+          支払い名
         </Text>
         <Input
           required
