@@ -122,7 +122,8 @@ const Add = () => {
         <Input
           required
           value={amount}
-          type="number"
+          type="text"
+          inputMode="numeric"
           onChange={(e) => setAmount(Number(e.target.value))}
         />
         <Text mb="1" mt="3">
