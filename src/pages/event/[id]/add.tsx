@@ -106,7 +106,7 @@ const Add = () => {
           value={whoPaidId}
           required
           onChange={(e) => {
-            setWhoPaidId(+e.target.value);
+            setWhoPaidId(Number(e.target.value));
           }}
           placeholder="支払った人を選択"
         >
