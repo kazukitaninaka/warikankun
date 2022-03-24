@@ -106,7 +106,7 @@ const Add = () => {
           value={whoPaidId}
           required
           onChange={(e) => {
-            setWhoPaidId(+e.target.value);
+            setWhoPaidId(Number(e.target.value));
           }}
           placeholder="支払った人を選択"
         >
@@ -122,7 +122,8 @@ const Add = () => {
         <Input
           required
           value={amount}
-          type="number"
+          type="text"
+          inputMode="numeric"
           onChange={(e) => setAmount(Number(e.target.value))}
         />
         <Text mb="1" mt="3">
