@@ -88,7 +88,7 @@ const Add = () => {
 
   return (
     <>
-      <Text>イベント名：{event?.name}</Text>
+      <Text fontSize="large">イベント名：{event?.name}</Text>
       <Text textAlign="center" fontSize="large">
         支払い情報
       </Text>
