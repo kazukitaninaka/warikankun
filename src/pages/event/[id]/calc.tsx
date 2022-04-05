@@ -81,10 +81,10 @@ const Calc = () => {
 
   return (
     <>
+      <Text fontSize="large">イベント名：{result!.name}</Text>
       <Text textAlign="center" fontSize="2xl" mb="5">
         精算
       </Text>
-      <Text fontSize="large">イベント名：{result!.name}</Text>
       <Text my="2">支払い総額: {formatNumberToJPY(result!.sumPrice)}</Text>
       <Box mb="10">
         {result?.transactions.map((transaction, index) => {

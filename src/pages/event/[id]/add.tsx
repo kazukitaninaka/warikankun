@@ -28,7 +28,7 @@ const Add = () => {
 
   const [name, setName] = useState<string>('');
   const [whoPaidId, setWhoPaidId] = useState<number | undefined>(undefined);
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<string>('');
   const [whoShouldNotPay, setWhoShouldNotPay] = useState<number[]>([]);
 
   const [insertPayment] = useInsertPaymentMutation();
@@ -47,11 +47,13 @@ const Add = () => {
     );
   }
 
-  const handleWhoShouldPay = (index: number, isInWhoShouldNotPay: boolean) => {
-    // whoShouldNotPayにあったら削除、なかったら追加
-    if (isInWhoShouldNotPay) {
+  const handleWhoShouldPay = (index: number, isChecked: boolean) => {
+    if (!event) return;
+    // checkされてればwhoShouldNotPayに追加、なければ削除
+    if (!isChecked) {
       setWhoShouldNotPay((prev) => prev.filter((i) => i !== index));
-    } else {
+    } else if (whoShouldNotPay.length < event.participants.length - 1) {
+      // 全員がwhoShouldNotPayに含まれるケースを避ける
       setWhoShouldNotPay((prev) => [...prev, index]);
     }
   };
@@ -72,7 +74,7 @@ const Add = () => {
       variables: {
         eventId: id,
         name,
-        amount,
+        amount: +amount, // convert string to number
         whoPaidId,
         whoShouldPay,
       },
@@ -86,7 +88,7 @@ const Add = () => {
 
   return (
     <>
-      <Text>イベント名：{event?.name}</Text>
+      <Text fontSize="large">イベント名：{event?.name}</Text>
       <Text textAlign="center" fontSize="large">
         支払い情報
       </Text>
@@ -106,7 +108,7 @@ const Add = () => {
           value={whoPaidId}
           required
           onChange={(e) => {
-            setWhoPaidId(Number(e.target.value));
+            setWhoPaidId(+e.target.value);
           }}
           placeholder="支払った人を選択"
         >
@@ -124,23 +126,23 @@ const Add = () => {
           value={amount}
           type="text"
           inputMode="numeric"
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e) => setAmount(e.target.value)}
         />
         <Text mb="1" mt="3">
           割り勘対象者
         </Text>
         <Box border="1px" borderColor="gray.200" borderRadius="md">
           {event?.participants?.map((participant, index) => {
-            const isInWhoShouldNotPay = whoShouldNotPay.includes(index);
+            const isChecked = !whoShouldNotPay.includes(index);
             return (
               <Box
                 key={participant.id}
-                onClick={() => handleWhoShouldPay(index, isInWhoShouldNotPay)}
+                onClick={() => handleWhoShouldPay(index, isChecked)}
                 cursor="pointer"
               >
                 <Flex p="2">
                   <Box w="8%">
-                    {!isInWhoShouldNotPay && <CheckIcon color="blue.500" />}
+                    {isChecked && <CheckIcon color="blue.500" />}
                   </Box>
                   {participant.name}
                 </Flex>
