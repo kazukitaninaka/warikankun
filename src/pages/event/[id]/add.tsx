@@ -28,7 +28,7 @@ const Add = () => {
 
   const [name, setName] = useState<string>('');
   const [whoPaidId, setWhoPaidId] = useState<number | undefined>(undefined);
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<string>('');
   const [whoShouldNotPay, setWhoShouldNotPay] = useState<number[]>([]);
 
   const [insertPayment] = useInsertPaymentMutation();
@@ -72,7 +72,7 @@ const Add = () => {
       variables: {
         eventId: id,
         name,
-        amount,
+        amount: +amount, // convert string to number
         whoPaidId,
         whoShouldPay,
       },
@@ -106,7 +106,7 @@ const Add = () => {
           value={whoPaidId}
           required
           onChange={(e) => {
-            setWhoPaidId(Number(e.target.value));
+            setWhoPaidId(+e.target.value);
           }}
           placeholder="支払った人を選択"
         >
@@ -124,7 +124,7 @@ const Add = () => {
           value={amount}
           type="text"
           inputMode="numeric"
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e) => setAmount(e.target.value)}
         />
         <Text mb="1" mt="3">
           割り勘対象者
