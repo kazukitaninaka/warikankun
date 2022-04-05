@@ -47,11 +47,13 @@ const Add = () => {
     );
   }
 
-  const handleWhoShouldPay = (index: number, isNotChecked: boolean) => {
-    // whoShouldNotPayにあったら削除、なかったら追加
-    if (isNotChecked) {
+  const handleWhoShouldPay = (index: number, isChecked: boolean) => {
+    if (!event) return;
+    // checkされてればwhoShouldNotPayに追加、なければ削除
+    if (!isChecked) {
       setWhoShouldNotPay((prev) => prev.filter((i) => i !== index));
-    } else {
+    } else if (whoShouldNotPay.length < event.participants.length - 1) {
+      // 全員がwhoShouldNotPayに含まれるケースを避ける
       setWhoShouldNotPay((prev) => [...prev, index]);
     }
   };
@@ -131,16 +133,16 @@ const Add = () => {
         </Text>
         <Box border="1px" borderColor="gray.200" borderRadius="md">
           {event?.participants?.map((participant, index) => {
-            const isNotChecked = whoShouldNotPay.includes(index);
+            const isChecked = !whoShouldNotPay.includes(index);
             return (
               <Box
                 key={participant.id}
-                onClick={() => handleWhoShouldPay(index, isNotChecked)}
+                onClick={() => handleWhoShouldPay(index, isChecked)}
                 cursor="pointer"
               >
                 <Flex p="2">
                   <Box w="8%">
-                    {!isNotChecked && <CheckIcon color="blue.500" />}
+                    {isChecked && <CheckIcon color="blue.500" />}
                   </Box>
                   {participant.name}
                 </Flex>
