@@ -28,8 +28,8 @@ const Payments = ({
   });
   if (loading) {
     return (
-      <Center>
-        <Spinner />
+      <Center mt="3">
+        <Spinner size="lg" />
       </Center>
     );
   }
