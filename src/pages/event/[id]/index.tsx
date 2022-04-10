@@ -12,22 +12,41 @@ import {
   Box,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import {
   useDeletePaymentMutation,
   useQueryEventByIdQuery,
+  useQueryEventNameQuery,
+  useQueryPaymentsQuery,
 } from '../../../generated/graphql';
-import { formatNumberToJPY } from '../../../utils';
+import { formatNumberToJPY, getParamAsString } from '../../../utils';
 import Modal from '../../../components/Modal';
 import { useState } from 'react';
 import { liffVar } from '../../../components/LiffProvider';
 import AddWarikankun from '../../../components/AddFriend';
 import useFriendship from '../../../hooks/useFriendship';
+import EventName from '../../../components/EventName';
+import { GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
+import SumPrice from '../../../components/SumPrice';
+import Payments from '../../../components/Payments';
+
+// export const getServerSideProps = (context: GetServerSidePropsContext) => {
+//   const queryParam = context.query.queryParam;
+//   const id = getParamAsString(queryParam);
+//   return {
+//     props: {
+//       id,
+//     },
+//   };
+// };
 
 const Event = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { loading, error, data } = useQueryEventByIdQuery({
+  const { data: eventNameData } = useQueryEventNameQuery({
+    variables: { eventId: id },
+  });
+  const { data: paymentsData } = useQueryPaymentsQuery({
     variables: { eventId: id },
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,23 +55,6 @@ const Event = () => {
     useDeletePaymentMutation();
   const liff = liffVar();
   const { isFriend } = useFriendship();
-
-  if (loading) {
-    return (
-      <Center>
-        <Spinner size="lg" />
-      </Center>
-    );
-  }
-
-  if (error) {
-    return (
-      <Text>エラーが発生しました。時間を置いて再度アクセスしてください。</Text>
-    );
-  }
-
-  const event = data?.events[0];
-  const sumPrice = event?.payments_aggregate.aggregate?.sum?.amount;
 
   const deletePayment = () => {
     if (deleteTarget) {
@@ -64,8 +66,9 @@ const Event = () => {
   };
 
   const handleShareClick = () => {
-    if (!liff || !event) return;
+    if (!liff || !eventNameData?.events[0]) return;
     if (liff.isApiAvailable('shareTargetPicker')) {
+      const event = eventNameData?.events[0];
       liff.shareTargetPicker(
         [
           {
@@ -93,7 +96,7 @@ const Event = () => {
         loading={isDeleting}
         error={deleteError}
       />
-      <Text fontSize="large">イベント名：{event?.name}</Text>
+      <EventName id={id} />
       <Flex justifyContent="space-evenly" mt="3">
         <Button colorScheme="teal" onClick={() => router.push(`${id}/add`)}>
           支払いを追加
@@ -101,7 +104,7 @@ const Event = () => {
         <Button
           colorScheme="blue"
           onClick={() => router.push(`${id}/calc`)}
-          disabled={!event?.payments.length}
+          disabled={!paymentsData?.events[0].payments.length}
         >
           現在の精算結果を表示
         </Button>
@@ -109,54 +112,11 @@ const Event = () => {
       <Text fontSize="large" mt="8">
         今までの支払い情報
       </Text>
-      <Text mt="2">支払い総額：{formatNumberToJPY(sumPrice!)}</Text>
-      <Box mb="10">
-        {event?.payments.map((payment) => (
-          <Box
-            key={payment.id}
-            borderRadius="md"
-            shadow="base"
-            my="3"
-            bgColor="gray.50"
-          >
-            <Box textAlign="right">
-              <DeleteIcon
-                w={5}
-                h={5}
-                mt="3"
-                mr="5"
-                onClick={() => {
-                  setDeleteTarget(payment.id);
-                  onOpen();
-                }}
-              />
-            </Box>
-            <Table variant="simple">
-              <Tbody>
-                <Tr>
-                  <Td>支払い名</Td>
-                  <Td>{payment.name}</Td>
-                </Tr>
-                <Tr>
-                  <Td>支払った人</Td>
-                  <Td>{payment.whoPaid.name}</Td>
-                </Tr>
-                <Tr>
-                  <Td>金額</Td>
-                  <Td>{formatNumberToJPY(payment.amount)}</Td>
-                </Tr>
-                <Tr>
-                  <Td>割り勘対象</Td>
-                  <Td>
-                    {payment.whoShouldPay.map((_) => (
-                      <span key={_.participant.id}>{_.participant.name}　</span>
-                    ))}
-                  </Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </Box>
-        ))}
+      <Box mt="2">
+        <SumPrice id={id} />
+      </Box>
+      <Box mb="5">
+        <Payments id={id} setDeleteTarget={setDeleteTarget} onOpen={onOpen} />
       </Box>
       <Box mb="5">
         <Center>

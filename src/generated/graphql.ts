@@ -1868,12 +1868,40 @@ export type QueryEventForAddQueryVariables = Exact<{
 
 export type QueryEventForAddQuery = { __typename?: 'query_root', events: Array<{ __typename?: 'events', id: any, name: string, participants: Array<{ __typename?: 'participants', id: number, name: string }> }> };
 
+export type QueryEventNameQueryVariables = Exact<{
+  eventId: Scalars['uuid'];
+}>;
+
+
+export type QueryEventNameQuery = { __typename?: 'query_root', events: Array<{ __typename?: 'events', id: any, name: string }> };
+
+export type QueryParticipantsQueryVariables = Exact<{
+  eventId: Scalars['uuid'];
+}>;
+
+
+export type QueryParticipantsQuery = { __typename?: 'query_root', events: Array<{ __typename?: 'events', id: any, participants: Array<{ __typename?: 'participants', id: number, name: string }> }> };
+
+export type QueryPaymentsQueryVariables = Exact<{
+  eventId: Scalars['uuid'];
+}>;
+
+
+export type QueryPaymentsQuery = { __typename?: 'query_root', events: Array<{ __typename?: 'events', id: any, payments: Array<{ __typename?: 'payments', id: number, name: string, amount: number, createdAt: any, whoShouldPay: Array<{ __typename?: 'payment_participant', participant: { __typename?: 'participants', id: number, name: string } }>, whoPaid: { __typename?: 'participants', id: number, name: string } }> }> };
+
 export type ResultQueryVariables = Exact<{
   eventId: Scalars['uuid'];
 }>;
 
 
 export type ResultQuery = { __typename?: 'query_root', QueryResult: { __typename?: 'Result', id: any, name: string, sumPrice: number, transactions: Array<{ __typename?: 'Transaction', from: { __typename?: 'From', id: number, name: string, shouldHavePaid: number }, to: Array<{ __typename?: 'To', amount: number, name: string, participantId: number }> }> } };
+
+export type QuerySumPriceQueryVariables = Exact<{
+  eventId: Scalars['uuid'];
+}>;
+
+
+export type QuerySumPriceQuery = { __typename?: 'query_root', events: Array<{ __typename?: 'events', id: any, payments_aggregate: { __typename?: 'payments_aggregate', aggregate?: { __typename?: 'payments_aggregate_fields', sum?: { __typename?: 'payments_sum_fields', amount?: number | null } | null } | null } }> };
 
 
 export const DeletePaymentDocument = gql`
@@ -2088,6 +2116,132 @@ export function useQueryEventForAddLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type QueryEventForAddQueryHookResult = ReturnType<typeof useQueryEventForAddQuery>;
 export type QueryEventForAddLazyQueryHookResult = ReturnType<typeof useQueryEventForAddLazyQuery>;
 export type QueryEventForAddQueryResult = Apollo.QueryResult<QueryEventForAddQuery, QueryEventForAddQueryVariables>;
+export const QueryEventNameDocument = gql`
+    query queryEventName($eventId: uuid!) {
+  events(where: {id: {_eq: $eventId}}) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useQueryEventNameQuery__
+ *
+ * To run a query within a React component, call `useQueryEventNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQueryEventNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQueryEventNameQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useQueryEventNameQuery(baseOptions: Apollo.QueryHookOptions<QueryEventNameQuery, QueryEventNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QueryEventNameQuery, QueryEventNameQueryVariables>(QueryEventNameDocument, options);
+      }
+export function useQueryEventNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QueryEventNameQuery, QueryEventNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QueryEventNameQuery, QueryEventNameQueryVariables>(QueryEventNameDocument, options);
+        }
+export type QueryEventNameQueryHookResult = ReturnType<typeof useQueryEventNameQuery>;
+export type QueryEventNameLazyQueryHookResult = ReturnType<typeof useQueryEventNameLazyQuery>;
+export type QueryEventNameQueryResult = Apollo.QueryResult<QueryEventNameQuery, QueryEventNameQueryVariables>;
+export const QueryParticipantsDocument = gql`
+    query queryParticipants($eventId: uuid!) {
+  events(where: {id: {_eq: $eventId}}) {
+    id
+    participants {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useQueryParticipantsQuery__
+ *
+ * To run a query within a React component, call `useQueryParticipantsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQueryParticipantsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQueryParticipantsQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useQueryParticipantsQuery(baseOptions: Apollo.QueryHookOptions<QueryParticipantsQuery, QueryParticipantsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QueryParticipantsQuery, QueryParticipantsQueryVariables>(QueryParticipantsDocument, options);
+      }
+export function useQueryParticipantsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QueryParticipantsQuery, QueryParticipantsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QueryParticipantsQuery, QueryParticipantsQueryVariables>(QueryParticipantsDocument, options);
+        }
+export type QueryParticipantsQueryHookResult = ReturnType<typeof useQueryParticipantsQuery>;
+export type QueryParticipantsLazyQueryHookResult = ReturnType<typeof useQueryParticipantsLazyQuery>;
+export type QueryParticipantsQueryResult = Apollo.QueryResult<QueryParticipantsQuery, QueryParticipantsQueryVariables>;
+export const QueryPaymentsDocument = gql`
+    query queryPayments($eventId: uuid!) {
+  events(where: {id: {_eq: $eventId}}) {
+    id
+    payments {
+      id
+      name
+      amount
+      createdAt
+      whoShouldPay {
+        participant {
+          id
+          name
+        }
+      }
+      whoPaid {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useQueryPaymentsQuery__
+ *
+ * To run a query within a React component, call `useQueryPaymentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQueryPaymentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQueryPaymentsQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useQueryPaymentsQuery(baseOptions: Apollo.QueryHookOptions<QueryPaymentsQuery, QueryPaymentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QueryPaymentsQuery, QueryPaymentsQueryVariables>(QueryPaymentsDocument, options);
+      }
+export function useQueryPaymentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QueryPaymentsQuery, QueryPaymentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QueryPaymentsQuery, QueryPaymentsQueryVariables>(QueryPaymentsDocument, options);
+        }
+export type QueryPaymentsQueryHookResult = ReturnType<typeof useQueryPaymentsQuery>;
+export type QueryPaymentsLazyQueryHookResult = ReturnType<typeof useQueryPaymentsLazyQuery>;
+export type QueryPaymentsQueryResult = Apollo.QueryResult<QueryPaymentsQuery, QueryPaymentsQueryVariables>;
 export const ResultDocument = gql`
     query Result($eventId: uuid!) {
   QueryResult(eventId: $eventId) {
@@ -2137,3 +2291,45 @@ export function useResultLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Res
 export type ResultQueryHookResult = ReturnType<typeof useResultQuery>;
 export type ResultLazyQueryHookResult = ReturnType<typeof useResultLazyQuery>;
 export type ResultQueryResult = Apollo.QueryResult<ResultQuery, ResultQueryVariables>;
+export const QuerySumPriceDocument = gql`
+    query querySumPrice($eventId: uuid!) {
+  events(where: {id: {_eq: $eventId}}) {
+    id
+    payments_aggregate {
+      aggregate {
+        sum {
+          amount
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useQuerySumPriceQuery__
+ *
+ * To run a query within a React component, call `useQuerySumPriceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuerySumPriceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuerySumPriceQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useQuerySumPriceQuery(baseOptions: Apollo.QueryHookOptions<QuerySumPriceQuery, QuerySumPriceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuerySumPriceQuery, QuerySumPriceQueryVariables>(QuerySumPriceDocument, options);
+      }
+export function useQuerySumPriceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuerySumPriceQuery, QuerySumPriceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuerySumPriceQuery, QuerySumPriceQueryVariables>(QuerySumPriceDocument, options);
+        }
+export type QuerySumPriceQueryHookResult = ReturnType<typeof useQuerySumPriceQuery>;
+export type QuerySumPriceLazyQueryHookResult = ReturnType<typeof useQuerySumPriceLazyQuery>;
+export type QuerySumPriceQueryResult = Apollo.QueryResult<QuerySumPriceQuery, QuerySumPriceQueryVariables>;
