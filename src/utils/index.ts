@@ -18,12 +18,13 @@ export const makeRefundString = (transactions: TransactionInCalc[]) => {
   transactions.forEach((transaction) => {
     refundString += `${transaction.from.name} (支払うべき金額: ${transaction.from.shouldHavePaid}円)\n`;
     if (!transaction.to.length) {
-      refundString += '　- 精算なし\n\n';
+      refundString += '　- 精算なし\n';
     } else {
       transaction.to.forEach((el) => {
-        refundString += `　- ${el.name}へ${el.amount}円\n\n`;
+        refundString += `　- ${el.name}へ${el.amount}円\n`;
       });
     }
+    refundString += '\n';
   });
   refundString += '\n\n';
 
