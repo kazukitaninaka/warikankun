@@ -10,7 +10,7 @@ module.exports = {
       },
     },
   ],
-  documents: ['./src/graphql/*.graphql'],
+  documents: ['./src/graphql/*.gql'],
   overwrite: true,
   generates: {
     './src/generated/graphql.ts': {

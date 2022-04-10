@@ -1,0 +1,21 @@
+query queryPayments($eventId: uuid!) {
+  events(where: { id: { _eq: $eventId } }) {
+    id
+    payments {
+      id
+      name
+      amount
+      createdAt
+      whoShouldPay {
+        participant {
+          id
+          name
+        }
+      }
+      whoPaid {
+        id
+        name
+      }
+    }
+  }
+}
