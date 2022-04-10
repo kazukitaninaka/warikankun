@@ -2,15 +2,9 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -97,13 +91,7 @@ export type Transaction = {
   to: Array<To>;
 };
 
-/**
- * warikan events
- *
- *
- * columns and relationships of "events"
- *
- */
+/** warikan events */
 export type Events = {
   __typename?: 'events';
   createdAt: Scalars['timestamptz'];
@@ -120,13 +108,8 @@ export type Events = {
   updatedAt: Scalars['timestamptz'];
 };
 
-/**
- * warikan events
- *
- *
- * columns and relationships of "events"
- *
- */
+
+/** warikan events */
 export type EventsParticipantsArgs = {
   distinct_on?: InputMaybe<Array<Participants_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -135,13 +118,8 @@ export type EventsParticipantsArgs = {
   where?: InputMaybe<Participants_Bool_Exp>;
 };
 
-/**
- * warikan events
- *
- *
- * columns and relationships of "events"
- *
- */
+
+/** warikan events */
 export type EventsParticipants_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Participants_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -150,13 +128,8 @@ export type EventsParticipants_AggregateArgs = {
   where?: InputMaybe<Participants_Bool_Exp>;
 };
 
-/**
- * warikan events
- *
- *
- * columns and relationships of "events"
- *
- */
+
+/** warikan events */
 export type EventsPaymentsArgs = {
   distinct_on?: InputMaybe<Array<Payments_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -165,13 +138,8 @@ export type EventsPaymentsArgs = {
   where?: InputMaybe<Payments_Bool_Exp>;
 };
 
-/**
- * warikan events
- *
- *
- * columns and relationships of "events"
- *
- */
+
+/** warikan events */
 export type EventsPayments_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Payments_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -195,6 +163,7 @@ export type Events_Aggregate_Fields = {
   min?: Maybe<Events_Min_Fields>;
 };
 
+
 /** aggregate fields of "events" */
 export type Events_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Events_Select_Column>>;
@@ -217,7 +186,7 @@ export type Events_Bool_Exp = {
 /** unique or primary key constraints on table "events" */
 export enum Events_Constraint {
   /** unique or primary key constraint */
-  EventsPkey = 'events_pkey',
+  EventsPkey = 'events_pkey'
 }
 
 /** input type for inserting data into table "events" */
@@ -288,7 +257,7 @@ export enum Events_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 /** input type for updating data in table "events" */
@@ -308,7 +277,7 @@ export enum Events_Update_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 /** mutation root */
@@ -364,45 +333,54 @@ export type Mutation_Root = {
   update_payments_by_pk?: Maybe<Payments>;
 };
 
+
 /** mutation root */
 export type Mutation_RootDelete_EventsArgs = {
   where: Events_Bool_Exp;
 };
+
 
 /** mutation root */
 export type Mutation_RootDelete_Events_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
+
 /** mutation root */
 export type Mutation_RootDelete_ParticipantsArgs = {
   where: Participants_Bool_Exp;
 };
+
 
 /** mutation root */
 export type Mutation_RootDelete_Participants_By_PkArgs = {
   id: Scalars['Int'];
 };
 
+
 /** mutation root */
 export type Mutation_RootDelete_Payment_ParticipantArgs = {
   where: Payment_Participant_Bool_Exp;
 };
+
 
 /** mutation root */
 export type Mutation_RootDelete_Payment_Participant_By_PkArgs = {
   id: Scalars['Int'];
 };
 
+
 /** mutation root */
 export type Mutation_RootDelete_PaymentsArgs = {
   where: Payments_Bool_Exp;
 };
 
+
 /** mutation root */
 export type Mutation_RootDelete_Payments_By_PkArgs = {
   id: Scalars['Int'];
 };
+
 
 /** mutation root */
 export type Mutation_RootInsert_EventsArgs = {
@@ -410,11 +388,13 @@ export type Mutation_RootInsert_EventsArgs = {
   on_conflict?: InputMaybe<Events_On_Conflict>;
 };
 
+
 /** mutation root */
 export type Mutation_RootInsert_Events_OneArgs = {
   object: Events_Insert_Input;
   on_conflict?: InputMaybe<Events_On_Conflict>;
 };
+
 
 /** mutation root */
 export type Mutation_RootInsert_ParticipantsArgs = {
@@ -422,11 +402,13 @@ export type Mutation_RootInsert_ParticipantsArgs = {
   on_conflict?: InputMaybe<Participants_On_Conflict>;
 };
 
+
 /** mutation root */
 export type Mutation_RootInsert_Participants_OneArgs = {
   object: Participants_Insert_Input;
   on_conflict?: InputMaybe<Participants_On_Conflict>;
 };
+
 
 /** mutation root */
 export type Mutation_RootInsert_Payment_ParticipantArgs = {
@@ -434,11 +416,13 @@ export type Mutation_RootInsert_Payment_ParticipantArgs = {
   on_conflict?: InputMaybe<Payment_Participant_On_Conflict>;
 };
 
+
 /** mutation root */
 export type Mutation_RootInsert_Payment_Participant_OneArgs = {
   object: Payment_Participant_Insert_Input;
   on_conflict?: InputMaybe<Payment_Participant_On_Conflict>;
 };
+
 
 /** mutation root */
 export type Mutation_RootInsert_PaymentsArgs = {
@@ -446,11 +430,13 @@ export type Mutation_RootInsert_PaymentsArgs = {
   on_conflict?: InputMaybe<Payments_On_Conflict>;
 };
 
+
 /** mutation root */
 export type Mutation_RootInsert_Payments_OneArgs = {
   object: Payments_Insert_Input;
   on_conflict?: InputMaybe<Payments_On_Conflict>;
 };
+
 
 /** mutation root */
 export type Mutation_RootUpdate_EventsArgs = {
@@ -458,11 +444,13 @@ export type Mutation_RootUpdate_EventsArgs = {
   where: Events_Bool_Exp;
 };
 
+
 /** mutation root */
 export type Mutation_RootUpdate_Events_By_PkArgs = {
   _set?: InputMaybe<Events_Set_Input>;
   pk_columns: Events_Pk_Columns_Input;
 };
+
 
 /** mutation root */
 export type Mutation_RootUpdate_ParticipantsArgs = {
@@ -471,12 +459,14 @@ export type Mutation_RootUpdate_ParticipantsArgs = {
   where: Participants_Bool_Exp;
 };
 
+
 /** mutation root */
 export type Mutation_RootUpdate_Participants_By_PkArgs = {
   _inc?: InputMaybe<Participants_Inc_Input>;
   _set?: InputMaybe<Participants_Set_Input>;
   pk_columns: Participants_Pk_Columns_Input;
 };
+
 
 /** mutation root */
 export type Mutation_RootUpdate_Payment_ParticipantArgs = {
@@ -485,6 +475,7 @@ export type Mutation_RootUpdate_Payment_ParticipantArgs = {
   where: Payment_Participant_Bool_Exp;
 };
 
+
 /** mutation root */
 export type Mutation_RootUpdate_Payment_Participant_By_PkArgs = {
   _inc?: InputMaybe<Payment_Participant_Inc_Input>;
@@ -492,12 +483,14 @@ export type Mutation_RootUpdate_Payment_Participant_By_PkArgs = {
   pk_columns: Payment_Participant_Pk_Columns_Input;
 };
 
+
 /** mutation root */
 export type Mutation_RootUpdate_PaymentsArgs = {
   _inc?: InputMaybe<Payments_Inc_Input>;
   _set?: InputMaybe<Payments_Set_Input>;
   where: Payments_Bool_Exp;
 };
+
 
 /** mutation root */
 export type Mutation_RootUpdate_Payments_By_PkArgs = {
@@ -519,16 +512,10 @@ export enum Order_By {
   /** in descending order, nulls first */
   DescNullsFirst = 'desc_nulls_first',
   /** in descending order, nulls last */
-  DescNullsLast = 'desc_nulls_last',
+  DescNullsLast = 'desc_nulls_last'
 }
 
-/**
- * warikan participants
- *
- *
- * columns and relationships of "participants"
- *
- */
+/** warikan participants */
 export type Participants = {
   __typename?: 'participants';
   createdAt: Scalars['timestamptz'];
@@ -544,13 +531,8 @@ export type Participants = {
   updatedAt: Scalars['timestamptz'];
 };
 
-/**
- * warikan participants
- *
- *
- * columns and relationships of "participants"
- *
- */
+
+/** warikan participants */
 export type ParticipantsPayment_ParticipantsArgs = {
   distinct_on?: InputMaybe<Array<Payment_Participant_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -559,13 +541,8 @@ export type ParticipantsPayment_ParticipantsArgs = {
   where?: InputMaybe<Payment_Participant_Bool_Exp>;
 };
 
-/**
- * warikan participants
- *
- *
- * columns and relationships of "participants"
- *
- */
+
+/** warikan participants */
 export type ParticipantsPayment_Participants_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Payment_Participant_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -596,6 +573,7 @@ export type Participants_Aggregate_Fields = {
   var_samp?: Maybe<Participants_Var_Samp_Fields>;
   variance?: Maybe<Participants_Variance_Fields>;
 };
+
 
 /** aggregate fields of "participants" */
 export type Participants_Aggregate_FieldsCountArgs = {
@@ -654,7 +632,7 @@ export type Participants_Bool_Exp = {
 /** unique or primary key constraints on table "participants" */
 export enum Participants_Constraint {
   /** unique or primary key constraint */
-  ParticipantsPkey = 'participants_pkey',
+  ParticipantsPkey = 'participants_pkey'
 }
 
 /** input type for incrementing numeric columns in table "participants" */
@@ -775,7 +753,7 @@ export enum Participants_Select_Column {
   /** column name */
   PictureUrl = 'pictureUrl',
   /** column name */
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 /** input type for updating data in table "participants" */
@@ -848,7 +826,7 @@ export enum Participants_Update_Column {
   /** column name */
   PictureUrl = 'pictureUrl',
   /** column name */
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 /** aggregate var_pop on columns */
@@ -884,13 +862,7 @@ export type Participants_Variance_Order_By = {
   id?: InputMaybe<Order_By>;
 };
 
-/**
- * join table of payment and participant on who_should_pay
- *
- *
- * columns and relationships of "payment_participant"
- *
- */
+/** join table of payment and participant on who_should_pay */
 export type Payment_Participant = {
   __typename?: 'payment_participant';
   id: Scalars['Int'];
@@ -924,6 +896,7 @@ export type Payment_Participant_Aggregate_Fields = {
   var_samp?: Maybe<Payment_Participant_Var_Samp_Fields>;
   variance?: Maybe<Payment_Participant_Variance_Fields>;
 };
+
 
 /** aggregate fields of "payment_participant" */
 export type Payment_Participant_Aggregate_FieldsCountArgs = {
@@ -985,7 +958,7 @@ export enum Payment_Participant_Constraint {
   /** unique or primary key constraint */
   PaymentParticipantPaymentIdParticipantIdKey = 'payment_participant_payment_id_participant_id_key',
   /** unique or primary key constraint */
-  PaymentParticipantPkey = 'payment_participant_pkey',
+  PaymentParticipantPkey = 'payment_participant_pkey'
 }
 
 /** input type for incrementing numeric columns in table "payment_participant" */
@@ -1071,7 +1044,7 @@ export enum Payment_Participant_Select_Column {
   /** column name */
   ParticipantId = 'participantId',
   /** column name */
-  PaymentId = 'paymentId',
+  PaymentId = 'paymentId'
 }
 
 /** input type for updating data in table "payment_participant" */
@@ -1148,7 +1121,7 @@ export enum Payment_Participant_Update_Column {
   /** column name */
   ParticipantId = 'participantId',
   /** column name */
-  PaymentId = 'paymentId',
+  PaymentId = 'paymentId'
 }
 
 /** aggregate var_pop on columns */
@@ -1196,13 +1169,7 @@ export type Payment_Participant_Variance_Order_By = {
   paymentId?: InputMaybe<Order_By>;
 };
 
-/**
- * payments
- *
- *
- * columns and relationships of "payments"
- *
- */
+/** payments */
 export type Payments = {
   __typename?: 'payments';
   amount: Scalars['Int'];
@@ -1220,13 +1187,8 @@ export type Payments = {
   whoShouldPay_aggregate: Payment_Participant_Aggregate;
 };
 
-/**
- * payments
- *
- *
- * columns and relationships of "payments"
- *
- */
+
+/** payments */
 export type PaymentsWhoShouldPayArgs = {
   distinct_on?: InputMaybe<Array<Payment_Participant_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1235,13 +1197,8 @@ export type PaymentsWhoShouldPayArgs = {
   where?: InputMaybe<Payment_Participant_Bool_Exp>;
 };
 
-/**
- * payments
- *
- *
- * columns and relationships of "payments"
- *
- */
+
+/** payments */
 export type PaymentsWhoShouldPay_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Payment_Participant_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1272,6 +1229,7 @@ export type Payments_Aggregate_Fields = {
   var_samp?: Maybe<Payments_Var_Samp_Fields>;
   variance?: Maybe<Payments_Variance_Fields>;
 };
+
 
 /** aggregate fields of "payments" */
 export type Payments_Aggregate_FieldsCountArgs = {
@@ -1335,7 +1293,7 @@ export type Payments_Bool_Exp = {
 /** unique or primary key constraints on table "payments" */
 export enum Payments_Constraint {
   /** unique or primary key constraint */
-  PaymentsPkey = 'payments_pkey',
+  PaymentsPkey = 'payments_pkey'
 }
 
 /** input type for incrementing numeric columns in table "payments" */
@@ -1460,7 +1418,7 @@ export enum Payments_Select_Column {
   /** column name */
   UpdatedAt = 'updatedAt',
   /** column name */
-  WhoPaidId = 'whoPaidId',
+  WhoPaidId = 'whoPaidId'
 }
 
 /** input type for updating data in table "payments" */
@@ -1549,7 +1507,7 @@ export enum Payments_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt',
   /** column name */
-  WhoPaidId = 'whoPaidId',
+  WhoPaidId = 'whoPaidId'
 }
 
 /** aggregate var_pop on columns */
@@ -1627,9 +1585,11 @@ export type Query_Root = {
   payments_by_pk?: Maybe<Payments>;
 };
 
+
 export type Query_RootQueryResultArgs = {
   eventId: Scalars['uuid'];
 };
+
 
 export type Query_RootEventsArgs = {
   distinct_on?: InputMaybe<Array<Events_Select_Column>>;
@@ -1639,6 +1599,7 @@ export type Query_RootEventsArgs = {
   where?: InputMaybe<Events_Bool_Exp>;
 };
 
+
 export type Query_RootEvents_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Events_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1647,9 +1608,11 @@ export type Query_RootEvents_AggregateArgs = {
   where?: InputMaybe<Events_Bool_Exp>;
 };
 
+
 export type Query_RootEvents_By_PkArgs = {
   id: Scalars['uuid'];
 };
+
 
 export type Query_RootParticipantsArgs = {
   distinct_on?: InputMaybe<Array<Participants_Select_Column>>;
@@ -1659,6 +1622,7 @@ export type Query_RootParticipantsArgs = {
   where?: InputMaybe<Participants_Bool_Exp>;
 };
 
+
 export type Query_RootParticipants_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Participants_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1667,9 +1631,11 @@ export type Query_RootParticipants_AggregateArgs = {
   where?: InputMaybe<Participants_Bool_Exp>;
 };
 
+
 export type Query_RootParticipants_By_PkArgs = {
   id: Scalars['Int'];
 };
+
 
 export type Query_RootPayment_ParticipantArgs = {
   distinct_on?: InputMaybe<Array<Payment_Participant_Select_Column>>;
@@ -1679,6 +1645,7 @@ export type Query_RootPayment_ParticipantArgs = {
   where?: InputMaybe<Payment_Participant_Bool_Exp>;
 };
 
+
 export type Query_RootPayment_Participant_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Payment_Participant_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1687,9 +1654,11 @@ export type Query_RootPayment_Participant_AggregateArgs = {
   where?: InputMaybe<Payment_Participant_Bool_Exp>;
 };
 
+
 export type Query_RootPayment_Participant_By_PkArgs = {
   id: Scalars['Int'];
 };
+
 
 export type Query_RootPaymentsArgs = {
   distinct_on?: InputMaybe<Array<Payments_Select_Column>>;
@@ -1699,6 +1668,7 @@ export type Query_RootPaymentsArgs = {
   where?: InputMaybe<Payments_Bool_Exp>;
 };
 
+
 export type Query_RootPayments_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Payments_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1706,6 +1676,7 @@ export type Query_RootPayments_AggregateArgs = {
   order_by?: InputMaybe<Array<Payments_Order_By>>;
   where?: InputMaybe<Payments_Bool_Exp>;
 };
+
 
 export type Query_RootPayments_By_PkArgs = {
   id: Scalars['Int'];
@@ -1739,6 +1710,7 @@ export type Subscription_Root = {
   payments_by_pk?: Maybe<Payments>;
 };
 
+
 export type Subscription_RootEventsArgs = {
   distinct_on?: InputMaybe<Array<Events_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1746,6 +1718,7 @@ export type Subscription_RootEventsArgs = {
   order_by?: InputMaybe<Array<Events_Order_By>>;
   where?: InputMaybe<Events_Bool_Exp>;
 };
+
 
 export type Subscription_RootEvents_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Events_Select_Column>>;
@@ -1755,9 +1728,11 @@ export type Subscription_RootEvents_AggregateArgs = {
   where?: InputMaybe<Events_Bool_Exp>;
 };
 
+
 export type Subscription_RootEvents_By_PkArgs = {
   id: Scalars['uuid'];
 };
+
 
 export type Subscription_RootParticipantsArgs = {
   distinct_on?: InputMaybe<Array<Participants_Select_Column>>;
@@ -1767,6 +1742,7 @@ export type Subscription_RootParticipantsArgs = {
   where?: InputMaybe<Participants_Bool_Exp>;
 };
 
+
 export type Subscription_RootParticipants_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Participants_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1775,9 +1751,11 @@ export type Subscription_RootParticipants_AggregateArgs = {
   where?: InputMaybe<Participants_Bool_Exp>;
 };
 
+
 export type Subscription_RootParticipants_By_PkArgs = {
   id: Scalars['Int'];
 };
+
 
 export type Subscription_RootPayment_ParticipantArgs = {
   distinct_on?: InputMaybe<Array<Payment_Participant_Select_Column>>;
@@ -1787,6 +1765,7 @@ export type Subscription_RootPayment_ParticipantArgs = {
   where?: InputMaybe<Payment_Participant_Bool_Exp>;
 };
 
+
 export type Subscription_RootPayment_Participant_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Payment_Participant_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1795,9 +1774,11 @@ export type Subscription_RootPayment_Participant_AggregateArgs = {
   where?: InputMaybe<Payment_Participant_Bool_Exp>;
 };
 
+
 export type Subscription_RootPayment_Participant_By_PkArgs = {
   id: Scalars['Int'];
 };
+
 
 export type Subscription_RootPaymentsArgs = {
   distinct_on?: InputMaybe<Array<Payments_Select_Column>>;
@@ -1807,6 +1788,7 @@ export type Subscription_RootPaymentsArgs = {
   where?: InputMaybe<Payments_Bool_Exp>;
 };
 
+
 export type Subscription_RootPayments_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Payments_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -1814,6 +1796,7 @@ export type Subscription_RootPayments_AggregateArgs = {
   order_by?: InputMaybe<Array<Payments_Order_By>>;
   where?: InputMaybe<Payments_Bool_Exp>;
 };
+
 
 export type Subscription_RootPayments_By_PkArgs = {
   id: Scalars['Int'];
@@ -1849,138 +1832,58 @@ export type DeletePaymentMutationVariables = Exact<{
   paymentId: Scalars['Int'];
 }>;
 
-export type DeletePaymentMutation = {
-  __typename?: 'mutation_root';
-  delete_payments_by_pk?: { __typename?: 'payments'; id: number } | null;
-};
+
+export type DeletePaymentMutation = { __typename?: 'mutation_root', delete_payments_by_pk?: { __typename?: 'payments', id: number } | null };
 
 export type InsertEventMutationVariables = Exact<{
   eventName: Scalars['String'];
   participants: Array<Participants_Insert_Input> | Participants_Insert_Input;
 }>;
 
-export type InsertEventMutation = {
-  __typename?: 'mutation_root';
-  insert_events_one?: {
-    __typename?: 'events';
-    id: any;
-    name: string;
-    participants: Array<{
-      __typename?: 'participants';
-      id: number;
-      name: string;
-    }>;
-  } | null;
-};
+
+export type InsertEventMutation = { __typename?: 'mutation_root', insert_events_one?: { __typename?: 'events', id: any, name: string, participants: Array<{ __typename?: 'participants', id: number, name: string }> } | null };
 
 export type InsertPaymentMutationVariables = Exact<{
   amount: Scalars['Int'];
   eventId: Scalars['uuid'];
   name: Scalars['String'];
   whoPaidId: Scalars['Int'];
-  whoShouldPay:
-    | Array<Payment_Participant_Insert_Input>
-    | Payment_Participant_Insert_Input;
+  whoShouldPay: Array<Payment_Participant_Insert_Input> | Payment_Participant_Insert_Input;
 }>;
 
-export type InsertPaymentMutation = {
-  __typename?: 'mutation_root';
-  insert_payments_one?: { __typename?: 'payments'; id: number } | null;
-};
+
+export type InsertPaymentMutation = { __typename?: 'mutation_root', insert_payments_one?: { __typename?: 'payments', id: number } | null };
 
 export type QueryEventByIdQueryVariables = Exact<{
   eventId: Scalars['uuid'];
 }>;
 
-export type QueryEventByIdQuery = {
-  __typename?: 'query_root';
-  events: Array<{
-    __typename?: 'events';
-    id: any;
-    name: string;
-    payments: Array<{
-      __typename?: 'payments';
-      id: number;
-      name: string;
-      amount: number;
-      createdAt: any;
-      whoShouldPay: Array<{
-        __typename?: 'payment_participant';
-        participant: { __typename?: 'participants'; id: number; name: string };
-      }>;
-      whoPaid: { __typename?: 'participants'; id: number; name: string };
-    }>;
-    payments_aggregate: {
-      __typename?: 'payments_aggregate';
-      aggregate?: {
-        __typename?: 'payments_aggregate_fields';
-        sum?: {
-          __typename?: 'payments_sum_fields';
-          amount?: number | null;
-        } | null;
-      } | null;
-    };
-  }>;
-};
+
+export type QueryEventByIdQuery = { __typename?: 'query_root', events: Array<{ __typename?: 'events', id: any, name: string, payments: Array<{ __typename?: 'payments', id: number, name: string, amount: number, createdAt: any, whoShouldPay: Array<{ __typename?: 'payment_participant', participant: { __typename?: 'participants', id: number, name: string } }>, whoPaid: { __typename?: 'participants', id: number, name: string } }>, payments_aggregate: { __typename?: 'payments_aggregate', aggregate?: { __typename?: 'payments_aggregate_fields', sum?: { __typename?: 'payments_sum_fields', amount?: number | null } | null } | null } }> };
 
 export type QueryEventForAddQueryVariables = Exact<{
   eventId: Scalars['uuid'];
 }>;
 
-export type QueryEventForAddQuery = {
-  __typename?: 'query_root';
-  events: Array<{
-    __typename?: 'events';
-    id: any;
-    name: string;
-    participants: Array<{
-      __typename?: 'participants';
-      id: number;
-      name: string;
-    }>;
-  }>;
-};
+
+export type QueryEventForAddQuery = { __typename?: 'query_root', events: Array<{ __typename?: 'events', id: any, name: string, participants: Array<{ __typename?: 'participants', id: number, name: string }> }> };
 
 export type ResultQueryVariables = Exact<{
   eventId: Scalars['uuid'];
 }>;
 
-export type ResultQuery = {
-  __typename?: 'query_root';
-  QueryResult: {
-    __typename?: 'Result';
-    id: any;
-    name: string;
-    sumPrice: number;
-    transactions: Array<{
-      __typename?: 'Transaction';
-      from: {
-        __typename?: 'From';
-        id: number;
-        name: string;
-        shouldHavePaid: number;
-      };
-      to: Array<{
-        __typename?: 'To';
-        amount: number;
-        name: string;
-        participantId: number;
-      }>;
-    }>;
-  };
-};
+
+export type ResultQuery = { __typename?: 'query_root', QueryResult: { __typename?: 'Result', id: any, name: string, sumPrice: number, transactions: Array<{ __typename?: 'Transaction', from: { __typename?: 'From', id: number, name: string, shouldHavePaid: number }, to: Array<{ __typename?: 'To', amount: number, name: string, participantId: number }> }> } };
+
 
 export const DeletePaymentDocument = gql`
-  mutation deletePayment($paymentId: Int!) {
-    delete_payments_by_pk(id: $paymentId) {
-      id
-    }
+    mutation deletePayment($paymentId: Int!) {
+  delete_payments_by_pk(id: $paymentId) {
+    id
   }
-`;
-export type DeletePaymentMutationFn = Apollo.MutationFunction<
-  DeletePaymentMutation,
-  DeletePaymentMutationVariables
->;
+}
+    `;
+export type DeletePaymentMutationFn = Apollo.MutationFunction<DeletePaymentMutation, DeletePaymentMutationVariables>;
 
 /**
  * __useDeletePaymentMutation__
@@ -1999,48 +1902,28 @@ export type DeletePaymentMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeletePaymentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeletePaymentMutation,
-    DeletePaymentMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeletePaymentMutation,
-    DeletePaymentMutationVariables
-  >(DeletePaymentDocument, options);
-}
-export type DeletePaymentMutationHookResult = ReturnType<
-  typeof useDeletePaymentMutation
->;
-export type DeletePaymentMutationResult =
-  Apollo.MutationResult<DeletePaymentMutation>;
-export type DeletePaymentMutationOptions = Apollo.BaseMutationOptions<
-  DeletePaymentMutation,
-  DeletePaymentMutationVariables
->;
+export function useDeletePaymentMutation(baseOptions?: Apollo.MutationHookOptions<DeletePaymentMutation, DeletePaymentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePaymentMutation, DeletePaymentMutationVariables>(DeletePaymentDocument, options);
+      }
+export type DeletePaymentMutationHookResult = ReturnType<typeof useDeletePaymentMutation>;
+export type DeletePaymentMutationResult = Apollo.MutationResult<DeletePaymentMutation>;
+export type DeletePaymentMutationOptions = Apollo.BaseMutationOptions<DeletePaymentMutation, DeletePaymentMutationVariables>;
 export const InsertEventDocument = gql`
-  mutation insertEvent(
-    $eventName: String!
-    $participants: [participants_insert_input!]!
+    mutation insertEvent($eventName: String!, $participants: [participants_insert_input!]!) {
+  insert_events_one(
+    object: {name: $eventName, participants: {data: $participants}}
   ) {
-    insert_events_one(
-      object: { name: $eventName, participants: { data: $participants } }
-    ) {
+    id
+    name
+    participants {
       id
       name
-      participants {
-        id
-        name
-      }
     }
   }
-`;
-export type InsertEventMutationFn = Apollo.MutationFunction<
-  InsertEventMutation,
-  InsertEventMutationVariables
->;
+}
+    `;
+export type InsertEventMutationFn = Apollo.MutationFunction<InsertEventMutation, InsertEventMutationVariables>;
 
 /**
  * __useInsertEventMutation__
@@ -2060,52 +1943,23 @@ export type InsertEventMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useInsertEventMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    InsertEventMutation,
-    InsertEventMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<InsertEventMutation, InsertEventMutationVariables>(
-    InsertEventDocument,
-    options,
-  );
-}
-export type InsertEventMutationHookResult = ReturnType<
-  typeof useInsertEventMutation
->;
-export type InsertEventMutationResult =
-  Apollo.MutationResult<InsertEventMutation>;
-export type InsertEventMutationOptions = Apollo.BaseMutationOptions<
-  InsertEventMutation,
-  InsertEventMutationVariables
->;
-export const InsertPaymentDocument = gql`
-  mutation insertPayment(
-    $amount: Int!
-    $eventId: uuid!
-    $name: String!
-    $whoPaidId: Int!
-    $whoShouldPay: [payment_participant_insert_input!]!
-  ) {
-    insert_payments_one(
-      object: {
-        amount: $amount
-        eventId: $eventId
-        name: $name
-        whoPaidId: $whoPaidId
-        whoShouldPay: { data: $whoShouldPay }
+export function useInsertEventMutation(baseOptions?: Apollo.MutationHookOptions<InsertEventMutation, InsertEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertEventMutation, InsertEventMutationVariables>(InsertEventDocument, options);
       }
-    ) {
-      id
-    }
+export type InsertEventMutationHookResult = ReturnType<typeof useInsertEventMutation>;
+export type InsertEventMutationResult = Apollo.MutationResult<InsertEventMutation>;
+export type InsertEventMutationOptions = Apollo.BaseMutationOptions<InsertEventMutation, InsertEventMutationVariables>;
+export const InsertPaymentDocument = gql`
+    mutation insertPayment($amount: Int!, $eventId: uuid!, $name: String!, $whoPaidId: Int!, $whoShouldPay: [payment_participant_insert_input!]!) {
+  insert_payments_one(
+    object: {amount: $amount, eventId: $eventId, name: $name, whoPaidId: $whoPaidId, whoShouldPay: {data: $whoShouldPay}}
+  ) {
+    id
   }
-`;
-export type InsertPaymentMutationFn = Apollo.MutationFunction<
-  InsertPaymentMutation,
-  InsertPaymentMutationVariables
->;
+}
+    `;
+export type InsertPaymentMutationFn = Apollo.MutationFunction<InsertPaymentMutation, InsertPaymentMutationVariables>;
 
 /**
  * __useInsertPaymentMutation__
@@ -2128,58 +1982,44 @@ export type InsertPaymentMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useInsertPaymentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    InsertPaymentMutation,
-    InsertPaymentMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    InsertPaymentMutation,
-    InsertPaymentMutationVariables
-  >(InsertPaymentDocument, options);
-}
-export type InsertPaymentMutationHookResult = ReturnType<
-  typeof useInsertPaymentMutation
->;
-export type InsertPaymentMutationResult =
-  Apollo.MutationResult<InsertPaymentMutation>;
-export type InsertPaymentMutationOptions = Apollo.BaseMutationOptions<
-  InsertPaymentMutation,
-  InsertPaymentMutationVariables
->;
+export function useInsertPaymentMutation(baseOptions?: Apollo.MutationHookOptions<InsertPaymentMutation, InsertPaymentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertPaymentMutation, InsertPaymentMutationVariables>(InsertPaymentDocument, options);
+      }
+export type InsertPaymentMutationHookResult = ReturnType<typeof useInsertPaymentMutation>;
+export type InsertPaymentMutationResult = Apollo.MutationResult<InsertPaymentMutation>;
+export type InsertPaymentMutationOptions = Apollo.BaseMutationOptions<InsertPaymentMutation, InsertPaymentMutationVariables>;
 export const QueryEventByIdDocument = gql`
-  query queryEventById($eventId: uuid!) {
-    events(where: { id: { _eq: $eventId } }) {
+    query queryEventById($eventId: uuid!) {
+  events(where: {id: {_eq: $eventId}}) {
+    id
+    name
+    payments {
       id
       name
-      payments {
-        id
-        name
-        amount
-        createdAt
-        whoShouldPay {
-          participant {
-            id
-            name
-          }
-        }
-        whoPaid {
+      amount
+      createdAt
+      whoShouldPay {
+        participant {
           id
           name
         }
       }
-      payments_aggregate {
-        aggregate {
-          sum {
-            amount
-          }
+      whoPaid {
+        id
+        name
+      }
+    }
+    payments_aggregate {
+      aggregate {
+        sum {
+          amount
         }
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useQueryEventByIdQuery__
@@ -2197,52 +2037,29 @@ export const QueryEventByIdDocument = gql`
  *   },
  * });
  */
-export function useQueryEventByIdQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    QueryEventByIdQuery,
-    QueryEventByIdQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<QueryEventByIdQuery, QueryEventByIdQueryVariables>(
-    QueryEventByIdDocument,
-    options,
-  );
-}
-export function useQueryEventByIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    QueryEventByIdQuery,
-    QueryEventByIdQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<QueryEventByIdQuery, QueryEventByIdQueryVariables>(
-    QueryEventByIdDocument,
-    options,
-  );
-}
-export type QueryEventByIdQueryHookResult = ReturnType<
-  typeof useQueryEventByIdQuery
->;
-export type QueryEventByIdLazyQueryHookResult = ReturnType<
-  typeof useQueryEventByIdLazyQuery
->;
-export type QueryEventByIdQueryResult = Apollo.QueryResult<
-  QueryEventByIdQuery,
-  QueryEventByIdQueryVariables
->;
+export function useQueryEventByIdQuery(baseOptions: Apollo.QueryHookOptions<QueryEventByIdQuery, QueryEventByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QueryEventByIdQuery, QueryEventByIdQueryVariables>(QueryEventByIdDocument, options);
+      }
+export function useQueryEventByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QueryEventByIdQuery, QueryEventByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QueryEventByIdQuery, QueryEventByIdQueryVariables>(QueryEventByIdDocument, options);
+        }
+export type QueryEventByIdQueryHookResult = ReturnType<typeof useQueryEventByIdQuery>;
+export type QueryEventByIdLazyQueryHookResult = ReturnType<typeof useQueryEventByIdLazyQuery>;
+export type QueryEventByIdQueryResult = Apollo.QueryResult<QueryEventByIdQuery, QueryEventByIdQueryVariables>;
 export const QueryEventForAddDocument = gql`
-  query queryEventForAdd($eventId: uuid!) {
-    events(where: { id: { _eq: $eventId } }) {
+    query queryEventForAdd($eventId: uuid!) {
+  events(where: {id: {_eq: $eventId}}) {
+    id
+    name
+    participants {
       id
       name
-      participants {
-        id
-        name
-      }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useQueryEventForAddQuery__
@@ -2260,61 +2077,38 @@ export const QueryEventForAddDocument = gql`
  *   },
  * });
  */
-export function useQueryEventForAddQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    QueryEventForAddQuery,
-    QueryEventForAddQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<QueryEventForAddQuery, QueryEventForAddQueryVariables>(
-    QueryEventForAddDocument,
-    options,
-  );
-}
-export function useQueryEventForAddLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    QueryEventForAddQuery,
-    QueryEventForAddQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    QueryEventForAddQuery,
-    QueryEventForAddQueryVariables
-  >(QueryEventForAddDocument, options);
-}
-export type QueryEventForAddQueryHookResult = ReturnType<
-  typeof useQueryEventForAddQuery
->;
-export type QueryEventForAddLazyQueryHookResult = ReturnType<
-  typeof useQueryEventForAddLazyQuery
->;
-export type QueryEventForAddQueryResult = Apollo.QueryResult<
-  QueryEventForAddQuery,
-  QueryEventForAddQueryVariables
->;
+export function useQueryEventForAddQuery(baseOptions: Apollo.QueryHookOptions<QueryEventForAddQuery, QueryEventForAddQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QueryEventForAddQuery, QueryEventForAddQueryVariables>(QueryEventForAddDocument, options);
+      }
+export function useQueryEventForAddLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QueryEventForAddQuery, QueryEventForAddQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QueryEventForAddQuery, QueryEventForAddQueryVariables>(QueryEventForAddDocument, options);
+        }
+export type QueryEventForAddQueryHookResult = ReturnType<typeof useQueryEventForAddQuery>;
+export type QueryEventForAddLazyQueryHookResult = ReturnType<typeof useQueryEventForAddLazyQuery>;
+export type QueryEventForAddQueryResult = Apollo.QueryResult<QueryEventForAddQuery, QueryEventForAddQueryVariables>;
 export const ResultDocument = gql`
-  query Result($eventId: uuid!) {
-    QueryResult(eventId: $eventId) {
-      id
-      name
-      sumPrice
-      transactions {
-        from {
-          id
-          name
-          shouldHavePaid
-        }
-        to {
-          amount
-          name
-          participantId: id
-        }
+    query Result($eventId: uuid!) {
+  QueryResult(eventId: $eventId) {
+    id
+    name
+    sumPrice
+    transactions {
+      from {
+        id
+        name
+        shouldHavePaid
+      }
+      to {
+        amount
+        name
+        participantId: id
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useResultQuery__
@@ -2332,27 +2126,14 @@ export const ResultDocument = gql`
  *   },
  * });
  */
-export function useResultQuery(
-  baseOptions: Apollo.QueryHookOptions<ResultQuery, ResultQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ResultQuery, ResultQueryVariables>(
-    ResultDocument,
-    options,
-  );
-}
-export function useResultLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ResultQuery, ResultQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ResultQuery, ResultQueryVariables>(
-    ResultDocument,
-    options,
-  );
-}
+export function useResultQuery(baseOptions: Apollo.QueryHookOptions<ResultQuery, ResultQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ResultQuery, ResultQueryVariables>(ResultDocument, options);
+      }
+export function useResultLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResultQuery, ResultQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ResultQuery, ResultQueryVariables>(ResultDocument, options);
+        }
 export type ResultQueryHookResult = ReturnType<typeof useResultQuery>;
 export type ResultLazyQueryHookResult = ReturnType<typeof useResultLazyQuery>;
-export type ResultQueryResult = Apollo.QueryResult<
-  ResultQuery,
-  ResultQueryVariables
->;
+export type ResultQueryResult = Apollo.QueryResult<ResultQuery, ResultQueryVariables>;
