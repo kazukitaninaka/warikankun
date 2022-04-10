@@ -1,44 +1,25 @@
-import { DeleteIcon } from '@chakra-ui/icons';
 import {
-  Spinner,
   Text,
   Center,
   Flex,
   Button,
-  Table,
-  Tbody,
-  Tr,
-  Td,
   Box,
   useDisclosure,
 } from '@chakra-ui/react';
 import {
   useDeletePaymentMutation,
-  useQueryEventByIdQuery,
   useQueryEventNameQuery,
   useQueryPaymentsQuery,
 } from '../../../generated/graphql';
-import { formatNumberToJPY, getParamAsString } from '../../../utils';
 import Modal from '../../../components/Modal';
 import { useState } from 'react';
 import { liffVar } from '../../../components/LiffProvider';
 import AddWarikankun from '../../../components/AddFriend';
 import useFriendship from '../../../hooks/useFriendship';
 import EventName from '../../../components/EventName';
-import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import SumPrice from '../../../components/SumPrice';
 import Payments from '../../../components/Payments';
-
-// export const getServerSideProps = (context: GetServerSidePropsContext) => {
-//   const queryParam = context.query.queryParam;
-//   const id = getParamAsString(queryParam);
-//   return {
-//     props: {
-//       id,
-//     },
-//   };
-// };
 
 const Event = () => {
   const router = useRouter();
