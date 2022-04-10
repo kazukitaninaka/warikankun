@@ -1,15 +1,11 @@
-import { Box, Center, Button, Spinner, Text } from '@chakra-ui/react';
+import { Box, Center, Button, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import Calculating from '../../../components/Calculating';
+import EventName from '../../../components/EventName';
 import { liffVar } from '../../../components/LiffProvider';
-import { useResultQuery, To, From } from '../../../generated/graphql';
-import { formatNumberToJPY } from '../../../utils';
-
-type TransactionInCalc = {
-  from: From;
-  to: (Omit<To, 'id'> & {
-    participantId: number;
-  })[];
-};
+import SumPrice from '../../../components/SumPrice';
+import { useResultQuery } from '../../../generated/graphql';
+import { makeRefundString } from '../../../utils';
 
 const Calc = () => {
   const router = useRouter();
@@ -19,39 +15,13 @@ const Calc = () => {
   });
   const liff = liffVar();
 
-  if (loading) {
-    return (
-      <Center>
-        <Spinner />
-      </Center>
-    );
-  }
-
   if (error) {
-    console.log(error);
     return (
       <Text>エラーが発生しました。時間を置いて再度アクセスしてください。</Text>
     );
   }
 
   const result = data?.QueryResult;
-
-  const makeRefundString = (transactions: TransactionInCalc[]) => {
-    let refundString = '';
-    transactions.forEach((transaction) => {
-      refundString += `${transaction.from.name} (支払うべき金額: ${transaction.from.shouldHavePaid}円)\n`;
-      if (!transaction.to.length) {
-        refundString += '　- 精算なし\n';
-      } else {
-        transaction.to.forEach((el) => {
-          refundString += `　- ${el.name}へ${el.amount}円\n`;
-        });
-      }
-    });
-    refundString += '\n\n';
-
-    return refundString;
-  };
 
   const handleShareResultClick = () => {
     if (!liff || !result) return;
@@ -81,35 +51,43 @@ const Calc = () => {
 
   return (
     <>
-      <Text fontSize="large">イベント名：{result!.name}</Text>
+      <EventName id={id} />
       <Text textAlign="center" fontSize="2xl" mb="5">
         精算
       </Text>
-      <Text my="2">支払い総額: {formatNumberToJPY(result!.sumPrice)}</Text>
+      <Box mb="2">
+        <SumPrice id={id} />
+      </Box>
       <Box mb="10">
-        {result?.transactions.map((transaction, index) => {
-          return (
-            <div key={`transaction-${index}`}>
-              <Box bgColor="gray.100">
-                <Text p="1.5">
-                  {transaction.from.name} (支払うべき合計金額:
-                  {transaction.from.shouldHavePaid}円)
-                </Text>
-              </Box>
-              <Box my="2" pl="1">
-                {transaction.to.length === 0 ? (
-                  <Text>精算なし</Text>
-                ) : (
-                  transaction.to.map((el) => (
-                    <Text key={el.participantId}>
-                      {el.name}に{el.amount}円
-                    </Text>
-                  ))
-                )}
-              </Box>
-            </div>
-          );
-        })}
+        {loading ? (
+          <Center>
+            <Calculating />
+          </Center>
+        ) : (
+          result?.transactions.map((transaction, index) => {
+            return (
+              <div key={`transaction-${index}`}>
+                <Box bgColor="gray.100">
+                  <Text p="1.5">
+                    {transaction.from.name} (支払うべき合計金額:
+                    {transaction.from.shouldHavePaid}円)
+                  </Text>
+                </Box>
+                <Box my="2" pl="1">
+                  {transaction.to.length === 0 ? (
+                    <Text>精算なし</Text>
+                  ) : (
+                    transaction.to.map((el) => (
+                      <Text key={el.participantId}>
+                        {el.name}に{el.amount}円
+                      </Text>
+                    ))
+                  )}
+                </Box>
+              </div>
+            );
+          })
+        )}
       </Box>
       <Center>
         <Button colorScheme="green" onClick={handleShareResultClick}>
