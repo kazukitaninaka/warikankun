@@ -8,7 +8,6 @@ import {
   Td,
   Tr,
   Text,
-  Skeleton,
 } from '@chakra-ui/react';
 import { formatNumberToJPY } from '../utils';
 import { DeleteIcon } from '@chakra-ui/icons';
