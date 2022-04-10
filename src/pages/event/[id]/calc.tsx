@@ -1,5 +1,6 @@
-import { Box, Center, Button, Spinner, Text } from '@chakra-ui/react';
+import { Box, Center, Button, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import Calculating from '../../../components/Calculating';
 import { liffVar } from '../../../components/LiffProvider';
 import { useResultQuery, To, From } from '../../../generated/graphql';
 import { formatNumberToJPY } from '../../../utils';
@@ -22,7 +23,7 @@ const Calc = () => {
   if (loading) {
     return (
       <Center>
-        <Spinner />
+        <Calculating />
       </Center>
     );
   }

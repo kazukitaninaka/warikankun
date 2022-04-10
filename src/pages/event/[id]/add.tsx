@@ -30,13 +30,14 @@ const Add = () => {
   const [whoPaidId, setWhoPaidId] = useState<number | undefined>(undefined);
   const [amount, setAmount] = useState<string>('');
   const [whoShouldNotPay, setWhoShouldNotPay] = useState<number[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [insertPayment] = useInsertPaymentMutation();
 
   if (loading) {
     return (
       <Center>
-        <Spinner />
+        <Spinner size="lg" />
       </Center>
     );
   }
@@ -60,6 +61,7 @@ const Add = () => {
 
   const addPayment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     if (!amount || !whoPaidId || !event) return;
 
     // whoShouldNotPayを元にmutateする形にwhoShouldPayを整形
@@ -152,7 +154,12 @@ const Add = () => {
           })}
         </Box>
         <Center mt="5">
-          <Button bgColor="blue.500" color="white" type="submit">
+          <Button
+            bgColor="blue.500"
+            color="white"
+            type="submit"
+            isLoading={isSubmitting}
+          >
             追加
           </Button>
         </Center>
