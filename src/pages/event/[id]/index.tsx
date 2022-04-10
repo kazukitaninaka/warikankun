@@ -23,7 +23,6 @@ import { useState } from 'react';
 import { liffVar } from '../../../components/LiffProvider';
 import AddWarikankun from '../../../components/AddFriend';
 import useFriendship from '../../../hooks/useFriendship';
-import Calculating from '../../../components/Calculating';
 
 const Event = () => {
   const router = useRouter();
