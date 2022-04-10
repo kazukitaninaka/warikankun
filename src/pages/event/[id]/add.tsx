@@ -37,7 +37,7 @@ const Add = () => {
   if (loading) {
     return (
       <Center>
-        <Spinner />
+        <Spinner size="lg" />
       </Center>
     );
   }
