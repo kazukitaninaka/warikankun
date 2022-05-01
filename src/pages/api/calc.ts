@@ -99,7 +99,7 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
     // 支払った人は「支払ったトータル金額」ー「自分が払うべき金額」をプラス
     // whoShouldPayの人たちは「自分が払うべき金額」をマイナス
     const numParticipants = payment.whoShouldPay.length;
-    const pricePerParticipant = payment.amount / numParticipants; // 負担者が若干得するためにceil
+    const pricePerParticipant = payment.amount / numParticipants;
 
     participantBalances = participantBalances.map((participantBalance) => {
       const newParticipantBalance = { ...participantBalance };
