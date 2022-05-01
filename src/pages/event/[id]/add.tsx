@@ -1,4 +1,3 @@
-import { CheckIcon } from '@chakra-ui/icons';
 import {
   Text,
   Input,
@@ -6,9 +5,13 @@ import {
   Center,
   Button,
   Box,
-  Divider,
-  Flex,
   Spinner,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -18,6 +21,7 @@ import {
   useInsertPaymentMutation,
   useQueryParticipantsQuery,
 } from '../../../generated/graphql';
+import useAddPaymentDetails from '../../../hooks/useAddPaymentDetails';
 
 const Add = () => {
   const router = useRouter();
@@ -30,34 +34,61 @@ const Add = () => {
   const [name, setName] = useState<string>('');
   const [whoPaidId, setWhoPaidId] = useState<number | undefined>(undefined);
   const [amount, setAmount] = useState<string>('');
-  const [whoShouldNotPay, setWhoShouldNotPay] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { details, setDetails } = useAddPaymentDetails(event);
 
   const [insertPayment] = useInsertPaymentMutation();
 
-  const handleWhoShouldPay = (index: number, isChecked: boolean) => {
-    if (!event) return;
-    // checkされてればwhoShouldNotPayに追加、なければ削除
-    if (!isChecked) {
-      setWhoShouldNotPay((prev) => prev.filter((i) => i !== index));
-    } else if (whoShouldNotPay.length < event.participants.length - 1) {
-      // 全員がwhoShouldNotPayに含まれるケースを避ける
-      setWhoShouldNotPay((prev) => [...prev, index]);
-    }
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(e.target.value);
+  };
+
+  const handleAmountPerPersonChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    i: number,
+  ) => {
+    setDetails((prev) => {
+      const newDetails = [...prev];
+      newDetails[i].amount = e.target.value;
+      return newDetails;
+    });
   };
 
   const addPayment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    if (!amount || !whoPaidId || !event) return;
+    if (!amount || !whoPaidId) return;
 
-    // whoShouldNotPayを元にmutateする形にwhoShouldPayを整形
-    let whoShouldPay: Payment_Participant_Insert_Input[] = [];
-    event.participants.forEach((participant, index) => {
-      if (!whoShouldNotPay.includes(index)) {
-        whoShouldPay.push({ participantId: participant.id });
-      }
-    });
+    // 負担調整済額の合計を算出
+
+    const filteredDetails = details.filter(
+      (participant) => participant.amount !== '0',
+    );
+
+    const sumOfCustomAmount = filteredDetails.reduce(
+      (prev, curr) => {
+        if (curr.amount === '') return prev;
+        return {
+          sumAmount: prev.sumAmount + Number(curr.amount),
+          sumParticipants: prev.sumParticipants + 1,
+        };
+      },
+      { sumAmount: 0, sumParticipants: 0 },
+    );
+
+    const whoShouldPay: Payment_Participant_Insert_Input[] =
+      filteredDetails.map((participant) => {
+        const amountForRest =
+          (+amount - sumOfCustomAmount.sumAmount) /
+          (filteredDetails.length - sumOfCustomAmount.sumParticipants);
+
+        return {
+          participantId: participant.id,
+          amountPerPerson: participant.amount
+            ? +participant.amount
+            : amountForRest,
+        };
+      });
 
     insertPayment({
       variables: {
@@ -82,7 +113,7 @@ const Add = () => {
   return (
     <>
       <EventName id={id} />
-      <Text textAlign="center" fontSize="large" mb="5">
+      <Text textAlign="center" fontSize="x-large" mb="5">
         支払い情報
       </Text>
       {loading ? (
@@ -91,7 +122,7 @@ const Add = () => {
         </Center>
       ) : (
         <form onSubmit={addPayment}>
-          <Text mb="1" mt="3">
+          <Text fontSize="lg" mb="1" mt="4">
             支払い名
           </Text>
           <Input
@@ -99,7 +130,7 @@ const Add = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <Text mb="1" mt="3">
+          <Text fontSize="lg" mb="1" mt="4">
             支払った人
           </Text>
           <Select
@@ -116,7 +147,7 @@ const Add = () => {
               </option>
             ))}
           </Select>
-          <Text mb="1" mt="3">
+          <Text fontSize="lg" mb="1" mt="4">
             金額
           </Text>
           <Input
@@ -124,30 +155,52 @@ const Add = () => {
             value={amount}
             type="text"
             inputMode="numeric"
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={handleAmountChange}
           />
-          <Text mb="1" mt="3">
-            割り勘対象者
+          <Text mb="1" mt="4" fontSize="lg">
+            負担額調整
+          </Text>
+          <Text fontSize="sm" color="gray.600">
+            一人当たりの負担額を個別に設定できます。
+          </Text>
+          <Text fontSize="sm" mb="1" color="gray.600">
+            0を設定すればその人を割り勘対象から外すことができます。
+          </Text>
+          <Text fontSize="sm" mb="1" color="gray.600">
+            空白にすれば残りの額で均等に割り勘されます。
           </Text>
           <Box border="1px" borderColor="gray.200" borderRadius="md">
-            {event?.participants?.map((participant, index) => {
-              const isChecked = !whoShouldNotPay.includes(index);
-              return (
-                <Box
-                  key={participant.id}
-                  onClick={() => handleWhoShouldPay(index, isChecked)}
-                  cursor="pointer"
-                >
-                  <Flex p="2">
-                    <Box w="8%">
-                      {isChecked && <CheckIcon color="blue.500" />}
-                    </Box>
-                    {participant.name}
-                  </Flex>
-                  {index !== event.participants.length - 1 && <Divider />}
-                </Box>
-              );
-            })}
+            <Table size="sm">
+              <Thead>
+                <Tr>
+                  <Th>名前</Th>
+                  <Th>
+                    負担額(調整なしの場合、{Math.ceil(+amount / details.length)}
+                    円/人)
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {details?.map((participant, index) => {
+                  return (
+                    <Tr key={participant.id}>
+                      <Td>{participant.name}</Td>
+                      <Td>
+                        <Input
+                          value={participant.amount}
+                          type="text"
+                          inputMode="numeric"
+                          onChange={(e) =>
+                            handleAmountPerPersonChange(e, index)
+                          }
+                          placeholder="残りの額で均等に割り勘"
+                        />
+                      </Td>
+                    </Tr>
+                  );
+                })}
+              </Tbody>
+            </Table>
           </Box>
           <Center mt="5">
             <Button
