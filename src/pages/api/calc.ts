@@ -119,7 +119,7 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
   return participantBalances;
 };
 
-const resolveBlance = (participantBalances: ParticipantBalance[]) => {
+const resolveBalance = (participantBalances: ParticipantBalance[]) => {
   let transactions: Transaction[] = participantBalances.map((participant) => ({
     from: {
       id: participant.id,
@@ -172,7 +172,7 @@ const calcTransaction = (event: Event) => {
   // TODO: balanceがゼロサムにならない点を直す（割り勘で割り切れない分の処理）
   // (そんな気にならない程度の差ではあるかも)
   const participantBalances = calcBalance(event);
-  const transactions = resolveBlance(participantBalances);
+  const transactions = resolveBalance(participantBalances);
 
   return transactions;
 };
