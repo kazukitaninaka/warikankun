@@ -865,6 +865,7 @@ export type Participants_Variance_Order_By = {
 /** join table of payment and participant on who_should_pay */
 export type Payment_Participant = {
   __typename?: 'payment_participant';
+  amountPerPerson?: Maybe<Scalars['Int']>;
   id: Scalars['Int'];
   /** An object relationship */
   participant: Participants;
@@ -929,6 +930,7 @@ export type Payment_Participant_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Payment_Participant_Avg_Fields = {
   __typename?: 'payment_participant_avg_fields';
+  amountPerPerson?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
@@ -936,6 +938,7 @@ export type Payment_Participant_Avg_Fields = {
 
 /** order by avg() on columns of table "payment_participant" */
 export type Payment_Participant_Avg_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -946,6 +949,7 @@ export type Payment_Participant_Bool_Exp = {
   _and?: InputMaybe<Array<Payment_Participant_Bool_Exp>>;
   _not?: InputMaybe<Payment_Participant_Bool_Exp>;
   _or?: InputMaybe<Array<Payment_Participant_Bool_Exp>>;
+  amountPerPerson?: InputMaybe<Int_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   participant?: InputMaybe<Participants_Bool_Exp>;
   participantId?: InputMaybe<Int_Comparison_Exp>;
@@ -963,6 +967,7 @@ export enum Payment_Participant_Constraint {
 
 /** input type for incrementing numeric columns in table "payment_participant" */
 export type Payment_Participant_Inc_Input = {
+  amountPerPerson?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['Int']>;
   participantId?: InputMaybe<Scalars['Int']>;
   paymentId?: InputMaybe<Scalars['Int']>;
@@ -970,6 +975,7 @@ export type Payment_Participant_Inc_Input = {
 
 /** input type for inserting data into table "payment_participant" */
 export type Payment_Participant_Insert_Input = {
+  amountPerPerson?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['Int']>;
   participant?: InputMaybe<Participants_Obj_Rel_Insert_Input>;
   participantId?: InputMaybe<Scalars['Int']>;
@@ -980,6 +986,7 @@ export type Payment_Participant_Insert_Input = {
 /** aggregate max on columns */
 export type Payment_Participant_Max_Fields = {
   __typename?: 'payment_participant_max_fields';
+  amountPerPerson?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
@@ -987,6 +994,7 @@ export type Payment_Participant_Max_Fields = {
 
 /** order by max() on columns of table "payment_participant" */
 export type Payment_Participant_Max_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -995,6 +1003,7 @@ export type Payment_Participant_Max_Order_By = {
 /** aggregate min on columns */
 export type Payment_Participant_Min_Fields = {
   __typename?: 'payment_participant_min_fields';
+  amountPerPerson?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
@@ -1002,6 +1011,7 @@ export type Payment_Participant_Min_Fields = {
 
 /** order by min() on columns of table "payment_participant" */
 export type Payment_Participant_Min_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -1025,6 +1035,7 @@ export type Payment_Participant_On_Conflict = {
 
 /** Ordering options when selecting data from "payment_participant". */
 export type Payment_Participant_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participant?: InputMaybe<Participants_Order_By>;
   participantId?: InputMaybe<Order_By>;
@@ -1040,6 +1051,8 @@ export type Payment_Participant_Pk_Columns_Input = {
 /** select columns of table "payment_participant" */
 export enum Payment_Participant_Select_Column {
   /** column name */
+  AmountPerPerson = 'amountPerPerson',
+  /** column name */
   Id = 'id',
   /** column name */
   ParticipantId = 'participantId',
@@ -1049,6 +1062,7 @@ export enum Payment_Participant_Select_Column {
 
 /** input type for updating data in table "payment_participant" */
 export type Payment_Participant_Set_Input = {
+  amountPerPerson?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['Int']>;
   participantId?: InputMaybe<Scalars['Int']>;
   paymentId?: InputMaybe<Scalars['Int']>;
@@ -1057,6 +1071,7 @@ export type Payment_Participant_Set_Input = {
 /** aggregate stddev on columns */
 export type Payment_Participant_Stddev_Fields = {
   __typename?: 'payment_participant_stddev_fields';
+  amountPerPerson?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
@@ -1064,6 +1079,7 @@ export type Payment_Participant_Stddev_Fields = {
 
 /** order by stddev() on columns of table "payment_participant" */
 export type Payment_Participant_Stddev_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -1072,6 +1088,7 @@ export type Payment_Participant_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Payment_Participant_Stddev_Pop_Fields = {
   __typename?: 'payment_participant_stddev_pop_fields';
+  amountPerPerson?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
@@ -1079,6 +1096,7 @@ export type Payment_Participant_Stddev_Pop_Fields = {
 
 /** order by stddev_pop() on columns of table "payment_participant" */
 export type Payment_Participant_Stddev_Pop_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -1087,6 +1105,7 @@ export type Payment_Participant_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Payment_Participant_Stddev_Samp_Fields = {
   __typename?: 'payment_participant_stddev_samp_fields';
+  amountPerPerson?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
@@ -1094,6 +1113,7 @@ export type Payment_Participant_Stddev_Samp_Fields = {
 
 /** order by stddev_samp() on columns of table "payment_participant" */
 export type Payment_Participant_Stddev_Samp_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -1102,6 +1122,7 @@ export type Payment_Participant_Stddev_Samp_Order_By = {
 /** aggregate sum on columns */
 export type Payment_Participant_Sum_Fields = {
   __typename?: 'payment_participant_sum_fields';
+  amountPerPerson?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
@@ -1109,6 +1130,7 @@ export type Payment_Participant_Sum_Fields = {
 
 /** order by sum() on columns of table "payment_participant" */
 export type Payment_Participant_Sum_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -1116,6 +1138,8 @@ export type Payment_Participant_Sum_Order_By = {
 
 /** update columns of table "payment_participant" */
 export enum Payment_Participant_Update_Column {
+  /** column name */
+  AmountPerPerson = 'amountPerPerson',
   /** column name */
   Id = 'id',
   /** column name */
@@ -1127,6 +1151,7 @@ export enum Payment_Participant_Update_Column {
 /** aggregate var_pop on columns */
 export type Payment_Participant_Var_Pop_Fields = {
   __typename?: 'payment_participant_var_pop_fields';
+  amountPerPerson?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
@@ -1134,6 +1159,7 @@ export type Payment_Participant_Var_Pop_Fields = {
 
 /** order by var_pop() on columns of table "payment_participant" */
 export type Payment_Participant_Var_Pop_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -1142,6 +1168,7 @@ export type Payment_Participant_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Payment_Participant_Var_Samp_Fields = {
   __typename?: 'payment_participant_var_samp_fields';
+  amountPerPerson?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
@@ -1149,6 +1176,7 @@ export type Payment_Participant_Var_Samp_Fields = {
 
 /** order by var_samp() on columns of table "payment_participant" */
 export type Payment_Participant_Var_Samp_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
@@ -1157,6 +1185,7 @@ export type Payment_Participant_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Payment_Participant_Variance_Fields = {
   __typename?: 'payment_participant_variance_fields';
+  amountPerPerson?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
@@ -1164,6 +1193,7 @@ export type Payment_Participant_Variance_Fields = {
 
 /** order by variance() on columns of table "payment_participant" */
 export type Payment_Participant_Variance_Order_By = {
+  amountPerPerson?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
