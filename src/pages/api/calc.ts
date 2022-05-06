@@ -185,7 +185,6 @@ export default async function handler(
   const { events } = await fetchEventForCalc(eventId);
   const event = events[0];
 
-  // TODO: 割り勘ロジックを作ってresultで返す
   const transactions = calcTransaction(event);
 
   const result = {
