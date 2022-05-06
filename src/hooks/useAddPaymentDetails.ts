@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryParticipantsQuery } from '../generated/graphql';
 
 type Details = {
@@ -19,6 +19,7 @@ const useAddPaymentDetails = (
     });
     setDetails(details);
   }, [event]);
+
   return { details, setDetails };
 };
 
