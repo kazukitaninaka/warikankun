@@ -12,6 +12,7 @@ import {
   Th,
   Tbody,
   Td,
+  Checkbox,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -21,7 +22,9 @@ import {
   useInsertPaymentMutation,
   useQueryParticipantsQuery,
 } from '../../../generated/graphql';
-import useAddPaymentDetails from '../../../hooks/useAddPaymentDetails';
+import useAddPaymentDetails, {
+  ratioEnum,
+} from '../../../hooks/useAddPaymentDetails';
 
 const Add = () => {
   const router = useRouter();
@@ -43,13 +46,21 @@ const Add = () => {
     setAmount(e.target.value);
   };
 
-  const handleAmountPerPersonChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+  const handleRatioChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
     i: number,
   ) => {
     setDetails((prev) => {
       const newDetails = [...prev];
-      newDetails[i].amount = e.target.value;
+      newDetails[i].ratio = +e.target.value;
+      return newDetails;
+    });
+  };
+
+  const handleShouldPayChange = (i: number) => {
+    setDetails((prev) => {
+      const newDetails = [...prev];
+      newDetails[i].shouldPay = !prev[i].shouldPay;
       return newDetails;
     });
   };
@@ -62,14 +73,16 @@ const Add = () => {
     // 負担調整済額の合計を算出
 
     const filteredDetails = details.filter(
-      (participant) => participant.amount !== '0',
+      (participant) => participant.shouldPay,
     );
+
+    const defaultAmountPerPerson = +amount / filteredDetails.length;
 
     const sumOfCustomAmount = filteredDetails.reduce(
       (prev, curr) => {
-        if (curr.amount === '') return prev;
+        if (curr.ratio === 1) return prev; // "デフォルト"の場合
         return {
-          sumAmount: prev.sumAmount + Number(curr.amount),
+          sumAmount: prev.sumAmount + defaultAmountPerPerson * curr.ratio,
           sumParticipants: prev.sumParticipants + 1,
         };
       },
@@ -78,15 +91,17 @@ const Add = () => {
 
     const whoShouldPay: Payment_Participant_Insert_Input[] =
       filteredDetails.map((participant) => {
-        const amountForRest =
+        const amountForRest = Math.ceil(
           (+amount - sumOfCustomAmount.sumAmount) /
-          (filteredDetails.length - sumOfCustomAmount.sumParticipants);
+            (filteredDetails.length - sumOfCustomAmount.sumParticipants),
+        );
 
         return {
           participantId: participant.id,
-          amountPerPerson: participant.amount
-            ? +participant.amount
-            : amountForRest,
+          amountPerPerson:
+            participant.ratio !== 1
+              ? Math.ceil(defaultAmountPerPerson * participant.ratio)
+              : amountForRest,
         };
       });
 
@@ -114,7 +129,7 @@ const Add = () => {
     <>
       <EventName id={id} />
       <Text textAlign="center" fontSize="x-large" mb="5">
-        支払い情報
+        支払い追加
       </Text>
       {loading ? (
         <Center>
@@ -158,43 +173,39 @@ const Add = () => {
             onChange={handleAmountChange}
           />
           <Text mb="1" mt="4" fontSize="lg">
-            負担額調整
-          </Text>
-          <Text fontSize="sm" color="gray.600">
-            一人当たりの負担額を個別に設定できます。
-          </Text>
-          <Text fontSize="sm" mb="1" color="gray.600">
-            0を設定すればその人を割り勘対象から外すことができます。
-          </Text>
-          <Text fontSize="sm" mb="1" color="gray.600">
-            空白にすれば残りの額で均等に割り勘されます。
+            割り勘設定
           </Text>
           <Box border="1px" borderColor="gray.200" borderRadius="md">
-            <Table size="sm">
+            <Table size="sm" variant="simple">
               <Thead>
                 <Tr>
+                  <Th>割り勘対象</Th>
                   <Th>名前</Th>
-                  <Th>
-                    負担額(調整なしの場合、{Math.ceil(+amount / details.length)}
-                    円/人)
-                  </Th>
+                  <Th>負担割合</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {details?.map((participant, index) => {
+                {details.map((participant, index) => {
                   return (
                     <Tr key={participant.id}>
+                      <Td>
+                        <Checkbox
+                          size="lg"
+                          onChange={() => handleShouldPayChange(index)}
+                          isChecked={participant.shouldPay}
+                        />
+                      </Td>
                       <Td>{participant.name}</Td>
                       <Td>
-                        <Input
-                          value={participant.amount}
-                          type="text"
-                          inputMode="numeric"
-                          onChange={(e) =>
-                            handleAmountPerPersonChange(e, index)
-                          }
-                          placeholder="残りの額で均等に割り勘"
-                        />
+                        <Select onChange={(e) => handleRatioChange(e, index)}>
+                          <option value={ratioEnum.DEFAULT}>そのまま</option>
+                          <option value={ratioEnum.LITTLE_LESS}>
+                            ちょっと少なめ
+                          </option>
+                          <option value={ratioEnum.LITTLE_MORE}>
+                            ちょっと多め
+                          </option>
+                        </Select>
                       </Td>
                     </Tr>
                   );
