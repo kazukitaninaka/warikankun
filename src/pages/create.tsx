@@ -17,6 +17,12 @@ const Create: NextPage = () => {
     setParticipants((prev) => [...prev, { name: '' }]);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      addParticipant();
+    }
+  };
+
   const setParticipantName = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>,
@@ -86,6 +92,7 @@ const Create: NextPage = () => {
               onChange={(e) => setParticipantName(index, e)}
               autoFocus={index >= 1} // 初回レンダー、すなわちindex0の場合のみfocusしないように
               mb="2"
+              onKeyDown={handleKeyDown}
             />
             <CloseIcon mr="2" onClick={() => deleteParticipant(index)} />
           </Flex>
