@@ -1,4 +1,6 @@
 import { Box, Center, Button, Text } from '@chakra-ui/react';
+import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
 import Calculating from '../../../components/Calculating';
 import EventName from '../../../components/EventName';
@@ -88,6 +90,9 @@ const Calc = () => {
       </Box>
       <Center>
         <Button colorScheme="green" onClick={handleShareResultClick}>
+          <Box mr="1">
+            <FontAwesomeIcon icon={faShareSquare} />
+          </Box>
           精算結果をグループに共有
         </Button>
       </Center>
