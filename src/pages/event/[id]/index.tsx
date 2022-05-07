@@ -6,6 +6,7 @@ import {
   Box,
   useDisclosure,
 } from '@chakra-ui/react';
+import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import {
   useDeletePaymentMutation,
   useQueryEventNameQuery,
@@ -20,7 +21,8 @@ import EventName from '../../../components/EventName';
 import { useRouter } from 'next/router';
 import SumPrice from '../../../components/SumPrice';
 import Payments from '../../../components/Payments';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 const Event = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -80,14 +82,14 @@ const Event = () => {
       <EventName id={id} />
       <Flex justifyContent="space-evenly" mt="3">
         <Button colorScheme="teal" onClick={() => router.push(`${id}/add`)}>
-          支払いを追加
+          <PlusSquareIcon mr="1" /> 支払いを追加
         </Button>
         <Button
           colorScheme="blue"
           onClick={() => router.push(`${id}/calc`)}
           disabled={!paymentsData?.events[0].payments.length}
         >
-          現在の精算結果を表示
+          <CheckIcon mr="1" /> 現在の精算結果を表示
         </Button>
       </Flex>
       <Text fontSize="large" mt="8">
@@ -107,7 +109,10 @@ const Event = () => {
         </Center>
         <Center>
           <Button colorScheme="green" onClick={handleShareClick}>
-            このページをグループに共有
+            <Box mr="1">
+              <FontAwesomeIcon icon={faShareSquare} />
+            </Box>
+            LINEでグループに共有
           </Button>
         </Center>
       </Box>
