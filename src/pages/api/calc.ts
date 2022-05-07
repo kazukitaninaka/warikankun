@@ -87,7 +87,7 @@ const calcAmountForRest = (amount: number, whoShouldPay: WhoShouldPay[]) => {
   // ratioが1でない人たちの総額
   const sumOfCustomAmount = whoShouldPay.reduce(
     (prev, curr) => {
-      if (curr.ratio === 1 || curr.ratio === null) return prev; // "そのまま"の場合
+      if (curr.ratio === 1 || curr.ratio === null) return prev; // "そのまま"の場合。 過去のデータに対応するためnullの場合も。
       return {
         sumAmount: prev.sumAmount + defaultAmountPerPerson * curr.ratio,
         sumParticipants: prev.sumParticipants + 1,
@@ -133,7 +133,7 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
       );
       if (personIndexToPay > -1) {
         const ratio = payment.whoShouldPay[personIndexToPay].ratio;
-        const appliesAmountForRest = ratio === 1;
+        const appliesAmountForRest = ratio === 1 || ratio === null; // 過去のデータに対応するためnullの場合も
         newParticipantBalance.balance -= appliesAmountForRest
           ? amountForRest
           : defaultAmountPerPerson * ratio;
