@@ -1,3 +1,4 @@
+import { InfoIcon } from '@chakra-ui/icons';
 import {
   Text,
   Input,
@@ -13,6 +14,13 @@ import {
   Tbody,
   Td,
   Checkbox,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
+  PopoverHeader,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -98,6 +106,24 @@ const Add = () => {
     });
   };
 
+  const renderPopover = () => {
+    return (
+      <Popover placement="top-start">
+        <PopoverTrigger>
+          <InfoIcon />
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverBody>
+            <Text>ちょっと多め：通常の1.25倍の負担額</Text>
+            <Text>ちょっと少なめ：通常の0.75倍の負担額</Text>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+    );
+  };
+
   if (error) {
     <Text>エラーが発生しました。</Text>;
   }
@@ -158,7 +184,7 @@ const Add = () => {
                 <Tr>
                   <Th>割り勘対象</Th>
                   <Th w="30%">名前</Th>
-                  <Th w="50%">負担割合</Th>
+                  <Th w="50%">負担割合 {renderPopover()}</Th>
                 </Tr>
               </Thead>
               <Tbody>
