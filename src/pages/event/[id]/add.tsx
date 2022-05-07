@@ -157,8 +157,8 @@ const Add = () => {
               <Thead>
                 <Tr>
                   <Th>割り勘対象</Th>
-                  <Th>名前</Th>
-                  <Th>負担割合</Th>
+                  <Th w="30%">名前</Th>
+                  <Th w="50%">負担割合</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -174,7 +174,10 @@ const Add = () => {
                       </Td>
                       <Td>{participant.name}</Td>
                       <Td>
-                        <Select onChange={(e) => handleRatioChange(e, index)}>
+                        <Select
+                          onChange={(e) => handleRatioChange(e, index)}
+                          size="sm"
+                        >
                           <option value={ratioEnum.DEFAULT}>そのまま</option>
                           <option value={ratioEnum.LITTLE_LESS}>
                             ちょっと少なめ
