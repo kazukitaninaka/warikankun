@@ -1,4 +1,4 @@
-import { CheckIcon } from '@chakra-ui/icons';
+import { InfoIcon } from '@chakra-ui/icons';
 import {
   Text,
   Input,
@@ -6,9 +6,21 @@ import {
   Center,
   Button,
   Box,
-  Divider,
-  Flex,
   Spinner,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Checkbox,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
+  PopoverHeader,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -18,6 +30,9 @@ import {
   useInsertPaymentMutation,
   useQueryParticipantsQuery,
 } from '../../../generated/graphql';
+import useAddPaymentDetails, {
+  ratioEnum,
+} from '../../../hooks/useAddPaymentDetails';
 
 const Add = () => {
   const router = useRouter();
@@ -30,34 +45,50 @@ const Add = () => {
   const [name, setName] = useState<string>('');
   const [whoPaidId, setWhoPaidId] = useState<number | undefined>(undefined);
   const [amount, setAmount] = useState<string>('');
-  const [whoShouldNotPay, setWhoShouldNotPay] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { details, setDetails } = useAddPaymentDetails(event);
 
   const [insertPayment] = useInsertPaymentMutation();
 
-  const handleWhoShouldPay = (index: number, isChecked: boolean) => {
-    if (!event) return;
-    // checkされてればwhoShouldNotPayに追加、なければ削除
-    if (!isChecked) {
-      setWhoShouldNotPay((prev) => prev.filter((i) => i !== index));
-    } else if (whoShouldNotPay.length < event.participants.length - 1) {
-      // 全員がwhoShouldNotPayに含まれるケースを避ける
-      setWhoShouldNotPay((prev) => [...prev, index]);
-    }
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(e.target.value);
+  };
+
+  const handleRatioChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    i: number,
+  ) => {
+    setDetails((prev) => {
+      const newDetails = [...prev];
+      newDetails[i].ratio = +e.target.value;
+      return newDetails;
+    });
+  };
+
+  const handleShouldPayChange = (i: number) => {
+    setDetails((prev) => {
+      const newDetails = [...prev];
+      newDetails[i].shouldPay = !prev[i].shouldPay;
+      return newDetails;
+    });
   };
 
   const addPayment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    if (!amount || !whoPaidId || !event) return;
+    if (!amount || !whoPaidId) return;
 
-    // whoShouldNotPayを元にmutateする形にwhoShouldPayを整形
-    let whoShouldPay: Payment_Participant_Insert_Input[] = [];
-    event.participants.forEach((participant, index) => {
-      if (!whoShouldNotPay.includes(index)) {
-        whoShouldPay.push({ participantId: participant.id });
-      }
-    });
+    const filteredDetails = details.filter(
+      (participant) => participant.shouldPay,
+    );
+
+    const whoShouldPay: Payment_Participant_Insert_Input[] =
+      filteredDetails.map((participant) => {
+        return {
+          participantId: participant.id,
+          ratio: participant.ratio,
+        };
+      });
 
     insertPayment({
       variables: {
@@ -75,6 +106,24 @@ const Add = () => {
     });
   };
 
+  const renderPopover = () => {
+    return (
+      <Popover placement="top-start">
+        <PopoverTrigger>
+          <InfoIcon />
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverBody>
+            <Text>ちょっと多め：通常の1.25倍の負担額</Text>
+            <Text>ちょっと少なめ：通常の0.75倍の負担額</Text>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+    );
+  };
+
   if (error) {
     <Text>エラーが発生しました。</Text>;
   }
@@ -82,8 +131,8 @@ const Add = () => {
   return (
     <>
       <EventName id={id} />
-      <Text textAlign="center" fontSize="large" mb="5">
-        支払い情報
+      <Text textAlign="center" fontSize="x-large" mb="5">
+        支払い追加
       </Text>
       {loading ? (
         <Center>
@@ -91,7 +140,7 @@ const Add = () => {
         </Center>
       ) : (
         <form onSubmit={addPayment}>
-          <Text mb="1" mt="3">
+          <Text fontSize="lg" mb="1" mt="4">
             支払い名
           </Text>
           <Input
@@ -99,7 +148,7 @@ const Add = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <Text mb="1" mt="3">
+          <Text fontSize="lg" mb="1" mt="4">
             支払った人
           </Text>
           <Select
@@ -116,7 +165,7 @@ const Add = () => {
               </option>
             ))}
           </Select>
-          <Text mb="1" mt="3">
+          <Text fontSize="lg" mb="1" mt="4">
             金額
           </Text>
           <Input
@@ -124,30 +173,51 @@ const Add = () => {
             value={amount}
             type="text"
             inputMode="numeric"
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={handleAmountChange}
           />
-          <Text mb="1" mt="3">
-            割り勘対象者
+          <Text mb="1" mt="4" fontSize="lg">
+            割り勘設定
           </Text>
           <Box border="1px" borderColor="gray.200" borderRadius="md">
-            {event?.participants?.map((participant, index) => {
-              const isChecked = !whoShouldNotPay.includes(index);
-              return (
-                <Box
-                  key={participant.id}
-                  onClick={() => handleWhoShouldPay(index, isChecked)}
-                  cursor="pointer"
-                >
-                  <Flex p="2">
-                    <Box w="8%">
-                      {isChecked && <CheckIcon color="blue.500" />}
-                    </Box>
-                    {participant.name}
-                  </Flex>
-                  {index !== event.participants.length - 1 && <Divider />}
-                </Box>
-              );
-            })}
+            <Table size="sm" variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>割り勘対象</Th>
+                  <Th w="30%">名前</Th>
+                  <Th w="50%">負担割合 {renderPopover()}</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {details.map((participant, index) => {
+                  return (
+                    <Tr key={participant.id}>
+                      <Td>
+                        <Checkbox
+                          size="lg"
+                          onChange={() => handleShouldPayChange(index)}
+                          isChecked={participant.shouldPay}
+                        />
+                      </Td>
+                      <Td>{participant.name}</Td>
+                      <Td>
+                        <Select
+                          onChange={(e) => handleRatioChange(e, index)}
+                          size="sm"
+                        >
+                          <option value={ratioEnum.DEFAULT}>そのまま</option>
+                          <option value={ratioEnum.LITTLE_LESS}>
+                            ちょっと少なめ
+                          </option>
+                          <option value={ratioEnum.LITTLE_MORE}>
+                            ちょっと多め
+                          </option>
+                        </Select>
+                      </Td>
+                    </Tr>
+                  );
+                })}
+              </Tbody>
+            </Table>
           </Box>
           <Center mt="5">
             <Button

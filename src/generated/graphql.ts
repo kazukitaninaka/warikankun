@@ -872,6 +872,7 @@ export type Payment_Participant = {
   /** An object relationship */
   payment: Payments;
   paymentId: Scalars['Int'];
+  ratio?: Maybe<Scalars['Int']>;
 };
 
 /** aggregated selection of "payment_participant" */
@@ -932,6 +933,7 @@ export type Payment_Participant_Avg_Fields = {
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
+  ratio?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "payment_participant" */
@@ -939,6 +941,7 @@ export type Payment_Participant_Avg_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "payment_participant". All fields are combined with a logical 'AND'. */
@@ -951,6 +954,7 @@ export type Payment_Participant_Bool_Exp = {
   participantId?: InputMaybe<Int_Comparison_Exp>;
   payment?: InputMaybe<Payments_Bool_Exp>;
   paymentId?: InputMaybe<Int_Comparison_Exp>;
+  ratio?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "payment_participant" */
@@ -966,6 +970,7 @@ export type Payment_Participant_Inc_Input = {
   id?: InputMaybe<Scalars['Int']>;
   participantId?: InputMaybe<Scalars['Int']>;
   paymentId?: InputMaybe<Scalars['Int']>;
+  ratio?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "payment_participant" */
@@ -975,6 +980,7 @@ export type Payment_Participant_Insert_Input = {
   participantId?: InputMaybe<Scalars['Int']>;
   payment?: InputMaybe<Payments_Obj_Rel_Insert_Input>;
   paymentId?: InputMaybe<Scalars['Int']>;
+  ratio?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate max on columns */
@@ -983,6 +989,7 @@ export type Payment_Participant_Max_Fields = {
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
+  ratio?: Maybe<Scalars['Int']>;
 };
 
 /** order by max() on columns of table "payment_participant" */
@@ -990,6 +997,7 @@ export type Payment_Participant_Max_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -998,6 +1006,7 @@ export type Payment_Participant_Min_Fields = {
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
+  ratio?: Maybe<Scalars['Int']>;
 };
 
 /** order by min() on columns of table "payment_participant" */
@@ -1005,6 +1014,7 @@ export type Payment_Participant_Min_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "payment_participant" */
@@ -1030,6 +1040,7 @@ export type Payment_Participant_Order_By = {
   participantId?: InputMaybe<Order_By>;
   payment?: InputMaybe<Payments_Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: payment_participant */
@@ -1044,7 +1055,9 @@ export enum Payment_Participant_Select_Column {
   /** column name */
   ParticipantId = 'participantId',
   /** column name */
-  PaymentId = 'paymentId'
+  PaymentId = 'paymentId',
+  /** column name */
+  Ratio = 'ratio'
 }
 
 /** input type for updating data in table "payment_participant" */
@@ -1052,6 +1065,7 @@ export type Payment_Participant_Set_Input = {
   id?: InputMaybe<Scalars['Int']>;
   participantId?: InputMaybe<Scalars['Int']>;
   paymentId?: InputMaybe<Scalars['Int']>;
+  ratio?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate stddev on columns */
@@ -1060,6 +1074,7 @@ export type Payment_Participant_Stddev_Fields = {
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
+  ratio?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "payment_participant" */
@@ -1067,6 +1082,7 @@ export type Payment_Participant_Stddev_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -1075,6 +1091,7 @@ export type Payment_Participant_Stddev_Pop_Fields = {
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
+  ratio?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "payment_participant" */
@@ -1082,6 +1099,7 @@ export type Payment_Participant_Stddev_Pop_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -1090,6 +1108,7 @@ export type Payment_Participant_Stddev_Samp_Fields = {
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
+  ratio?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "payment_participant" */
@@ -1097,6 +1116,7 @@ export type Payment_Participant_Stddev_Samp_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** aggregate sum on columns */
@@ -1105,6 +1125,7 @@ export type Payment_Participant_Sum_Fields = {
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
+  ratio?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "payment_participant" */
@@ -1112,6 +1133,7 @@ export type Payment_Participant_Sum_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "payment_participant" */
@@ -1121,7 +1143,9 @@ export enum Payment_Participant_Update_Column {
   /** column name */
   ParticipantId = 'participantId',
   /** column name */
-  PaymentId = 'paymentId'
+  PaymentId = 'paymentId',
+  /** column name */
+  Ratio = 'ratio'
 }
 
 /** aggregate var_pop on columns */
@@ -1130,6 +1154,7 @@ export type Payment_Participant_Var_Pop_Fields = {
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
+  ratio?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "payment_participant" */
@@ -1137,6 +1162,7 @@ export type Payment_Participant_Var_Pop_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
@@ -1145,6 +1171,7 @@ export type Payment_Participant_Var_Samp_Fields = {
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
+  ratio?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "payment_participant" */
@@ -1152,6 +1179,7 @@ export type Payment_Participant_Var_Samp_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
@@ -1160,6 +1188,7 @@ export type Payment_Participant_Variance_Fields = {
   id?: Maybe<Scalars['Float']>;
   participantId?: Maybe<Scalars['Float']>;
   paymentId?: Maybe<Scalars['Float']>;
+  ratio?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "payment_participant" */
@@ -1167,6 +1196,7 @@ export type Payment_Participant_Variance_Order_By = {
   id?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   paymentId?: InputMaybe<Order_By>;
+  ratio?: InputMaybe<Order_By>;
 };
 
 /** payments */
