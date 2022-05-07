@@ -16,7 +16,7 @@ type TransactionInCalc = {
 export const makeRefundString = (transactions: TransactionInCalc[]) => {
   let refundString = '';
   transactions.forEach((transaction) => {
-    refundString += `${transaction.from.name}`;
+    refundString += `${transaction.from.name}\n`;
     if (!transaction.to.length) {
       refundString += '　- 精算なし\n';
     } else {
