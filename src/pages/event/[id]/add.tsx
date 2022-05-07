@@ -70,38 +70,15 @@ const Add = () => {
     setIsSubmitting(true);
     if (!amount || !whoPaidId) return;
 
-    // 負担調整済額の合計を算出
-
     const filteredDetails = details.filter(
       (participant) => participant.shouldPay,
     );
 
-    const defaultAmountPerPerson = +amount / filteredDetails.length;
-
-    const sumOfCustomAmount = filteredDetails.reduce(
-      (prev, curr) => {
-        if (curr.ratio === 1) return prev; // "デフォルト"の場合
-        return {
-          sumAmount: prev.sumAmount + defaultAmountPerPerson * curr.ratio,
-          sumParticipants: prev.sumParticipants + 1,
-        };
-      },
-      { sumAmount: 0, sumParticipants: 0 },
-    );
-
     const whoShouldPay: Payment_Participant_Insert_Input[] =
       filteredDetails.map((participant) => {
-        const amountForRest = Math.ceil(
-          (+amount - sumOfCustomAmount.sumAmount) /
-            (filteredDetails.length - sumOfCustomAmount.sumParticipants),
-        );
-
         return {
           participantId: participant.id,
-          amountPerPerson:
-            participant.ratio !== 1
-              ? Math.ceil(defaultAmountPerPerson * participant.ratio)
-              : amountForRest,
+          ratio: participant.ratio,
         };
       });
 

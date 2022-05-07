@@ -56,6 +56,7 @@ type Payment = {
 
 type WhoShouldPay = {
   participantId: number;
+  ratio: number;
 };
 
 type ParticipantBalance = {
@@ -80,11 +81,27 @@ const fetchEventForCalc = async (
   return await data.json();
 };
 
-const isInWhoShouldPay = (
-  whoShouldPay: WhoShouldPay[],
-  participantId: number,
-): boolean => {
-  return whoShouldPay.some((el) => el.participantId === participantId);
+const calcAmountForRest = (amount: number, whoShouldPay: WhoShouldPay[]) => {
+  const defaultAmountPerPerson = amount / whoShouldPay.length;
+
+  // ratioが1でない人たちの総額
+  const sumOfCustomAmount = whoShouldPay.reduce(
+    (prev, curr) => {
+      if (curr.ratio === 1 || curr.ratio === null) return prev; // "そのまま"の場合
+      return {
+        sumAmount: prev.sumAmount + defaultAmountPerPerson * curr.ratio,
+        sumParticipants: prev.sumParticipants + 1,
+      };
+    },
+    { sumAmount: 0, sumParticipants: 0 },
+  );
+
+  const amountForRest = Math.ceil(
+    (amount - sumOfCustomAmount.sumAmount) /
+      (whoShouldPay.length - sumOfCustomAmount.sumParticipants),
+  );
+
+  return amountForRest;
 };
 
 const calcBalance = (event: Event): ParticipantBalance[] => {
@@ -98,8 +115,11 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
   event.payments.forEach((payment) => {
     // 支払った人は「支払ったトータル金額」ー「自分が払うべき金額」をプラス
     // whoShouldPayの人たちは「自分が払うべき金額」をマイナス
-    const numParticipants = payment.whoShouldPay.length;
-    const pricePerParticipant = payment.amount / numParticipants;
+    const defaultAmountPerPerson = payment.amount / payment.whoShouldPay.length;
+    const amountForRest = calcAmountForRest(
+      payment.amount,
+      payment.whoShouldPay,
+    );
 
     participantBalances = participantBalances.map((participantBalance) => {
       const newParticipantBalance = { ...participantBalance };
@@ -108,9 +128,18 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
         newParticipantBalance.balance += payment.amount;
       }
       // もし払うべき人だったらdebtの分引く、shouldHavePaidに一人分の金額を追加
-      if (isInWhoShouldPay(payment.whoShouldPay, participantBalance.id)) {
-        newParticipantBalance.balance -= pricePerParticipant;
-        newParticipantBalance.shouldHavePaid += pricePerParticipant;
+      const personIndexToPay = payment.whoShouldPay.findIndex(
+        (el) => el.participantId === participantBalance.id,
+      );
+      if (personIndexToPay > -1) {
+        const ratio = payment.whoShouldPay[personIndexToPay].ratio;
+        const appliesAmountForRest = ratio === 1;
+        newParticipantBalance.balance -= appliesAmountForRest
+          ? amountForRest
+          : defaultAmountPerPerson * ratio;
+        newParticipantBalance.shouldHavePaid += appliesAmountForRest
+          ? amountForRest
+          : defaultAmountPerPerson * ratio;
       }
 
       return newParticipantBalance;
@@ -155,7 +184,7 @@ const resolveBalance = (participantBalances: ParticipantBalance[]) => {
         {
           id: paidTooMuch.id,
           name: paidTooMuch.name,
-          amount: Math.ceil(transactionAmount),
+          amount: transactionAmount,
         },
       ],
     };
