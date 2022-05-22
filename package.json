@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "graphql-codegen --config codegen.js"
+    "generate": "graphql-codegen --config codegen.js",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "dependencies": {
     "@apollo/client": "^3.5.9",
@@ -33,6 +35,7 @@
   "devDependencies": {
     "@types/node": "17.0.19",
     "@types/react": "17.0.39",
+    "cypress": "^9.6.1",
     "eslint": "8.9.0",
     "eslint-config-next": "12.1.0",
     "prettier": "^2.5.1",

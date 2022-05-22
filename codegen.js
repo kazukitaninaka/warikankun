@@ -5,7 +5,7 @@ module.exports = {
         headers: {
           // TODO: ハードコードすればうまくいく
           'x-hasura-admin-secret':
-            process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET,
+            'kNRis2mNL5jGHMY6NXbR5PfjHItTXwefioWYR4pIu0QVlWuUp4nQX3mPaFhhmgiM',
         },
       },
     },

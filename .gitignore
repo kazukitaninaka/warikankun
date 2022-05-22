@@ -40,3 +40,7 @@ yarn-error.log*
 
 #graphql generated file
 graphql.schema.json
+
+# cypress videos and screenshots
+/cypress/videos
+/cypress/screenshots
