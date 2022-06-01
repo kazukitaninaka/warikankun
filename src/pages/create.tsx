@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Input, Text, Button, Box, Flex, Center } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useInsertEventMutation } from '../generated/graphql';
@@ -12,6 +12,12 @@ const Create: NextPage = () => {
   const [eventName, setEventName] = useState<string>('');
   const [insertEvent, { loading: isInserting }] = useInsertEventMutation();
   const liff = liffVar();
+  const isCreatingAllowed = useMemo(() => {
+    const participantsWithNonEmptyName = participants.filter(
+      (participant) => participant.name,
+    );
+    return eventName !== '' && participantsWithNonEmptyName.length >= 2;
+  }, [eventName, participants]);
 
   const addParticipant = () => {
     setParticipants((prev) => [...prev, { name: '' }]);
@@ -105,7 +111,7 @@ const Create: NextPage = () => {
         <Button
           colorScheme="teal"
           onClick={handleCreateEventClick}
-          disabled={isInserting}
+          disabled={!isCreatingAllowed || isInserting}
         >
           {isInserting ? 'イベント作成中...' : 'イベント作成'}
         </Button>
