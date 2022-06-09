@@ -1,19 +1,9 @@
-import {
-  Text,
-  Center,
-  Flex,
-  Button,
-  Box,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Text, Center, Flex, Button, Box } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import {
-  useDeletePaymentMutation,
   useQueryEventNameQuery,
-  useQueryPaymentsQuery,
+  usePaymentCountQuery,
 } from '../../../generated/graphql';
-import Modal from '../../../components/Modal';
-import { useState } from 'react';
 import { liffVar } from '../../../components/LiffProvider';
 import AddWarikankun from '../../../components/AddFriend';
 import useFriendship from '../../../hooks/useFriendship';
@@ -23,30 +13,20 @@ import SumPrice from '../../../components/SumPrice';
 import Payments from '../../../components/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
+import useDeleteModal from '../../../hooks/useDeleteModal';
+
 const Event = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data: eventNameData } = useQueryEventNameQuery({
     variables: { eventId: id },
   });
-  const { data: paymentsData } = useQueryPaymentsQuery({
+  const { data: paymentCountData } = usePaymentCountQuery({
     variables: { eventId: id },
   });
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
-  const [Mutation, { loading: isDeleting, error: deleteError }] =
-    useDeletePaymentMutation();
   const liff = liffVar();
   const { isFriend } = useFriendship();
-
-  const deletePayment = () => {
-    if (deleteTarget) {
-      Mutation({ variables: { paymentId: deleteTarget } }).then(() => {
-        onClose();
-        router.reload();
-      });
-    }
-  };
+  const { renderDeleteModal, openModal, setDeleteTarget } = useDeleteModal();
 
   const handleShareClick = () => {
     if (!liff || !eventNameData?.events[0]) return;
@@ -71,14 +51,7 @@ const Event = () => {
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        onClick={deletePayment}
-        setDeleteTarget={setDeleteTarget}
-        loading={isDeleting}
-        error={deleteError}
-      />
+      {renderDeleteModal()}
       <EventName id={id} />
       <Flex justifyContent="space-evenly" mt="3">
         <Button colorScheme="teal" onClick={() => router.push(`${id}/add`)}>
@@ -87,7 +60,7 @@ const Event = () => {
         <Button
           colorScheme="blue"
           onClick={() => router.push(`${id}/calc`)}
-          disabled={!paymentsData?.events[0].payments.length}
+          disabled={!paymentCountData?.payments_aggregate.aggregate?.count}
         >
           <CheckIcon mr="1" /> 現在の精算結果を表示
         </Button>
@@ -99,7 +72,11 @@ const Event = () => {
         <SumPrice id={id} />
       </Box>
       <Box mb="5">
-        <Payments id={id} setDeleteTarget={setDeleteTarget} onOpen={onOpen} />
+        <Payments
+          id={id}
+          setDeleteTarget={setDeleteTarget}
+          onOpen={openModal}
+        />
       </Box>
       <Box mb="5">
         <Center>

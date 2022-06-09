@@ -1,4 +1,3 @@
-import React, { Dispatch, SetStateAction } from 'react';
 import {
   Box,
   Center,
@@ -19,7 +18,7 @@ const Payments = ({
   onOpen,
 }: {
   id: string | string[] | undefined;
-  setDeleteTarget: Dispatch<SetStateAction<number | null>>;
+  setDeleteTarget: (deleteTarget: number | null) => void;
   onOpen: () => void;
 }) => {
   const { loading, error, data } = useQueryPaymentsQuery({

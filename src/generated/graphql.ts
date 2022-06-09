@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  numeric: any;
   timestamptz: any;
   uuid: any;
 };
@@ -499,6 +500,19 @@ export type Mutation_RootUpdate_Payments_By_PkArgs = {
   pk_columns: Payments_Pk_Columns_Input;
 };
 
+/** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
+export type Numeric_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['numeric']>;
+  _gt?: InputMaybe<Scalars['numeric']>;
+  _gte?: InputMaybe<Scalars['numeric']>;
+  _in?: InputMaybe<Array<Scalars['numeric']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _lt?: InputMaybe<Scalars['numeric']>;
+  _lte?: InputMaybe<Scalars['numeric']>;
+  _neq?: InputMaybe<Scalars['numeric']>;
+  _nin?: InputMaybe<Array<Scalars['numeric']>>;
+};
+
 /** column ordering options */
 export enum Order_By {
   /** in ascending order, nulls last */
@@ -872,7 +886,7 @@ export type Payment_Participant = {
   /** An object relationship */
   payment: Payments;
   paymentId: Scalars['Int'];
-  ratio?: Maybe<Scalars['Int']>;
+  ratio?: Maybe<Scalars['numeric']>;
 };
 
 /** aggregated selection of "payment_participant" */
@@ -954,7 +968,7 @@ export type Payment_Participant_Bool_Exp = {
   participantId?: InputMaybe<Int_Comparison_Exp>;
   payment?: InputMaybe<Payments_Bool_Exp>;
   paymentId?: InputMaybe<Int_Comparison_Exp>;
-  ratio?: InputMaybe<Int_Comparison_Exp>;
+  ratio?: InputMaybe<Numeric_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "payment_participant" */
@@ -970,7 +984,7 @@ export type Payment_Participant_Inc_Input = {
   id?: InputMaybe<Scalars['Int']>;
   participantId?: InputMaybe<Scalars['Int']>;
   paymentId?: InputMaybe<Scalars['Int']>;
-  ratio?: InputMaybe<Scalars['Int']>;
+  ratio?: InputMaybe<Scalars['numeric']>;
 };
 
 /** input type for inserting data into table "payment_participant" */
@@ -980,7 +994,7 @@ export type Payment_Participant_Insert_Input = {
   participantId?: InputMaybe<Scalars['Int']>;
   payment?: InputMaybe<Payments_Obj_Rel_Insert_Input>;
   paymentId?: InputMaybe<Scalars['Int']>;
-  ratio?: InputMaybe<Scalars['Int']>;
+  ratio?: InputMaybe<Scalars['numeric']>;
 };
 
 /** aggregate max on columns */
@@ -989,7 +1003,7 @@ export type Payment_Participant_Max_Fields = {
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
-  ratio?: Maybe<Scalars['Int']>;
+  ratio?: Maybe<Scalars['numeric']>;
 };
 
 /** order by max() on columns of table "payment_participant" */
@@ -1006,7 +1020,7 @@ export type Payment_Participant_Min_Fields = {
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
-  ratio?: Maybe<Scalars['Int']>;
+  ratio?: Maybe<Scalars['numeric']>;
 };
 
 /** order by min() on columns of table "payment_participant" */
@@ -1065,7 +1079,7 @@ export type Payment_Participant_Set_Input = {
   id?: InputMaybe<Scalars['Int']>;
   participantId?: InputMaybe<Scalars['Int']>;
   paymentId?: InputMaybe<Scalars['Int']>;
-  ratio?: InputMaybe<Scalars['Int']>;
+  ratio?: InputMaybe<Scalars['numeric']>;
 };
 
 /** aggregate stddev on columns */
@@ -1125,7 +1139,7 @@ export type Payment_Participant_Sum_Fields = {
   id?: Maybe<Scalars['Int']>;
   participantId?: Maybe<Scalars['Int']>;
   paymentId?: Maybe<Scalars['Int']>;
-  ratio?: Maybe<Scalars['Int']>;
+  ratio?: Maybe<Scalars['numeric']>;
 };
 
 /** order by sum() on columns of table "payment_participant" */
@@ -1919,6 +1933,13 @@ export type QueryPaymentsQueryVariables = Exact<{
 
 export type QueryPaymentsQuery = { __typename?: 'query_root', events: Array<{ __typename?: 'events', id: any, payments: Array<{ __typename?: 'payments', id: number, name: string, amount: number, createdAt: any, whoShouldPay: Array<{ __typename?: 'payment_participant', participant: { __typename?: 'participants', id: number, name: string } }>, whoPaid: { __typename?: 'participants', id: number, name: string } }> }> };
 
+export type PaymentCountQueryVariables = Exact<{
+  eventId: Scalars['uuid'];
+}>;
+
+
+export type PaymentCountQuery = { __typename?: 'query_root', payments_aggregate: { __typename?: 'payments_aggregate', aggregate?: { __typename?: 'payments_aggregate_fields', count: number } | null } };
+
 export type ResultQueryVariables = Exact<{
   eventId: Scalars['uuid'];
 }>;
@@ -2272,6 +2293,43 @@ export function useQueryPaymentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type QueryPaymentsQueryHookResult = ReturnType<typeof useQueryPaymentsQuery>;
 export type QueryPaymentsLazyQueryHookResult = ReturnType<typeof useQueryPaymentsLazyQuery>;
 export type QueryPaymentsQueryResult = Apollo.QueryResult<QueryPaymentsQuery, QueryPaymentsQueryVariables>;
+export const PaymentCountDocument = gql`
+    query PaymentCount($eventId: uuid!) {
+  payments_aggregate(where: {eventId: {_eq: $eventId}}) {
+    aggregate {
+      count
+    }
+  }
+}
+    `;
+
+/**
+ * __usePaymentCountQuery__
+ *
+ * To run a query within a React component, call `usePaymentCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentCountQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function usePaymentCountQuery(baseOptions: Apollo.QueryHookOptions<PaymentCountQuery, PaymentCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaymentCountQuery, PaymentCountQueryVariables>(PaymentCountDocument, options);
+      }
+export function usePaymentCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaymentCountQuery, PaymentCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaymentCountQuery, PaymentCountQueryVariables>(PaymentCountDocument, options);
+        }
+export type PaymentCountQueryHookResult = ReturnType<typeof usePaymentCountQuery>;
+export type PaymentCountLazyQueryHookResult = ReturnType<typeof usePaymentCountLazyQuery>;
+export type PaymentCountQueryResult = Apollo.QueryResult<PaymentCountQuery, PaymentCountQueryVariables>;
 export const ResultDocument = gql`
     query Result($eventId: uuid!) {
   QueryResult(eventId: $eventId) {
