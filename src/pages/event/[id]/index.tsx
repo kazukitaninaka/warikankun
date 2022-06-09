@@ -2,7 +2,7 @@ import { Text, Center, Flex, Button, Box } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import {
   useQueryEventNameQuery,
-  useQueryPaymentsQuery,
+  usePaymentCountQuery,
 } from '../../../generated/graphql';
 import { liffVar } from '../../../components/LiffProvider';
 import AddWarikankun from '../../../components/AddFriend';
@@ -21,7 +21,7 @@ const Event = () => {
   const { data: eventNameData } = useQueryEventNameQuery({
     variables: { eventId: id },
   });
-  const { data: paymentsData } = useQueryPaymentsQuery({
+  const { data: paymentCountData } = usePaymentCountQuery({
     variables: { eventId: id },
   });
   const liff = liffVar();
@@ -60,7 +60,7 @@ const Event = () => {
         <Button
           colorScheme="blue"
           onClick={() => router.push(`${id}/calc`)}
-          disabled={!paymentsData?.events[0].payments.length}
+          disabled={!paymentCountData?.payments_aggregate.aggregate?.count}
         >
           <CheckIcon mr="1" /> 現在の精算結果を表示
         </Button>
