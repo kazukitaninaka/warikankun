@@ -10,7 +10,7 @@ const SumPrice = ({ id }: { id: string | string[] | undefined }) => {
     <Text>データ取得に失敗しました。</Text>;
   }
   return (
-    <Text>
+    <Text data-testid="text">
       支払い総額：
       {!loading &&
         formatNumberToJPY(
