@@ -96,10 +96,9 @@ const calcAmountForRest = (amount: number, whoShouldPay: WhoShouldPay[]) => {
     { sumAmount: 0, sumParticipants: 0 },
   );
 
-  const amountForRest = Math.ceil(
+  const amountForRest =
     (amount - sumOfCustomAmount.sumAmount) /
-      (whoShouldPay.length - sumOfCustomAmount.sumParticipants),
-  );
+    (whoShouldPay.length - sumOfCustomAmount.sumParticipants);
 
   return amountForRest;
 };
@@ -145,6 +144,13 @@ const calcBalance = (event: Event): ParticipantBalance[] => {
       return newParticipantBalance;
     });
   });
+
+  // balanceの計算がすべて終わったところで、balanceの小数点以下を四捨五入
+  participantBalances = participantBalances.map((participantBalance) => ({
+    ...participantBalance,
+    balance: Math.round(participantBalance.balance),
+  }));
+
   return participantBalances;
 };
 
