@@ -1,6 +1,9 @@
 import SumPrice from './SumPrice';
 import { render, screen } from '@testing-library/react';
-import { QuerySumPriceQueryHookResult } from '../generated/graphql';
+import {
+  QuerySumPriceQueryHookResult,
+  useQuerySumPriceQuery,
+} from '../generated/graphql';
 
 type ResultType = Pick<
   QuerySumPriceQueryHookResult,
@@ -28,12 +31,17 @@ const successfulResult: ResultType = {
 
 jest.mock('../generated/graphql', () => ({
   __esModule: true,
-  useQuerySumPriceQuery: () => successfulResult,
+  useQuerySumPriceQuery: jest.fn(),
 }));
 
-test('値取得成功時、正しいフォーマットで金額が表示される', () => {
-  render(<SumPrice id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
+describe('SumPrice', () => {
+  test('値取得成功時、正しいフォーマットで金額が表示される', () => {
+    (useQuerySumPriceQuery as jest.Mock).mockImplementation(
+      () => successfulResult,
+    );
+    render(<SumPrice id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
 
-  const sumPriceNode = screen.getByTestId('text');
-  expect(sumPriceNode?.textContent).toBe('支払い総額：￥21,345');
+    const sumPriceNode = screen.getByTestId('text');
+    expect(sumPriceNode?.textContent).toBe('支払い総額：￥21,345');
+  });
 });
