@@ -22,8 +22,41 @@ const testResult1 = {
   ],
 };
 
+const testResult2 = {
+  id: '2cd83dfe-0f9d-446a-8778-e865daac862f',
+  name: 'テスト2',
+  sumPrice: 101755,
+  transactions: [
+    {
+      from: { id: 13, name: '山田', shouldHavePaid: 12680 },
+      to: [
+        { id: 17, name: '伊藤', amount: 3550 },
+        { id: 19, name: '小川', amount: 1629 },
+      ],
+    },
+    { from: { id: 14, name: '田中', shouldHavePaid: 14179 }, to: [] },
+    {
+      from: { id: 15, name: '髙橋', shouldHavePaid: 15973 },
+      to: [{ id: 17, name: '伊藤', amount: 15972 }],
+    },
+    {
+      from: { id: 16, name: '川上', shouldHavePaid: 9320 },
+      to: [
+        { id: 14, name: '田中', amount: 8401 },
+        { id: 19, name: '小川', amount: 919 },
+      ],
+    },
+    { from: { id: 17, name: '伊藤', shouldHavePaid: 16348 }, to: [] },
+    {
+      from: { id: 18, name: '小林', shouldHavePaid: 17376 },
+      to: [{ id: 19, name: '小川', amount: 17375 }],
+    },
+    { from: { id: 19, name: '小川', shouldHavePaid: 15884 }, to: [] },
+  ],
+};
+
 describe('割り勘計算がうまくいく', () => {
-  test('ケース1', async () => {
+  test('全員が均等に割り勘したケース', async () => {
     await testApiHandler({
       url: 'api/calc',
       handler,
@@ -40,6 +73,26 @@ describe('割り勘計算がうまくいく', () => {
           }),
         });
         expect(await res.json()).toStrictEqual(testResult1);
+      },
+    });
+  });
+  test('割り勘に参加しなかったり、支払いに傾斜をつけたりしたタイプ', async () => {
+    await testApiHandler({
+      url: 'api/calc',
+      handler,
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            input: {
+              eventId: '2cd83dfe-0f9d-446a-8778-e865daac862f',
+            },
+          }),
+        });
+        expect(await res.json()).toStrictEqual(testResult2);
       },
     });
   });
