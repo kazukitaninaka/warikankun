@@ -4,6 +4,7 @@ import {
   QuerySumPriceQueryHookResult,
   useQuerySumPriceQuery,
 } from '../generated/graphql';
+import { ApolloError } from '@apollo/client';
 
 type ResultType = Pick<
   QuerySumPriceQueryHookResult,
@@ -35,6 +36,14 @@ const loadingResult: ResultType = {
   error: undefined,
 };
 
+const errorResult: ResultType = {
+  data: undefined,
+  loading: false,
+  error: new ApolloError({
+    errorMessage: 'Failed to fetch data',
+  }),
+};
+
 jest.mock('../generated/graphql', () => ({
   __esModule: true,
   useQuerySumPriceQuery: jest.fn(),
@@ -59,5 +68,13 @@ describe('SumPrice', () => {
 
     const sumPriceNode = screen.getByTestId('text');
     expect(sumPriceNode?.textContent).toBe('支払い総額：');
+  });
+
+  test('値取得失敗時、エラーメッセージを表示する', () => {
+    (useQuerySumPriceQuery as jest.Mock).mockImplementation(() => errorResult);
+    render(<SumPrice id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
+
+    const sumPriceNode = screen.getByTestId('errorText');
+    expect(sumPriceNode?.textContent).toContain('データ取得に失敗しました。');
   });
 });
