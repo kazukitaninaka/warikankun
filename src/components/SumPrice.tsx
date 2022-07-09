@@ -6,7 +6,6 @@ const SumPrice = ({ id }: { id: string | string[] | undefined }) => {
   const { loading, error, data } = useQuerySumPriceQuery({
     variables: { eventId: id },
   });
-  console.log(error);
   if (error) {
     return <Text data-testid="errorText">データ取得に失敗しました。</Text>;
   }
