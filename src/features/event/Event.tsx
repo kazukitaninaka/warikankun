@@ -13,7 +13,7 @@ import SumPrice from '@components/SumPrice';
 import Payments from '@components/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
-import useDeleteModal from '@hooks/useDeleteModal';
+import useDeleteModal from '@features/event/useDeleteModal';
 
 const Event: React.FC = () => {
   const router = useRouter();

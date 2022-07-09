@@ -29,7 +29,9 @@ import {
   useInsertPaymentMutation,
   useQueryParticipantsQuery,
 } from '@generated/graphql';
-import useAddPaymentDetails, { ratioEnum } from '@hooks/useAddPaymentDetails';
+import useAddPaymentDetails, {
+  ratioEnum,
+} from '@features/event/add/useAddPaymentDetails';
 
 const Add: React.FC = () => {
   const router = useRouter();
