@@ -5,7 +5,7 @@ import {
   usePaymentCountQuery,
 } from '@generated/graphql';
 import { liffVar } from '@components/LiffProvider';
-import AddWarikankun from '@components/AddFriend';
+import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';
 import EventName from '@components/EventName';
 import { useRouter } from 'next/router';
@@ -95,7 +95,7 @@ const Event: React.FC = () => {
       </Box>
       {!isFriend && (
         <Center>
-          <AddWarikankun />
+          <AddFriend />
         </Center>
       )}
     </>
