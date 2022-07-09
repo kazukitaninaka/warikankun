@@ -19,7 +19,8 @@
       "@components/*": ["src/components/*"],
       "@generated/*": ["src/generated/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@features/*": ["src/features/*"]
+      "@features/*": ["src/features/*"],
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.config.js"],
