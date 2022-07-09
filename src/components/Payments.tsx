@@ -33,7 +33,7 @@ const Payments = ({
   }
 
   if (error) {
-    return <Text>エラーが発生しました。</Text>;
+    return <Text data-testid="errorText">データ取得に失敗しました。</Text>;
   }
   return (
     <Box>
