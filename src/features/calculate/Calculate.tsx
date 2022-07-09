@@ -2,7 +2,7 @@ import { Box, Center, Button, Text } from '@chakra-ui/react';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
-import Calculating from '@components/Calculating';
+import Calculating from '@features/calculate/Calculating';
 import EventName from '@components/EventName';
 import { liffVar } from '@components/LiffProvider';
 import SumPrice from '@components/SumPrice';
