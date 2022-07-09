@@ -10,7 +10,7 @@ import useFriendship from '@hooks/useFriendship';
 import EventName from '@components/EventName';
 import { useRouter } from 'next/router';
 import SumPrice from '@components/SumPrice';
-import Payments from '@components/Payments';
+import Payments from '@features/event/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import useDeleteModal from '@features/event/useDeleteModal';

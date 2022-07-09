@@ -8,9 +8,9 @@ import {
   Tr,
   Text,
 } from '@chakra-ui/react';
-import { formatNumberToJPY } from '../utils';
+import { formatNumberToJPY } from '../../utils';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { useQueryPaymentsQuery } from '../generated/graphql';
+import { useQueryPaymentsQuery } from '../../generated/graphql';
 
 const Payments = ({
   id,
