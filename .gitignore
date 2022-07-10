@@ -40,3 +40,6 @@ yarn-error.log*
 
 #graphql generated file
 graphql.schema.json
+
+# generated
+/src/generated/

@@ -3,9 +3,8 @@ module.exports = {
     {
       'https://warikankun.hasura.app/v1/graphql': {
         headers: {
-          // TODO: ハードコードすればうまくいく
           'x-hasura-admin-secret':
-            process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET,
+            process.env.X_HASURA_ADMIN_SECRET_FOR_CODEGEN,
         },
       },
     },
