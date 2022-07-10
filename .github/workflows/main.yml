@@ -25,6 +25,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: yarn install
         run: yarn install
+      - name: yarn generate
+        run: yarn generate
       - name: Run eslint
         run: yarn lint
       - name: Run Jest
