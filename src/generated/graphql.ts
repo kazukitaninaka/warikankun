@@ -186,7 +186,7 @@ export type Events_Bool_Exp = {
 
 /** unique or primary key constraints on table "events" */
 export enum Events_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   EventsPkey = 'events_pkey'
 }
 
@@ -645,7 +645,7 @@ export type Participants_Bool_Exp = {
 
 /** unique or primary key constraints on table "participants" */
 export enum Participants_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ParticipantsPkey = 'participants_pkey'
 }
 
@@ -973,9 +973,9 @@ export type Payment_Participant_Bool_Exp = {
 
 /** unique or primary key constraints on table "payment_participant" */
 export enum Payment_Participant_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "participant_id", "payment_id" */
   PaymentParticipantPaymentIdParticipantIdKey = 'payment_participant_payment_id_participant_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   PaymentParticipantPkey = 'payment_participant_pkey'
 }
 
@@ -1336,7 +1336,7 @@ export type Payments_Bool_Exp = {
 
 /** unique or primary key constraints on table "payments" */
 export enum Payments_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   PaymentsPkey = 'payments_pkey'
 }
 
