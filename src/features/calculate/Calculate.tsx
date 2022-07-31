@@ -89,7 +89,11 @@ const Calculate = () => {
         )}
       </Box>
       <Center>
-        <Button colorScheme="green" onClick={handleShareResultClick}>
+        <Button
+          colorScheme="green"
+          onClick={handleShareResultClick}
+          disabled={!liff?.isInClient()}
+        >
           <Box mr="1">
             <FontAwesomeIcon icon={faShareSquare} />
           </Box>

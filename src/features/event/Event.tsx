@@ -85,7 +85,11 @@ const Event: React.FC = () => {
           </Text>
         </Center>
         <Center>
-          <Button colorScheme="green" onClick={handleShareClick}>
+          <Button
+            colorScheme="green"
+            onClick={handleShareClick}
+            disabled={!liff?.isInClient()}
+          >
             <Box mr="1">
               <FontAwesomeIcon icon={faShareSquare} />
             </Box>
