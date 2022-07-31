@@ -26,7 +26,7 @@ const Calculate = () => {
   const result = data?.QueryResult;
 
   const handleShareResultClick = () => {
-    if (!liff || !result) return;
+    if (!liff?.isInClient() || !result) return;
     if (liff.isApiAvailable('shareTargetPicker')) {
       const refundString = makeRefundString(result.transactions);
       liff
