@@ -29,7 +29,7 @@ const Event: React.FC = () => {
   const { renderDeleteModal, openModal, setDeleteTarget } = useDeleteModal();
 
   const handleShareClick = () => {
-    if (!liff || !eventNameData?.events[0]) return;
+    if (!liff?.isInClient() || !eventNameData?.events[0]) return;
     if (liff.isApiAvailable('shareTargetPicker')) {
       const event = eventNameData?.events[0];
       liff.shareTargetPicker(
@@ -85,7 +85,11 @@ const Event: React.FC = () => {
           </Text>
         </Center>
         <Center>
-          <Button colorScheme="green" onClick={handleShareClick}>
+          <Button
+            colorScheme="green"
+            onClick={handleShareClick}
+            disabled={!liff?.isInClient()}
+          >
             <Box mr="1">
               <FontAwesomeIcon icon={faShareSquare} />
             </Box>

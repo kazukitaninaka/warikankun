@@ -5,7 +5,7 @@ const useFriendship = () => {
   const [isFriend, setIsFriend] = useState<boolean>(false);
   const liff = liffVar();
   useEffect(() => {
-    if (!liff) return;
+    if (!liff?.isInClient()) return;
     liff.getFriendship().then((data) => {
       if (data.friendFlag) {
         setIsFriend(true);
