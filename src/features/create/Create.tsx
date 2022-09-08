@@ -3,8 +3,10 @@ import { Input, Text, Button, Box, Flex, Center } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useInsertEventMutation } from '@generated/graphql';
 import { liffVar } from '@components/LiffProvider';
+import { useRouter } from 'next/router';
 
 const Create: React.FC = () => {
+  const router = useRouter();
   const [participants, setParticipants] = useState<{ name: string }[]>([
     { name: '' },
   ]);
@@ -55,6 +57,12 @@ const Create: React.FC = () => {
     }).then((res) => {
       const id = res.data?.insert_events_one?.id;
       const name = res.data?.insert_events_one?.name;
+
+      if (!liff?.isInClient()) {
+        router.push(`/event/${id}`);
+        return;
+      }
+
       liff
         ?.sendMessages([
           {
