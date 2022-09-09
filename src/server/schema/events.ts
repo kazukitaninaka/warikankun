@@ -1,5 +1,18 @@
-import { ObjectType, Field, ID, Resolver, Query } from 'type-graphql';
+import { PrismaClient } from '@prisma/client';
+import {
+  ObjectType,
+  Field,
+  ID,
+  Resolver,
+  Query,
+  Int,
+  Arg,
+  FieldResolver,
+  Root,
+} from 'type-graphql';
+import { Payment } from './payments';
 
+const prisma = new PrismaClient();
 @ObjectType()
 export class Event {
   @Field(() => ID!)
@@ -13,25 +26,37 @@ export class Event {
 
   @Field(() => Date!)
   updatedAt!: Date;
+
+  @Field(() => [Payment!])
+  payments?: Payment[];
+
+  @Field(() => Int!)
+  sumAmount?: number;
 }
 
 @Resolver(Event)
 export class EventResolver {
   @Query(() => [Event])
-  events(): Event[] {
-    return [
-      {
-        id: 'sdfgrwegthy',
-        name: 'test name',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+  async events(): Promise<Event[]> {
+    return await prisma.event.findMany();
+  }
+
+  @Query(() => Event)
+  async event(@Arg('eventId') eventId: string): Promise<any> {
+    const event = await prisma.event.findFirst({
+      where: {
+        id: eventId,
       },
-      {
-        id: 'sdfgrwegthydfghg',
-        name: 'test name2',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+    });
+    return event;
+  }
+
+  @FieldResolver()
+  async payments(@Root() event: Event): Promise<Payment[]> {
+    return await prisma.payment.findMany({
+      where: {
+        eventId: event.id,
       },
-    ];
+    });
   }
 }
