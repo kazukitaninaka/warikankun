@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from 'prisma/prisma';
 import {
   ObjectType,
   Field,
@@ -11,8 +11,6 @@ import {
   Root,
 } from 'type-graphql';
 import { Payment } from './payments';
-
-const prisma = new PrismaClient();
 @ObjectType()
 export class Event {
   @Field(() => ID!)
