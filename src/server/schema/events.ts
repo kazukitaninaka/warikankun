@@ -40,7 +40,7 @@ export class EventResolver {
   }
 
   @Query(() => Event)
-  async event(@Arg('eventId') eventId: string): Promise<any> {
+  async event(@Arg('eventId') eventId: string): Promise<Event | null> {
     const event = await prisma.event.findFirst({
       where: {
         id: eventId,
