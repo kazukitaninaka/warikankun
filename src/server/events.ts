@@ -11,6 +11,7 @@ import {
   Root,
 } from 'type-graphql';
 import { Payment } from './payments';
+import { Participant } from './participants';
 @ObjectType()
 export class Event {
   @Field(() => ID!)
@@ -30,6 +31,9 @@ export class Event {
 
   @Field(() => Int!)
   sumAmount?: number;
+
+  @Field(() => [Participant!])
+  participants?: Participant[];
 }
 
 @Resolver(Event)
@@ -52,6 +56,15 @@ export class EventResolver {
   @FieldResolver()
   async payments(@Root() event: Event): Promise<Payment[]> {
     return await prisma.payment.findMany({
+      where: {
+        eventId: event.id,
+      },
+    });
+  }
+
+  @FieldResolver()
+  async participants(@Root() event: Event): Promise<Participant[]> {
+    return await prisma.participant.findMany({
       where: {
         eventId: event.id,
       },
