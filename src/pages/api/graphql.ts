@@ -1,11 +1,15 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { NextApiRequest, NextApiResponse } from 'next';
 import 'reflect-metadata';
-import { EventResolver } from 'src/server/schema/events';
+import {
+  EventResolver,
+  PaymentResolver,
+  ParticipantResolver,
+} from 'src/server';
 import { buildSchema } from 'type-graphql';
 
 const schema = await buildSchema({
-  resolvers: [EventResolver],
+  resolvers: [EventResolver, PaymentResolver, ParticipantResolver],
 });
 
 const server = new ApolloServer({
