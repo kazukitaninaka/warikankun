@@ -30,7 +30,7 @@ export class Event {
   payments?: Payment[];
 
   @Field(() => Int!)
-  sumAmount?: number;
+  sumPrice?: number;
 
   @Field(() => [Participant!])
   participants?: Participant[];
@@ -69,5 +69,16 @@ export class EventResolver {
         eventId: event.id,
       },
     });
+  }
+
+  @FieldResolver()
+  async sumPrice(@Root() event: Event): Promise<number> {
+    const payments = await prisma.payment.findMany({
+      where: {
+        eventId: event.id,
+      },
+    });
+    const sum = payments.reduce((acc, payment) => acc + payment.amount, 0);
+    return sum;
   }
 }
