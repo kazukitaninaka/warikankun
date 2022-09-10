@@ -1,4 +1,14 @@
 module.exports = {
+  schema: [
+    {
+      'https://warikankun.hasura.app/v1/graphql': {
+        headers: {
+          'x-hasura-admin-secret':
+            process.env.X_HASURA_ADMIN_SECRET_FOR_CODEGEN,
+        },
+      },
+    },
+  ],
   documents: ['./src/DEPRECATEDgraphql/*.gql'],
   overwrite: true,
   generates: {
