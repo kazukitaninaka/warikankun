@@ -27,17 +27,3 @@ query queryEventById($eventId: uuid!) {
     }
   }
 }
-# 4d13f0e5-a25a-4537-9590-b6ec98cfc4ac
-query getEvent($eventId: String!) {
-  event(eventId: $eventId) {
-    name
-    payments {
-      id
-      name
-      whoShouldPay {
-        id
-        name
-      }
-    }
-  }
-}

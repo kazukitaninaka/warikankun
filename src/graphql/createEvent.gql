@@ -1,0 +1,10 @@
+mutation createEvent($eventName: String!, $participants: [Participant!]!) {
+  createEvent(input: { eventName: $eventName, participants: $participants }) {
+    id
+    name
+    participants {
+      id
+      name
+    }
+  }
+}

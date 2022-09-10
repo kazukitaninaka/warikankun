@@ -10,10 +10,3 @@ query querySumPrice($eventId: uuid!) {
     }
   }
 }
-
-query getSumPrice($eventId: String!) {
-  event(eventId: $eventId) {
-    id
-    sumPrice
-  }
-}

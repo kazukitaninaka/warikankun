@@ -7,10 +7,3 @@ query queryParticipants($eventId: ID!) {
     }
   }
 }
-
-query getParticipants($eventId: String!) {
-  participants(eventId: $eventId) {
-    id
-    name
-  }
-}
