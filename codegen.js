@@ -1,5 +1,6 @@
 module.exports = {
-  documents: ['./src/DEPRECATEDgraphql/*.gql'],
+  schema: './schema.gql',
+  documents: ['./src/graphql/*.gql'],
   overwrite: true,
   generates: {
     './src/generated/graphql.ts': {
