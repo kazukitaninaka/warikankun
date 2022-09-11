@@ -9,6 +9,8 @@ import {
   Arg,
   FieldResolver,
   Root,
+  Mutation,
+  InputType,
 } from 'type-graphql';
 import { Payment } from './payments';
 import { Participant } from './participants';
@@ -35,6 +37,20 @@ export class Event {
   @Field(() => [Participant!])
   participants?: Participant[];
 }
+@InputType()
+class ParticipantForEventInput {
+  @Field(() => String!)
+  name!: string;
+}
+
+@InputType()
+class EventInput {
+  @Field(() => String!)
+  eventName!: string;
+
+  @Field(() => [ParticipantForEventInput!])
+  participants!: { name: string }[];
+}
 
 @Resolver(Event)
 export class EventResolver {
@@ -50,6 +66,28 @@ export class EventResolver {
         id: eventId,
       },
     });
+    return event;
+  }
+
+  @Mutation(() => Event)
+  async createEvent(@Arg('input') eventInput: EventInput): Promise<Event> {
+    console.log({ eventInput });
+    const event = await prisma.event.create({
+      data: {
+        name: eventInput.eventName,
+      },
+    });
+    console.log('after event');
+
+    await prisma.participant.createMany({
+      data: eventInput.participants.map((participant) => ({
+        name: participant.name,
+        eventId: event.id,
+      })),
+    });
+
+    console.log('after participants');
+
     return event;
   }
 

@@ -1,4 +1,7 @@
-mutation createEvent($eventName: String!, $participants: [Participant!]!) {
+mutation createEvent(
+  $eventName: String!
+  $participants: [ParticipantForEventInput!]!
+) {
   createEvent(input: { eventName: $eventName, participants: $participants }) {
     id
     name

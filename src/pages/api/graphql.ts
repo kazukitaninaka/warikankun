@@ -10,6 +10,7 @@ import { buildSchema } from 'type-graphql';
 
 const schema = await buildSchema({
   resolvers: [EventResolver, PaymentResolver, ParticipantResolver],
+  emitSchemaFile: true,
 });
 
 const server = new ApolloServer({
