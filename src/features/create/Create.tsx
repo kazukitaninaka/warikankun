@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Input, Text, Button, Box, Flex, Center } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import { useInsertEventMutation } from '@generated/deprecatedGraphql';
+import { useCreateEventMutation } from '@generated/graphql';
 import { liffVar } from '@components/LiffProvider';
 import { useRouter } from 'next/router';
 
@@ -11,7 +11,7 @@ const Create: React.FC = () => {
     { name: '' },
   ]);
   const [eventName, setEventName] = useState<string>('');
-  const [insertEvent, { loading: isInserting }] = useInsertEventMutation();
+  const createEventMutation = useCreateEventMutation();
   const liff = liffVar();
   const isCreatingAllowed = useMemo(() => {
     const participantsWithNonEmptyName = participants.filter(
@@ -49,36 +49,39 @@ const Create: React.FC = () => {
   };
 
   const handleCreateEventClick = () => {
-    insertEvent({
-      variables: {
+    createEventMutation.mutate(
+      {
         eventName,
         participants: participants.filter((participant) => participant.name), // nameが空のものは除く
       },
-    }).then((res) => {
-      const id = res.data?.insert_events_one?.id;
-      const name = res.data?.insert_events_one?.name;
+      {
+        onSuccess: (data) => {
+          const id = data.createEvent.id;
+          const name = data.createEvent.name;
 
-      if (!liff?.isInClient()) {
-        router.push(`/event/${id}`);
-        return;
-      }
+          if (!liff?.isInClient()) {
+            router.push(`/event/${id}`);
+            return;
+          }
 
-      liff
-        ?.sendMessages([
-          {
-            type: 'text',
-            text:
-              `割り勘イベント「${name}」が作成されました！\n` +
-              '以下のリンクから支払いを追加していきましょう！\n' +
-              `https://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}\n` +
-              '---------------\n' +
-              '割り勘くん',
-          },
-        ])
-        .then(() => {
-          liff.closeWindow();
-        });
-    });
+          liff
+            ?.sendMessages([
+              {
+                type: 'text',
+                text:
+                  `割り勘イベント「${name}」が作成されました！\n` +
+                  '以下のリンクから支払いを追加していきましょう！\n' +
+                  `https://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}\n` +
+                  '---------------\n' +
+                  '割り勘くん',
+              },
+            ])
+            .then(() => {
+              liff.closeWindow();
+            });
+        },
+      },
+    );
   };
 
   return (
@@ -118,9 +121,9 @@ const Create: React.FC = () => {
         <Button
           colorScheme="teal"
           onClick={handleCreateEventClick}
-          disabled={!isCreatingAllowed || isInserting}
+          disabled={!isCreatingAllowed || createEventMutation.isLoading}
         >
-          {isInserting ? 'イベント作成中...' : 'イベント作成'}
+          {createEventMutation.isLoading ? 'イベント作成中...' : 'イベント作成'}
         </Button>
       </Center>
     </div>
