@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react';
-import { useQueryEventNameQuery } from '../generated/graphql';
+import { useQueryEventNameQuery } from '@generated/deprecatedGraphql';
 
 const EventName = ({ id }: { id: string | string[] | undefined }) => {
   const { error, data } = useQueryEventNameQuery({

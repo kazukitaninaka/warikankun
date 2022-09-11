@@ -10,7 +10,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useDeletePaymentMutation } from '../../generated/graphql';
+import { useDeletePaymentMutation } from '../../generated/deprecatedGraphql';
 import { useRouter } from 'next/router';
 
 const useDeleteModal = () => {

@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react';
-import { useQuerySumPriceQuery } from '../generated/graphql';
+import { useQuerySumPriceQuery } from '@generated/deprecatedGraphql';
 import { formatNumberToJPY } from '../utils';
 
 const SumPrice = ({ id }: { id: string | string[] | undefined }) => {
