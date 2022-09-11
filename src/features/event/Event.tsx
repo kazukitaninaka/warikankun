@@ -3,7 +3,7 @@ import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import {
   useQueryEventNameQuery,
   usePaymentCountQuery,
-} from '@generated/graphql';
+} from '@generated/deprecatedGraphql';
 import { liffVar } from '@components/LiffProvider';
 import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';

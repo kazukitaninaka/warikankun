@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { QueryParticipantsQuery } from '@generated/graphql';
+import { QueryParticipantsQuery } from '@generated/deprecatedGraphql';
 
 type Details = {
   id: number;

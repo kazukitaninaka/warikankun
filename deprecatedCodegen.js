@@ -12,7 +12,7 @@ module.exports = {
   documents: ['./src/DEPRECATEDgraphql/*.gql'],
   overwrite: true,
   generates: {
-    './src/generated/graphql.ts': {
+    './src/generated/deprecatedGraphql.ts': {
       plugins: [
         'typescript',
         'typescript-operations',

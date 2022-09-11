@@ -3,11 +3,11 @@ import { render, screen } from '@testing-library/react';
 import {
   QueryPaymentsQueryHookResult,
   useQueryPaymentsQuery,
-} from '@generated/graphql';
+} from '@generated/deprecatedGraphql';
 import { ApolloError } from '@apollo/client';
 import '@testing-library/jest-dom';
 
-jest.mock('@generated/graphql', () => ({
+jest.mock('@generated/deprecatedGraphql', () => ({
   __esModule: true,
   useQueryPaymentsQuery: jest.fn(),
 }));

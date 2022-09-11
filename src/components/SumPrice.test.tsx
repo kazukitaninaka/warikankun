@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import {
   QuerySumPriceQueryHookResult,
   useQuerySumPriceQuery,
-} from '@generated/graphql';
+} from '@generated/deprecatedGraphql';
 import { ApolloError } from '@apollo/client';
 
 type ResultType = Pick<
@@ -44,7 +44,7 @@ const errorResult: ResultType = {
   }),
 };
 
-jest.mock('@generated/graphql', () => ({
+jest.mock('@generated/deprecatedGraphql', () => ({
   __esModule: true,
   useQuerySumPriceQuery: jest.fn(),
 }));

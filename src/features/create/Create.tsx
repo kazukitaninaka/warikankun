@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Input, Text, Button, Box, Flex, Center } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import { useInsertEventMutation } from '@generated/graphql';
+import { useInsertEventMutation } from '@generated/deprecatedGraphql';
 import { liffVar } from '@components/LiffProvider';
 import { useRouter } from 'next/router';
 

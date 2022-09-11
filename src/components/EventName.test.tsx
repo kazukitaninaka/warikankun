@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import {
   QueryEventNameQueryHookResult,
   useQueryEventNameQuery,
-} from '@generated/graphql';
+} from '@generated/deprecatedGraphql';
 import { ApolloError } from '@apollo/client';
 import '@testing-library/jest-dom';
 
@@ -39,7 +39,7 @@ const errorResult: ResultType = {
   }),
 };
 
-jest.mock('@generated/graphql', () => ({
+jest.mock('@generated/deprecatedGraphql', () => ({
   __esModule: true,
   useQueryEventNameQuery: jest.fn(),
 }));

@@ -6,7 +6,7 @@ import Calculating from '@features/calculate/Calculating';
 import EventName from '@components/EventName';
 import { liffVar } from '@components/LiffProvider';
 import SumPrice from '@components/SumPrice';
-import { useResultQuery } from '@generated/graphql';
+import { useResultQuery } from '@generated/deprecatedGraphql';
 import { makeRefundString } from '@utils/index';
 
 const Calculate = () => {

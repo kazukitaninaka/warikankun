@@ -28,7 +28,7 @@ import {
   Payment_Participant_Insert_Input,
   useInsertPaymentMutation,
   useQueryParticipantsQuery,
-} from '@generated/graphql';
+} from '@generated/deprecatedGraphql';
 import useAddPaymentDetails, {
   ratioEnum,
 } from '@features/event/add/useAddPaymentDetails';
