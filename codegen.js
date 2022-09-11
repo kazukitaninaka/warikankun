@@ -7,17 +7,13 @@ module.exports = {
       plugins: [
         'typescript',
         'typescript-operations',
-        'typescript-react-apollo',
+        'typescript-react-query',
       ],
       config: {
-        skipTypename: false,
-        withHooks: true,
-        withHOC: false,
-        withComponent: false,
+        fetcher: {
+          endpoint: 'http://localhost:3000/api/graphql',
+        },
       },
-    },
-    './graphql.schema.json': {
-      plugins: ['introspection'],
     },
   },
 };
