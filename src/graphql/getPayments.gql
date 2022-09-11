@@ -1,4 +1,4 @@
-query queryPayments($eventId: String!) {
+query getPayments($eventId: String!) {
   payments(eventId: $eventId) {
     id
     name
