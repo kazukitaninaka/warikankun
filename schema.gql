@@ -49,6 +49,7 @@ type Payment {
   id: Int!
   name: String!
   updatedAt: DateTime!
+  whoPaid: Participant!
   whoPaidId: Int!
   whoShouldPay: [Participant!]
 }

@@ -1,0 +1,16 @@
+query queryPayments($eventId: String!) {
+  payments(eventId: $eventId) {
+    id
+    name
+    amount
+    createdAt
+    whoShouldPay {
+      id
+      name
+    }
+    whoPaid {
+      id
+      name
+    }
+  }
+}

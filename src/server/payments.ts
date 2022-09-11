@@ -23,6 +23,9 @@ export class Payment {
   @Field(() => Int!)
   whoPaidId!: number;
 
+  @Field(() => Participant!)
+  whoPaid!: Participant;
+
   @Field(() => Int!)
   amount!: number;
 
@@ -51,7 +54,7 @@ export class PaymentResolver {
   }
 
   @FieldResolver()
-  async whoShouldPay(@Root() payment: Payment) {
+  async whoShouldPay(@Root() payment: Payment): Promise<Participant[]> {
     const participants = await prisma.paymentsOnParticipants.findMany({
       where: {
         paymentId: payment.id,
@@ -65,5 +68,16 @@ export class PaymentResolver {
       },
     });
     return whoShouldPay;
+  }
+
+  @FieldResolver()
+  async whoPaid(@Root() payment: Payment): Promise<Participant> {
+    const whoPaid = await prisma.participant.findUnique({
+      where: {
+        id: payment.whoPaidId,
+      },
+    });
+    if (!whoPaid) throw new Error('whoPaid not found');
+    return whoPaid;
   }
 }
