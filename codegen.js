@@ -12,6 +12,11 @@ module.exports = {
       config: {
         fetcher: {
           endpoint: 'http://localhost:3000/api/graphql',
+          fetchParams: {
+            headers: {
+              'content-type': 'application/json',
+            },
+          },
         },
       },
     },
