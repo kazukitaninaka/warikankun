@@ -47,7 +47,7 @@ model Payment {
 
 model PaymentsOnParticipants {
   id        Int      @id @default(autoincrement())
-  payment Payment @relation(fields: [paymentId], references: [id])
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
   paymentId Int
   participant Participant @relation(fields: [participantId], references: [id])
   participantId Int
