@@ -28,7 +28,11 @@ import {
   Payment_Participant_Insert_Input,
   useInsertPaymentMutation,
 } from '@generated/deprecatedGraphql';
-import { useGetParticipantsQuery } from '@generated/graphql';
+import {
+  useGetParticipantsQuery,
+  useCreatePaymentMutation,
+  WhoShouldPayInput,
+} from '@generated/graphql';
 import useAddPaymentDetails, {
   ratioEnum,
 } from '@features/event/add/useAddPaymentDetails';
@@ -46,7 +50,7 @@ const Add: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { details, setDetails } = useAddPaymentDetails(data?.participants);
 
-  const [insertPayment] = useInsertPaymentMutation();
+  const createPaymentMutation = useCreatePaymentMutation();
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -80,28 +84,32 @@ const Add: React.FC = () => {
       (participant) => participant.shouldPay,
     );
 
-    const whoShouldPay: Payment_Participant_Insert_Input[] =
-      filteredDetails.map((participant) => {
+    const whoShouldPay: WhoShouldPayInput[] = filteredDetails.map(
+      (participant) => {
         return {
           participantId: participant.id,
           ratio: participant.ratio,
         };
-      });
+      },
+    );
 
-    insertPayment({
-      variables: {
-        eventId: id,
+    createPaymentMutation.mutate(
+      {
+        eventId: id as string,
         name,
         amount: +amount, // convert string to number
         whoPaidId,
         whoShouldPay,
       },
-    }).then(() => {
-      router.push({
-        pathname: '/event/[id]',
-        query: { id },
-      });
-    });
+      {
+        onSuccess: () => {
+          router.push({
+            pathname: '/event/[id]',
+            query: { id },
+          });
+        },
+      },
+    );
   };
 
   const renderPopover = () => {

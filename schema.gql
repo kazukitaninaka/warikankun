@@ -3,6 +3,14 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input AddPaymentInput {
+  amount: Int!
+  eventId: String!
+  name: String!
+  whoPaidId: Int!
+  whoShouldPay: [WhoShouldPayInput!]!
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
@@ -24,6 +32,7 @@ input EventInput {
 }
 
 type Mutation {
+  addPayment(input: AddPaymentInput!): Payment!
   createEvent(input: EventInput!): Event!
 }
 
@@ -51,7 +60,7 @@ type Payment {
   updatedAt: DateTime!
   whoPaid: Participant!
   whoPaidId: Int!
-  whoShouldPay: [Participant!]
+  whoShouldPay: [Participant!]!
 }
 
 type Query {
@@ -59,4 +68,9 @@ type Query {
   events: [Event!]!
   participants(eventId: String!): [Participant!]!
   payments(eventId: String!): [Payment!]!
+}
+
+input WhoShouldPayInput {
+  participantId: Int!
+  ratio: Float!
 }
