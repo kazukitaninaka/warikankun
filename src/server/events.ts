@@ -71,13 +71,11 @@ export class EventResolver {
 
   @Mutation(() => Event)
   async createEvent(@Arg('input') eventInput: EventInput): Promise<Event> {
-    console.log({ eventInput });
     const event = await prisma.event.create({
       data: {
         name: eventInput.eventName,
       },
     });
-    console.log('after event');
 
     await prisma.participant.createMany({
       data: eventInput.participants.map((participant) => ({
@@ -85,8 +83,6 @@ export class EventResolver {
         eventId: event.id,
       })),
     });
-
-    console.log('after participants');
 
     return event;
   }
