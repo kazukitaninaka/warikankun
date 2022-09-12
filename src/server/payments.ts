@@ -7,10 +7,12 @@ import {
   Float,
   Query,
   Arg,
+  Args,
   FieldResolver,
   Root,
   Mutation,
   InputType,
+  ArgsType,
 } from 'type-graphql';
 import prisma from 'prisma/prisma';
 import { Participant } from './participants';
@@ -72,6 +74,12 @@ export class AddPaymentInput {
   eventId!: string;
 }
 
+@ArgsType()
+class DeletePaymentArgs {
+  @Field(() => Int!)
+  paymentId!: number;
+}
+
 @Resolver(Payment)
 export class PaymentResolver {
   @Query(() => [Payment])
@@ -96,6 +104,19 @@ export class PaymentResolver {
         whoShouldPay: {
           create: addPaymentInput.whoShouldPay,
         },
+      },
+    });
+
+    return { id: payment.id };
+  }
+
+  @Mutation(() => Payment)
+  async deletePayment(
+    @Args() { paymentId }: DeletePaymentArgs,
+  ): Promise<{ id: number }> {
+    const payment = await prisma.payment.delete({
+      where: {
+        id: paymentId,
       },
     });
 

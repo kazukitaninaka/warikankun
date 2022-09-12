@@ -10,22 +10,26 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useDeletePaymentMutation } from '../../generated/deprecatedGraphql';
-import { useRouter } from 'next/router';
+import { useDeletePaymentMutation } from '@generated/graphql';
+import { useQueryClient } from '@tanstack/react-query';
 
 const useDeleteModal = () => {
-  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [deleteTarget, _setDeleteTarget] = useState<number | null>(null);
-  const [Mutation, { loading, error }] = useDeletePaymentMutation();
+  const { isError, isLoading, mutate } = useDeletePaymentMutation();
+  const queryClient = useQueryClient();
 
   const deletePayment = () => {
-    if (deleteTarget) {
-      Mutation({ variables: { paymentId: deleteTarget } }).then(() => {
-        onClose();
-        router.reload();
-      });
-    }
+    if (!deleteTarget) return;
+    mutate(
+      { paymentId: deleteTarget },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries();
+          onClose();
+        },
+      },
+    );
   };
 
   const setDeleteTarget = (argument: number | null) => {
@@ -47,16 +51,16 @@ const useDeleteModal = () => {
         <ModalCloseButton />
         <ModalBody textAlign="center" mt="2">
           <Text>本当に削除しますか？</Text>
-          {error && <Text fontSize="lg">Error: 削除に失敗しました。</Text>}
+          {isError && <Text fontSize="lg">Error: 削除に失敗しました。</Text>}
         </ModalBody>
         <ModalFooter>
           <Button
             colorScheme="blue"
             mx="auto"
             onClick={deletePayment}
-            disabled={loading}
+            disabled={isLoading}
           >
-            {loading ? '削除中…' : '削除'}
+            {isLoading ? '削除中…' : '削除'}
           </Button>
         </ModalFooter>
       </ModalContent>

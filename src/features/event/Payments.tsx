@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react';
 import { formatNumberToJPY } from '../../utils';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { useQueryPaymentsQuery } from '@generated/deprecatedGraphql';
 import { useGetPaymentsQuery } from '@generated/graphql';
 
 const Payments = ({

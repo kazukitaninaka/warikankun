@@ -34,6 +34,7 @@ input EventInput {
 type Mutation {
   addPayment(input: AddPaymentInput!): Payment!
   createEvent(input: EventInput!): Event!
+  deletePayment(paymentId: Int!): Payment!
 }
 
 type Participant {
