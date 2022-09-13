@@ -31,6 +31,12 @@ input EventInput {
   participants: [ParticipantForEventInput!]!
 }
 
+type From {
+  id: Int!
+  name: String!
+  shouldHavePaid: Int!
+}
+
 type Mutation {
   addPayment(input: AddPaymentInput!): Payment!
   createEvent(input: EventInput!): Event!
@@ -67,8 +73,27 @@ type Payment {
 type Query {
   event(eventId: String!): Event!
   events: [Event!]!
+  getResult(eventId: String!): Result!
   participants(eventId: String!): [Participant!]!
   payments(eventId: String!): [Payment!]!
+}
+
+type Result {
+  id: String!
+  name: String!
+  sumPrice: Int!
+  transactions: [Transaction!]!
+}
+
+type To {
+  amount: Int!
+  id: Int!
+  name: String!
+}
+
+type Transaction {
+  from: From!
+  to: [To!]!
 }
 
 input WhoShouldPayInput {

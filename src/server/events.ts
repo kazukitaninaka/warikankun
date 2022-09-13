@@ -14,6 +14,7 @@ import {
 } from 'type-graphql';
 import { Payment } from './payments';
 import { Participant } from './participants';
+import { Result, calcResult } from './result';
 @ObjectType()
 export class Event {
   @Field(() => ID!)
@@ -66,7 +67,51 @@ export class EventResolver {
         id: eventId,
       },
     });
+    console.log(event);
     return event;
+  }
+
+  @Query(() => Result)
+  async getResult(@Arg('eventId') eventId: string): Promise<Result> {
+    const event = await prisma.event.findFirst({
+      where: {
+        id: eventId,
+      },
+      select: {
+        id: true,
+        name: true,
+        participants: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        payments: {
+          select: {
+            id: true,
+            name: true,
+            amount: true,
+            whoPaid: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            whoShouldPay: {
+              select: {
+                participantId: true,
+                ratio: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!event) throw new Error('Event not found');
+
+    const result = calcResult(event);
+
+    return result;
   }
 
   @Mutation(() => Event)
