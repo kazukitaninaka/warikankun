@@ -11,7 +11,7 @@ module.exports = {
       ],
       config: {
         fetcher: {
-          endpoint: 'http://localhost:3000/api/graphql',
+          endpoint: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
           fetchParams: {
             headers: {
               'content-type': 'application/json',
