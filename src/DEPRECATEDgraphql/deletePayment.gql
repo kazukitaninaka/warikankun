@@ -1,5 +1,0 @@
-mutation deletePayment($paymentId: Int!) {
-  delete_payments_by_pk(id: $paymentId) {
-    id
-  }
-}

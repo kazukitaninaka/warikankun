@@ -1,6 +1,0 @@
-query queryEventName($eventId: uuid!) {
-  events(where: { id: { _eq: $eventId } }) {
-    id
-    name
-  }
-}
