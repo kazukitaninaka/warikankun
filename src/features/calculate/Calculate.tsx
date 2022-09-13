@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
 import Calculating from '@features/calculate/Calculating';
 import EventName from '@components/EventName';
-import { liffVar } from '@components/LiffProvider';
+import { LiffContext } from '@components/LiffProvider';
 import SumPrice from '@components/SumPrice';
 import { useGetResultQuery } from '@generated/graphql';
 import { makeRefundString } from '@utils/index';
+import { useContext } from 'react';
 
 const Calculate = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const Calculate = () => {
   const { isLoading, isError, data } = useGetResultQuery({
     eventId: id as string,
   });
-  const liff = liffVar();
+  const liff = useContext(LiffContext);
 
   if (isError) {
     return (

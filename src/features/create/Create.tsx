@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Input, Text, Button, Box, Flex, Center } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useCreateEventMutation } from '@generated/graphql';
-import { liffVar } from '@components/LiffProvider';
+import { LiffContext } from '@components/LiffProvider';
 import { useRouter } from 'next/router';
 
 const Create: React.FC = () => {
@@ -12,7 +12,7 @@ const Create: React.FC = () => {
   ]);
   const [eventName, setEventName] = useState<string>('');
   const createEventMutation = useCreateEventMutation();
-  const liff = liffVar();
+  const liff = useContext(LiffContext);
   const isCreatingAllowed = useMemo(() => {
     const participantsWithNonEmptyName = participants.filter(
       (participant) => participant.name,

@@ -1,7 +1,7 @@
 import { Text, Center, Flex, Button, Box } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useGetPaymentsQuery, useGetEventNameQuery } from '@generated/graphql';
-import { liffVar } from '@components/LiffProvider';
+import { LiffContext } from '@components/LiffProvider';
 import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';
 import EventName from '@components/EventName';
@@ -11,6 +11,7 @@ import Payments from '@features/event/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import useDeleteModal from '@features/event/useDeleteModal';
+import { useContext } from 'react';
 
 const Event: React.FC = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const Event: React.FC = () => {
   const { data: paymentsData } = useGetPaymentsQuery({
     eventId: id as string,
   });
-  const liff = liffVar();
+  const liff = useContext(LiffContext);
   const { isFriend } = useFriendship();
   const { renderDeleteModal, openModal, setDeleteTarget } = useDeleteModal();
 
