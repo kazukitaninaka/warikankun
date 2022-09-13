@@ -18,7 +18,6 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.9",
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11.9.3",
@@ -30,7 +29,6 @@
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.5",
     "@graphql-codegen/typescript-operations": "^2.3.2",
-    "@graphql-codegen/typescript-react-apollo": "^3.2.8",
     "@line/liff": "^2.18.2",
     "@prisma/client": "4.3.1",
     "@tanstack/react-query": "^4.3.3",
