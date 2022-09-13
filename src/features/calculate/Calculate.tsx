@@ -6,24 +6,24 @@ import Calculating from '@features/calculate/Calculating';
 import EventName from '@components/EventName';
 import { liffVar } from '@components/LiffProvider';
 import SumPrice from '@components/SumPrice';
-import { useResultQuery } from '@generated/deprecatedGraphql';
+import { useGetResultQuery } from '@generated/graphql';
 import { makeRefundString } from '@utils/index';
 
 const Calculate = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { loading, error, data } = useResultQuery({
-    variables: { eventId: id },
+  const { isLoading, isError, data } = useGetResultQuery({
+    eventId: id as string,
   });
   const liff = liffVar();
 
-  if (error) {
+  if (isError) {
     return (
       <Text>エラーが発生しました。時間を置いて再度アクセスしてください。</Text>
     );
   }
 
-  const result = data?.QueryResult;
+  const result = data?.result;
 
   const handleShareResultClick = () => {
     if (!liff?.isInClient() || !result) return;
@@ -61,7 +61,7 @@ const Calculate = () => {
         <SumPrice id={id} />
       </Box>
       <Box mb="10">
-        {loading ? (
+        {isLoading ? (
           <Center>
             <Calculating />
           </Center>

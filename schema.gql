@@ -73,9 +73,9 @@ type Payment {
 type Query {
   event(eventId: String!): Event!
   events: [Event!]!
-  getResult(eventId: String!): Result!
   participants(eventId: String!): [Participant!]!
   payments(eventId: String!): [Payment!]!
+  result(eventId: String!): Result!
 }
 
 type Result {
