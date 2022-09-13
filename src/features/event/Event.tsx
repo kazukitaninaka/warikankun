@@ -1,7 +1,6 @@
 import { Text, Center, Flex, Button, Box } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
-import { useQueryEventNameQuery } from '@generated/deprecatedGraphql';
-import { useGetPaymentsQuery } from '@generated/graphql';
+import { useGetPaymentsQuery, useGetEventNameQuery } from '@generated/graphql';
 import { liffVar } from '@components/LiffProvider';
 import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';
@@ -16,8 +15,8 @@ import useDeleteModal from '@features/event/useDeleteModal';
 const Event: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data: eventNameData } = useQueryEventNameQuery({
-    variables: { eventId: id },
+  const { data: eventNameData } = useGetEventNameQuery({
+    eventId: id as string,
   });
   const { data: paymentsData } = useGetPaymentsQuery({
     eventId: id as string,
@@ -27,9 +26,9 @@ const Event: React.FC = () => {
   const { renderDeleteModal, openModal, setDeleteTarget } = useDeleteModal();
 
   const handleShareClick = () => {
-    if (!liff?.isInClient() || !eventNameData?.events[0]) return;
+    if (!liff?.isInClient() || !eventNameData?.event) return;
     if (liff.isApiAvailable('shareTargetPicker')) {
-      const event = eventNameData?.events[0];
+      const event = eventNameData.event;
       liff.shareTargetPicker(
         [
           {

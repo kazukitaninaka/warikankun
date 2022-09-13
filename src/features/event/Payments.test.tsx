@@ -1,20 +1,17 @@
 import Payments from './Payments';
 import { render, screen } from '@testing-library/react';
-import {
-  QueryPaymentsQueryHookResult,
-  useQueryPaymentsQuery,
-} from '@generated/deprecatedGraphql';
-import { ApolloError } from '@apollo/client';
+import { useGetPaymentsQuery, GetPaymentsQuery } from '@generated/graphql';
+import { UseQueryResult } from '@tanstack/react-query';
 import '@testing-library/jest-dom';
 
-jest.mock('@generated/deprecatedGraphql', () => ({
+jest.mock('@generated/graphql', () => ({
   __esModule: true,
-  useQueryPaymentsQuery: jest.fn(),
+  useGetPaymentsQuery: jest.fn(),
 }));
 
 describe('SumPrice', () => {
   test('値取得成功時、2件の支払いが表示される', () => {
-    (useQueryPaymentsQuery as jest.Mock).mockImplementation(
+    (useGetPaymentsQuery as jest.Mock).mockImplementation(
       () => successfulResultWithTwoPayments,
     );
     render(
@@ -36,7 +33,7 @@ describe('SumPrice', () => {
   });
 
   test('値取得成功時、paymentsが0件の場合tableを表示しない', () => {
-    (useQueryPaymentsQuery as jest.Mock).mockImplementation(
+    (useGetPaymentsQuery as jest.Mock).mockImplementation(
       () => successfulResultWithNoPayments,
     );
     render(
@@ -52,9 +49,7 @@ describe('SumPrice', () => {
   });
 
   test('ローディング時、金額を表示しない', () => {
-    (useQueryPaymentsQuery as jest.Mock).mockImplementation(
-      () => loadingResult,
-    );
+    (useGetPaymentsQuery as jest.Mock).mockImplementation(() => loadingResult);
     const { container } = render(
       <Payments
         id="935ae70e-581c-4748-b8e1-503408a40f00" // 意味のないUUID
@@ -68,7 +63,7 @@ describe('SumPrice', () => {
   });
 
   test('値取得失敗時、エラーメッセージを表示する', () => {
-    (useQueryPaymentsQuery as jest.Mock).mockImplementation(() => errorResult);
+    (useGetPaymentsQuery as jest.Mock).mockImplementation(() => errorResult);
     render(
       <Payments
         id="935ae70e-581c-4748-b8e1-503408a40f00" // 意味のないUUID
@@ -83,113 +78,88 @@ describe('SumPrice', () => {
 });
 
 type ResultType = Pick<
-  QueryPaymentsQueryHookResult,
-  'data' | 'loading' | 'error'
+  UseQueryResult<GetPaymentsQuery, unknown>,
+  'data' | 'isLoading' | 'isError'
 >;
 
 const successfulResultWithTwoPayments: ResultType = {
   data: {
-    events: [
+    payments: [
       {
-        id: '935ae70e-581c-4748-b8e1-503408a40f00',
-        payments: [
+        id: 1,
+        name: 'ガソリン代',
+        amount: 6000,
+        createdAt: new Date(),
+        whoPaid: {
+          id: 5,
+          name: 'Takashi',
+        },
+        whoShouldPay: [
           {
-            id: 1,
-            name: 'ガソリン代',
-            amount: 6000,
-            createdAt: new Date(),
-            whoPaid: {
-              id: 5,
-              name: 'Takashi',
-            },
-            whoShouldPay: [
-              {
-                participant: {
-                  id: 5,
-                  name: 'Takashi',
-                },
-              },
-              {
-                participant: {
-                  id: 6,
-                  name: 'Satoshi',
-                },
-              },
-              {
-                participant: {
-                  id: 7,
-                  name: 'Ken',
-                },
-              },
-            ],
+            id: 5,
+            name: 'Takashi',
           },
           {
-            id: 2,
-            name: '夜ご飯代',
-            amount: 12000,
-            createdAt: new Date(),
-            whoPaid: {
-              id: 8,
-              name: 'Yoshiki',
-            },
-            whoShouldPay: [
-              {
-                participant: {
-                  id: 5,
-                  name: 'Takashi',
-                },
-              },
-              {
-                participant: {
-                  id: 6,
-                  name: 'Satoshi',
-                },
-              },
-              {
-                participant: {
-                  id: 7,
-                  name: 'Ken',
-                },
-              },
-              {
-                participant: {
-                  id: 8,
-                  name: 'Yoshiki',
-                },
-              },
-            ],
+            id: 6,
+            name: 'Satoshi',
+          },
+          {
+            id: 7,
+            name: 'Ken',
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: '夜ご飯代',
+        amount: 12000,
+        createdAt: new Date(),
+        whoPaid: {
+          id: 8,
+          name: 'Yoshiki',
+        },
+        whoShouldPay: [
+          {
+            id: 5,
+            name: 'Takashi',
+          },
+
+          {
+            id: 6,
+            name: 'Satoshi',
+          },
+          {
+            id: 7,
+            name: 'Ken',
+          },
+          {
+            id: 8,
+            name: 'Yoshiki',
           },
         ],
       },
     ],
   },
-  loading: false,
-  error: undefined,
+  isLoading: false,
+  isError: false,
 };
 
 const successfulResultWithNoPayments: ResultType = {
   data: {
-    events: [
-      {
-        id: '935ae70e-581c-4748-b8e1-503408a40f00',
-        payments: [],
-      },
-    ],
+    payments: [],
   },
-  loading: false,
-  error: undefined,
+  isLoading: false,
+  isError: false,
 };
 
 const loadingResult: ResultType = {
   data: undefined,
-  loading: true,
-  error: undefined,
+  isLoading: true,
+  isError: false,
 };
 
 const errorResult: ResultType = {
   data: undefined,
-  loading: false,
-  error: new ApolloError({
-    errorMessage: 'Failed to fetch data',
-  }),
+  isLoading: false,
+  isError: true,
 };

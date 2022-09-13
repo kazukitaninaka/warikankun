@@ -25,10 +25,6 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import EventName from '@components/EventName';
 import {
-  Payment_Participant_Insert_Input,
-  useInsertPaymentMutation,
-} from '@generated/deprecatedGraphql';
-import {
   useGetParticipantsQuery,
   useCreatePaymentMutation,
   WhoShouldPayInput,
