@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { formatNumberToJPY } from '../../utils';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { useGetPaymentsQuery } from '@generated/graphql';
+import { useQueryPaymentsQuery } from '../../generated/graphql';
 
 const Payments = ({
   id,
@@ -21,10 +21,10 @@ const Payments = ({
   setDeleteTarget: (deleteTarget: number | null) => void;
   onOpen: () => void;
 }) => {
-  const { isLoading, isError, data } = useGetPaymentsQuery({
-    eventId: id as string,
+  const { loading, error, data } = useQueryPaymentsQuery({
+    variables: { eventId: id },
   });
-  if (isLoading) {
+  if (loading) {
     return (
       <Center mt="3">
         <Spinner size="lg" />
@@ -32,13 +32,12 @@ const Payments = ({
     );
   }
 
-  if (isError) {
+  if (error) {
     return <Text data-testid="errorText">データ取得に失敗しました。</Text>;
   }
   return (
     <Box>
-      {/* TODO: Suspenseでちゃんと対応する */}
-      {data!.payments.map((payment) => (
+      {data?.events[0].payments.map((payment) => (
         <Box
           key={payment.id}
           borderRadius="md"
@@ -66,7 +65,7 @@ const Payments = ({
               </Tr>
               <Tr>
                 <Td>支払った人</Td>
-                <Td>{payment.whoPaid?.name}</Td>
+                <Td>{payment.whoPaid.name}</Td>
               </Tr>
               <Tr>
                 <Td>金額</Td>
@@ -75,8 +74,8 @@ const Payments = ({
               <Tr>
                 <Td>割り勘対象</Td>
                 <Td>
-                  {payment.whoShouldPay?.map((participant) => (
-                    <span key={participant.id}>{participant.name}　</span>
+                  {payment.whoShouldPay.map((_) => (
+                    <span key={_.participant.id}>{_.participant.name}　</span>
                   ))}
                 </Td>
               </Tr>

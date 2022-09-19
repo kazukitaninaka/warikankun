@@ -1,0 +1,15 @@
+mutation insertEvent(
+  $eventName: String!
+  $participants: [participants_insert_input!]!
+) {
+  insert_events_one(
+    object: { name: $eventName, participants: { data: $participants } }
+  ) {
+    id
+    name
+    participants {
+      id
+      name
+    }
+  }
+}
