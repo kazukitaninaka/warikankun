@@ -25,9 +25,9 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import EventName from '@components/EventName';
 import {
-  useGetParticipantsQuery,
-  useCreatePaymentMutation,
-  WhoShouldPayInput,
+  Payment_Participant_Insert_Input,
+  useInsertPaymentMutation,
+  useQueryParticipantsQuery,
 } from '@generated/graphql';
 import useAddPaymentDetails, {
   ratioEnum,
@@ -36,17 +36,18 @@ import useAddPaymentDetails, {
 const Add: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { isLoading, isError, data } = useGetParticipantsQuery({
-    eventId: id as string,
+  const { loading, error, data } = useQueryParticipantsQuery({
+    variables: { eventId: id },
   });
+  const event = data?.events[0];
 
   const [name, setName] = useState<string>('');
   const [whoPaidId, setWhoPaidId] = useState<number | undefined>(undefined);
   const [amount, setAmount] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const { details, setDetails } = useAddPaymentDetails(data?.participants);
+  const { details, setDetails } = useAddPaymentDetails(event);
 
-  const createPaymentMutation = useCreatePaymentMutation();
+  const [insertPayment] = useInsertPaymentMutation();
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -80,32 +81,28 @@ const Add: React.FC = () => {
       (participant) => participant.shouldPay,
     );
 
-    const whoShouldPay: WhoShouldPayInput[] = filteredDetails.map(
-      (participant) => {
+    const whoShouldPay: Payment_Participant_Insert_Input[] =
+      filteredDetails.map((participant) => {
         return {
           participantId: participant.id,
           ratio: participant.ratio,
         };
-      },
-    );
+      });
 
-    createPaymentMutation.mutate(
-      {
-        eventId: id as string,
+    insertPayment({
+      variables: {
+        eventId: id,
         name,
         amount: +amount, // convert string to number
         whoPaidId,
         whoShouldPay,
       },
-      {
-        onSuccess: () => {
-          router.push({
-            pathname: '/event/[id]',
-            query: { id },
-          });
-        },
-      },
-    );
+    }).then(() => {
+      router.push({
+        pathname: '/event/[id]',
+        query: { id },
+      });
+    });
   };
 
   const renderPopover = () => {
@@ -126,7 +123,7 @@ const Add: React.FC = () => {
     );
   };
 
-  if (isError) {
+  if (error) {
     <Text>エラーが発生しました。</Text>;
   }
 
@@ -136,7 +133,7 @@ const Add: React.FC = () => {
       <Text textAlign="center" fontSize="x-large" mb="5">
         支払い追加
       </Text>
-      {isLoading ? (
+      {loading ? (
         <Center>
           <Spinner size="lg" />
         </Center>
@@ -161,7 +158,7 @@ const Add: React.FC = () => {
             }}
             placeholder="支払った人を選択"
           >
-            {data?.participants?.map((participant) => (
+            {event?.participants?.map((participant) => (
               <option key={participant.id} value={participant.id}>
                 {participant.name}
               </option>

@@ -1,4 +1,4 @@
-import { From, To } from '@generated/graphql';
+import { From, To } from '../generated/graphql';
 
 export const formatNumberToJPY = (number: number) => {
   const option = { style: 'currency', currency: 'JPY' };

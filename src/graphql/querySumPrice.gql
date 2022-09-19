@@ -1,0 +1,12 @@
+query querySumPrice($eventId: uuid!) {
+  events(where: { id: { _eq: $eventId } }) {
+    id
+    payments_aggregate {
+      aggregate {
+        sum {
+          amount
+        }
+      }
+    }
+  }
+}

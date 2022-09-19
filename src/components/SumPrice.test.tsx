@@ -1,44 +1,57 @@
 import SumPrice from './SumPrice';
 import { render, screen } from '@testing-library/react';
-import { useGetSumPriceQuery, GetSumPriceQuery } from '@generated/graphql';
-import { UseQueryResult } from '@tanstack/react-query';
+import {
+  QuerySumPriceQueryHookResult,
+  useQuerySumPriceQuery,
+} from '@generated/graphql';
+import { ApolloError } from '@apollo/client';
 
 type ResultType = Pick<
-  UseQueryResult<GetSumPriceQuery, unknown>,
-  'data' | 'isLoading' | 'isError'
+  QuerySumPriceQueryHookResult,
+  'data' | 'loading' | 'error'
 >;
 
 const successfulResult: ResultType = {
   data: {
-    event: {
-      id: '935ae70e-581c-4748-b8e1-503408a40f00',
-      sumPrice: 21345,
-    },
+    events: [
+      {
+        id: '935ae70e-581c-4748-b8e1-503408a40f00',
+        payments_aggregate: {
+          aggregate: {
+            sum: {
+              amount: 21345,
+            },
+          },
+        },
+      },
+    ],
   },
-  isLoading: false,
-  isError: false,
+  loading: false,
+  error: undefined,
 };
 
 const loadingResult: ResultType = {
   data: undefined,
-  isLoading: true,
-  isError: false,
+  loading: true,
+  error: undefined,
 };
 
 const errorResult: ResultType = {
   data: undefined,
-  isLoading: false,
-  isError: true,
+  loading: false,
+  error: new ApolloError({
+    errorMessage: 'Failed to fetch data',
+  }),
 };
 
 jest.mock('@generated/graphql', () => ({
   __esModule: true,
-  useGetSumPriceQuery: jest.fn(),
+  useQuerySumPriceQuery: jest.fn(),
 }));
 
 describe('SumPrice', () => {
   test('値取得成功時、正しいフォーマットで金額が表示される', () => {
-    (useGetSumPriceQuery as jest.Mock).mockImplementation(
+    (useQuerySumPriceQuery as jest.Mock).mockImplementation(
       () => successfulResult,
     );
     render(<SumPrice id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
@@ -48,7 +61,9 @@ describe('SumPrice', () => {
   });
 
   test('ローディング時、金額を表示しない', () => {
-    (useGetSumPriceQuery as jest.Mock).mockImplementation(() => loadingResult);
+    (useQuerySumPriceQuery as jest.Mock).mockImplementation(
+      () => loadingResult,
+    );
     render(<SumPrice id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
 
     const sumPriceNode = screen.getByTestId('text');
@@ -56,7 +71,7 @@ describe('SumPrice', () => {
   });
 
   test('値取得失敗時、エラーメッセージを表示する', () => {
-    (useGetSumPriceQuery as jest.Mock).mockImplementation(() => errorResult);
+    (useQuerySumPriceQuery as jest.Mock).mockImplementation(() => errorResult);
     render(<SumPrice id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
 
     const sumPriceNode = screen.getByTestId('errorText');

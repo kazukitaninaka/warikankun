@@ -1,6 +1,0 @@
-query getEventName($eventId: String!) {
-  event(eventId: $eventId) {
-    id
-    name
-  }
-}
