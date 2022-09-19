@@ -13,7 +13,8 @@ const SumPrice = ({ id }: { id: string | string[] | undefined }) => {
   return (
     <Text data-testid="text">
       支払い総額：
-      {!isLoading && formatNumberToJPY(data.event.sumPrice)}
+      {/* TODO: Suspenseでちゃんと対応する */}
+      {!isLoading && formatNumberToJPY(data!.event.sumPrice)}
     </Text>
   );
 };

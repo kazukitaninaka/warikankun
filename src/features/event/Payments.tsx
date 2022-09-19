@@ -37,7 +37,8 @@ const Payments = ({
   }
   return (
     <Box>
-      {data.payments.map((payment) => (
+      {/* TODO: Suspenseでちゃんと対応する */}
+      {data!.payments.map((payment) => (
         <Box
           key={payment.id}
           borderRadius="md"
