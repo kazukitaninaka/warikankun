@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { liffVar } from '../components/LiffProvider';
+import { useContext, useEffect, useState } from 'react';
+import { LiffContext } from '@components/LiffProvider';
 
 const useFriendship = () => {
   const [isFriend, setIsFriend] = useState<boolean>(false);
-  const liff = liffVar();
+  const liff = useContext(LiffContext);
   useEffect(() => {
     if (!liff?.isInClient()) return;
     liff.getFriendship().then((data) => {

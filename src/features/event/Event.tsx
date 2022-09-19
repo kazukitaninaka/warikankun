@@ -1,10 +1,7 @@
 import { Text, Center, Flex, Button, Box } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
-import {
-  useQueryEventNameQuery,
-  usePaymentCountQuery,
-} from '@generated/graphql';
-import { liffVar } from '@components/LiffProvider';
+import { useGetPaymentsQuery, useGetEventNameQuery } from '@generated/graphql';
+import { LiffContext } from '@components/LiffProvider';
 import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';
 import EventName from '@components/EventName';
@@ -14,24 +11,25 @@ import Payments from '@features/event/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import useDeleteModal from '@features/event/useDeleteModal';
+import { useContext } from 'react';
 
 const Event: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data: eventNameData } = useQueryEventNameQuery({
-    variables: { eventId: id },
+  const { data: eventNameData } = useGetEventNameQuery({
+    eventId: id as string,
   });
-  const { data: paymentCountData } = usePaymentCountQuery({
-    variables: { eventId: id },
+  const { data: paymentsData } = useGetPaymentsQuery({
+    eventId: id as string,
   });
-  const liff = liffVar();
+  const liff = useContext(LiffContext);
   const { isFriend } = useFriendship();
   const { renderDeleteModal, openModal, setDeleteTarget } = useDeleteModal();
 
   const handleShareClick = () => {
-    if (!liff?.isInClient() || !eventNameData?.events[0]) return;
+    if (!liff?.isInClient() || !eventNameData?.event) return;
     if (liff.isApiAvailable('shareTargetPicker')) {
-      const event = eventNameData?.events[0];
+      const event = eventNameData.event;
       liff.shareTargetPicker(
         [
           {
@@ -60,7 +58,7 @@ const Event: React.FC = () => {
         <Button
           colorScheme="blue"
           onClick={() => router.push(`${id}/calc`)}
-          disabled={!paymentCountData?.payments_aggregate.aggregate?.count}
+          disabled={!paymentsData?.payments.length}
         >
           <CheckIcon mr="1" /> 現在の精算結果を表示
         </Button>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { QueryParticipantsQuery } from '@generated/graphql';
+import { GetParticipantsQuery } from '@generated/graphql';
 
 type Details = {
   id: number;
@@ -15,13 +15,13 @@ export const ratioEnum = {
 };
 
 const useAddPaymentDetails = (
-  event: QueryParticipantsQuery['events'][number] | undefined,
+  participants: GetParticipantsQuery['participants'] | undefined,
 ) => {
   const [details, setDetails] = useState<Details>([]);
 
   useEffect(() => {
-    if (!event) return;
-    const details = event.participants.map((participant) => {
+    if (!participants) return;
+    const details = participants.map((participant) => {
       return {
         id: participant.id,
         name: participant.name,
@@ -30,7 +30,7 @@ const useAddPaymentDetails = (
       };
     });
     setDetails(details);
-  }, [event]);
+  }, [participants]);
 
   return { details, setDetails };
 };

@@ -1,5 +1,5 @@
-query Result($eventId: uuid!) {
-  QueryResult(eventId: $eventId) {
+query getResult($eventId: String!) {
+  result(eventId: $eventId) {
     id
     name
     sumPrice
