@@ -65,9 +65,9 @@ type Payment {
   id: Int!
   name: String!
   updatedAt: DateTime!
-  whoPaid: Participant!
+  whoPaid: Participant
   whoPaidId: Int!
-  whoShouldPay: [Participant!]!
+  whoShouldPay: [Participant!]
 }
 
 type Query {

@@ -28,11 +28,11 @@ export class Payment {
   @Field(() => Int!)
   whoPaidId!: number;
 
-  @Field(() => Participant!)
-  whoPaid!: Participant;
+  @Field(() => Participant!, { nullable: true })
+  whoPaid?: Participant;
 
-  @Field(() => [Participant!]!)
-  whoShouldPay!: Participant[];
+  @Field(() => [Participant!]!, { nullable: true })
+  whoShouldPay?: Participant[];
 
   @Field(() => Int!)
   amount!: number;
