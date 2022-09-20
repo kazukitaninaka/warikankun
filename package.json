@@ -9,10 +9,14 @@
     "lint": "next lint",
     "generate": "graphql-codegen --require dotenv/config --config codegen.js",
     "generate:local": "graphql-codegen --require dotenv/config --config codegen.js dotenv_config_path=.env.local",
-    "test": "jest"
+    "test": "jest",
+    "migrate": "dotenv -e .env.local -- npx prisma migrate dev --name init",
+    "seed": "dotenv -e .env.local -- npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.9",
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11.9.3",
@@ -20,17 +24,24 @@
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
+    "@line/liff": "^2.18.2",
+    "@prisma/client": "4.3.1",
+    "@tanstack/react-query": "^4.3.3",
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.5",
     "@graphql-codegen/typescript-operations": "^2.3.2",
-    "@graphql-codegen/typescript-react-apollo": "^3.2.8",
-    "@line/liff": "^2.18.2",
+    "@graphql-codegen/typescript-react-query": "^4.0.1",
+    "apollo-server-micro": "^3.10.2",
+    "class-validator": "^0.13.2",
     "framer-motion": "^6.4.3",
-    "graphql": "^16.3.0",
+    "graphql": "^15.3.0",
+    "micro": "^9.4.1",
     "next": "^12.2.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -44,6 +55,8 @@
     "jest-environment-jsdom": "^28.1.1",
     "next-test-api-route-handler": "^3.1.3",
     "prettier": "^2.5.1",
+    "prisma": "^4.3.1",
+    "ts-node": "^10.9.1",
     "typescript": "4.5.5"
   }
 }

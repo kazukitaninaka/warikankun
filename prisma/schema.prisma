@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Event {
+  id        String      @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  participants Participant[] 
+  payments Payment[]
+}
+
+model Participant {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  event     Event       @relation(fields: [eventId], references: [id])
+  eventId   String
+  pictureUrl String?
+  participantId String?
+  shouldPay PaymentsOnParticipants[]
+  paid Payment[]
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  whoPaid Participant @relation(fields: [whoPaidId], references: [id])
+  whoPaidId Int
+  amount    Int
+  event     Event       @relation(fields: [eventId], references: [id])
+  eventId   String
+  whoShouldPay PaymentsOnParticipants[]
+}
+
+model PaymentsOnParticipants {
+  id        Int      @id @default(autoincrement())
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  paymentId Int
+  participant Participant @relation(fields: [participantId], references: [id])
+  participantId Int
+  ratio Float?
+}

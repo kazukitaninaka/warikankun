@@ -1,42 +1,52 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { ObjectType, Field, Int } from 'type-graphql';
 
-type Res = {
-  id: string;
-  name: string;
-  sumPrice: number;
-  transactions: Transaction[];
-};
+@ObjectType()
+class From {
+  @Field(() => Int!)
+  id!: number;
 
-type Transaction = {
-  from: {
-    id: number;
-    name: string;
-  };
-  to: {
-    id: number;
-    name: string;
-    amount: number;
-  }[];
-};
+  @Field(() => String!)
+  name!: string;
 
-type FetchEventResponse = {
-  events: Event[];
-};
+  @Field(() => Int!)
+  shouldHavePaid!: number;
+}
 
-type Event = {
-  id: string;
-  name: string;
-  payments: Payment[];
-  participants: Participant[];
-  payments_aggregate: {
-    aggregate: {
-      sum: {
-        amount: number;
-      };
-    };
-  };
-};
+@ObjectType()
+class To {
+  @Field(() => Int!)
+  id!: number;
+
+  @Field(() => String!)
+  name!: string;
+
+  @Field(() => Int!)
+  amount!: number;
+}
+
+@ObjectType()
+class Transaction {
+  @Field(() => From!)
+  from!: From;
+
+  @Field(() => [To!]!)
+  to!: To[];
+}
+
+@ObjectType()
+export class Result {
+  @Field(() => String!)
+  id!: string;
+
+  @Field(() => String!)
+  name!: string;
+
+  @Field(() => Int!)
+  sumPrice!: number;
+
+  @Field(() => [Transaction!]!)
+  transactions!: Transaction[];
+}
 
 type Participant = {
   id: number;
@@ -56,7 +66,7 @@ type Payment = {
 
 type WhoShouldPay = {
   participantId: number;
-  ratio: number;
+  ratio: number | null;
 };
 
 type ParticipantBalance = {
@@ -66,19 +76,11 @@ type ParticipantBalance = {
   shouldHavePaid: number;
 };
 
-const fetchEventForCalc = async (
-  eventId: string,
-): Promise<FetchEventResponse> => {
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_GRAPHQL_REST_ENDPOINT}/api/rest/eventForCalc/${eventId}`,
-    {
-      headers: {
-        'x-hasura-admin-secret': process.env.NEXT_PUBLIC_X_HASURA_ADMIN_SECRET!,
-      },
-    },
-  );
-
-  return await data.json();
+type Event = {
+  id: string;
+  name: string;
+  participants: Participant[];
+  payments: Payment[];
 };
 
 const calcAmountForRest = (amount: number, whoShouldPay: WhoShouldPay[]) => {
@@ -203,31 +205,18 @@ const resolveBalance = (participantBalances: ParticipantBalance[]) => {
   return transactions;
 };
 
-const calcTransaction = (event: Event) => {
+export const calcResult = (event: Event) => {
   // TODO: balanceがゼロサムにならない点を直す（割り勘で割り切れない分の処理）
   // (そんな気にならない程度の差ではあるかも)
   const participantBalances = calcBalance(event);
   const transactions = resolveBalance(participantBalances);
 
-  return transactions;
-};
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Res>,
-) {
-  const { eventId } = req.body.input;
-  const { events } = await fetchEventForCalc(eventId);
-  const event = events[0];
-
-  const transactions = calcTransaction(event);
-
   const result = {
     id: event.id,
     name: event.name,
-    sumPrice: event.payments_aggregate.aggregate.sum.amount,
+    sumPrice: event.payments?.reduce((acc, payment) => acc + payment.amount, 0),
     transactions,
   };
 
-  res.status(200).json(result);
-}
+  return result;
+};

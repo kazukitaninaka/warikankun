@@ -1,0 +1,10 @@
+query getEventForAdd($eventId: String!) {
+  event(eventId: $eventId) {
+    id
+    name
+    participants {
+      id
+      name
+    }
+  }
+}

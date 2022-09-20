@@ -1,0 +1,6 @@
+query getParticipants($eventId: String!) {
+  participants(eventId: $eventId) {
+    id
+    name
+  }
+}
