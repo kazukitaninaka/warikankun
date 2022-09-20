@@ -1,5 +1,5 @@
 mutation deletePayment($paymentId: Int!) {
-  deletePayment(paymentId: $paymentId) {
+  delete_payments_by_pk(id: $paymentId) {
     id
   }
 }

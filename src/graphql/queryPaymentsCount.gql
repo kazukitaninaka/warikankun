@@ -1,0 +1,7 @@
+query PaymentCount($eventId: uuid!) {
+  payments_aggregate(where: { eventId: { _eq: $eventId } }) {
+    aggregate {
+      count
+    }
+  }
+}
