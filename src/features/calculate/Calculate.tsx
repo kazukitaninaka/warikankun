@@ -1,7 +1,6 @@
 import { Box, Center, Button, Text } from '@chakra-ui/react';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRouter } from 'next/router';
 import Calculating from '@features/calculate/Calculating';
 import EventName from '@components/EventName';
 import { LiffContext } from '@components/LiffProvider';
@@ -10,11 +9,9 @@ import { useGetResultQuery } from '@generated/graphql';
 import { makeRefundString } from '@utils/index';
 import { useContext } from 'react';
 
-const Calculate = () => {
-  const router = useRouter();
-  const { id } = router.query;
+const Calculate: React.FC<{ id: string }> = ({ id }) => {
   const { isLoading, isError, data } = useGetResultQuery({
-    eventId: id as string,
+    eventId: id,
   });
   const liff = useContext(LiffContext);
 

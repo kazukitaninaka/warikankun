@@ -33,11 +33,10 @@ import useAddPaymentDetails, {
   ratioEnum,
 } from '@features/event/add/useAddPaymentDetails';
 
-const Add: React.FC = () => {
+const Add: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter();
-  const { id } = router.query;
   const { isLoading, isError, data } = useGetParticipantsQuery({
-    eventId: id as string,
+    eventId: id,
   });
 
   const [name, setName] = useState<string>('');

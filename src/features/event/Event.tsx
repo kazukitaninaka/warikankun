@@ -13,14 +13,13 @@ import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import useDeleteModal from '@features/event/useDeleteModal';
 import { useContext } from 'react';
 
-const Event: React.FC = () => {
+const Event: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter();
-  const { id } = router.query;
   const { data: eventNameData } = useGetEventNameQuery({
-    eventId: id as string,
+    eventId: id,
   });
   const { data: paymentsData } = useGetPaymentsQuery({
-    eventId: id as string,
+    eventId: id,
   });
   const liff = useContext(LiffContext);
   const { isFriend } = useFriendship();

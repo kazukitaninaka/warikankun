@@ -30,3 +30,7 @@ export const makeRefundString = (transactions: TransactionInCalc[]) => {
 
   return refundString;
 };
+
+export const parseId = (id: string | string[]) => {
+  return typeof id === 'string' ? id : id[0];
+};
