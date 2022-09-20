@@ -1,12 +1,14 @@
 import { Text } from '@chakra-ui/react';
-import { useGetEventNameQuery } from '@generated/graphql';
+import { useQueryEventNameQuery } from '../generated/graphql';
 
 const EventName = ({ id }: { id: string | string[] | undefined }) => {
-  const { isError, data } = useGetEventNameQuery({ eventId: id as string });
-  if (isError) {
+  const { error, data } = useQueryEventNameQuery({
+    variables: { eventId: id },
+  });
+  if (error) {
     return <Text>データ取得に失敗しました。</Text>;
   }
-  return <Text fontSize="large">イベント名：{data?.event.name}</Text>;
+  return <Text fontSize="large">イベント名：{data?.events[0].name}</Text>;
 };
 
 export default EventName;

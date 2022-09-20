@@ -1,45 +1,52 @@
 import EventName from './EventName';
 import { render, screen } from '@testing-library/react';
-import { useGetEventNameQuery, GetEventNameQuery } from '@generated/graphql';
-import { UseQueryResult } from '@tanstack/react-query';
+import {
+  QueryEventNameQueryHookResult,
+  useQueryEventNameQuery,
+} from '@generated/graphql';
+import { ApolloError } from '@apollo/client';
 import '@testing-library/jest-dom';
 
 type ResultType = Pick<
-  UseQueryResult<GetEventNameQuery, unknown>,
-  'data' | 'isLoading' | 'isError'
+  QueryEventNameQueryHookResult,
+  'data' | 'loading' | 'error'
 >;
 
 const successfulResult: ResultType = {
   data: {
-    event: {
-      id: '935ae70e-581c-4748-b8e1-503408a40f00',
-      name: 'ぶらり旅',
-    },
+    events: [
+      {
+        id: '935ae70e-581c-4748-b8e1-503408a40f00',
+        name: 'ぶらり旅',
+      },
+    ],
   },
-  isLoading: false,
-  isError: false,
+  loading: false,
+  error: undefined,
 };
 
 const loadingResult: ResultType = {
   data: undefined,
-  isLoading: true,
-  isError: false,
+  loading: true,
+  error: undefined,
 };
 
 const errorResult: ResultType = {
   data: undefined,
-  isLoading: false,
-  isError: true,
+  loading: false,
+  error: new ApolloError({
+    errorMessage: 'Failed to fetch data',
+  }),
 };
 
 jest.mock('@generated/graphql', () => ({
   __esModule: true,
-  useGetEventNameQuery: jest.fn(),
+  useQueryEventNameQuery: jest.fn(),
 }));
 
 describe('SumPrice', () => {
   test('値取得成功時、イベント名が表示される', () => {
-    (useGetEventNameQuery as jest.Mock).mockImplementation(
+    (useQueryEventNameQuery as jest.Mock).mockImplementation(
       () => successfulResult,
     );
     render(<EventName id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
@@ -48,14 +55,16 @@ describe('SumPrice', () => {
   });
 
   test('ローディング時、イベント名を表示しない', () => {
-    (useGetEventNameQuery as jest.Mock).mockImplementation(() => loadingResult);
+    (useQueryEventNameQuery as jest.Mock).mockImplementation(
+      () => loadingResult,
+    );
     render(<EventName id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
 
     expect(screen.getByText('イベント名：')).toBeInTheDocument();
   });
 
   test('値取得失敗時、エラーメッセージを表示する', () => {
-    (useGetEventNameQuery as jest.Mock).mockImplementation(() => errorResult);
+    (useQueryEventNameQuery as jest.Mock).mockImplementation(() => errorResult);
     render(<EventName id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
 
     expect(screen.getByText('データ取得に失敗しました。')).toBeInTheDocument();
