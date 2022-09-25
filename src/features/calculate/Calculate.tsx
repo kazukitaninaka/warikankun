@@ -1,29 +1,27 @@
 import { Box, Center, Button, Text } from '@chakra-ui/react';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRouter } from 'next/router';
 import Calculating from '@features/calculate/Calculating';
 import EventName from '@components/EventName';
-import { liffVar } from '@components/LiffProvider';
+import { LiffContext } from '@components/LiffProvider';
 import SumPrice from '@components/SumPrice';
-import { useResultQuery } from '@generated/graphql';
+import { useGetResultQuery } from '@generated/graphql';
 import { makeRefundString } from '@utils/index';
+import { useContext } from 'react';
 
-const Calculate = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  const { loading, error, data } = useResultQuery({
-    variables: { eventId: id },
+const Calculate: React.FC<{ id: string }> = ({ id }) => {
+  const { isLoading, isError, data } = useGetResultQuery({
+    eventId: id,
   });
-  const liff = liffVar();
+  const liff = useContext(LiffContext);
 
-  if (error) {
+  if (isError) {
     return (
       <Text>エラーが発生しました。時間を置いて再度アクセスしてください。</Text>
     );
   }
 
-  const result = data?.QueryResult;
+  const result = data?.result;
 
   const handleShareResultClick = () => {
     if (!liff?.isInClient() || !result) return;
@@ -61,7 +59,7 @@ const Calculate = () => {
         <SumPrice id={id} />
       </Box>
       <Box mb="10">
-        {loading ? (
+        {isLoading ? (
           <Center>
             <Calculating />
           </Center>

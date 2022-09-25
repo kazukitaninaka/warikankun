@@ -43,3 +43,5 @@ graphql.schema.json
 
 # generated
 /src/generated/
+
+.graphqlrc.json
