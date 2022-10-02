@@ -1,5 +1,8 @@
 module.exports = {
-  schema: 'http://localhost:4000/graphql',
+  schema:
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:4000/graphql'
+      : process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
   documents: ['./src/graphql/*.gql'],
   overwrite: true,
   generates: {
