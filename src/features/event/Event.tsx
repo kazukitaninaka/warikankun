@@ -1,4 +1,4 @@
-import { Text, Center, Flex, Button, Box } from '@chakra-ui/react';
+import { Text, Center, Flex, Button, Box, Spinner } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useGetPaymentsQuery, useGetEventNameQuery } from '@generated/graphql';
 import { LiffContext } from '@components/LiffProvider';
@@ -11,7 +11,8 @@ import Payments from '@features/event/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import useDeleteModal from '@features/event/useDeleteModal';
-import { useContext } from 'react';
+import { Suspense, useContext } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const Event: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter();
@@ -47,7 +48,9 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
   };
 
   return (
-    <>
+    <ErrorBoundary
+      fallback={<Text fontSize="lg">データ取得に失敗しました。</Text>}
+    >
       {renderDeleteModal()}
       <EventName id={id} />
       <Flex justifyContent="space-evenly" mt="3">
@@ -69,11 +72,19 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
         <SumPrice id={id} />
       </Box>
       <Box mb="5">
-        <Payments
-          id={id}
-          setDeleteTarget={setDeleteTarget}
-          onOpen={openModal}
-        />
+        <Suspense
+          fallback={
+            <Center mt="3">
+              <Spinner size="lg" />
+            </Center>
+          }
+        >
+          <Payments
+            id={id}
+            setDeleteTarget={setDeleteTarget}
+            onOpen={openModal}
+          />
+        </Suspense>
       </Box>
       <Box mb="5">
         <Center>
@@ -99,7 +110,7 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
           <AddFriend />
         </Center>
       )}
-    </>
+    </ErrorBoundary>
   );
 };
 

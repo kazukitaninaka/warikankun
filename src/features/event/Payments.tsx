@@ -1,13 +1,4 @@
-import {
-  Box,
-  Center,
-  Spinner,
-  Table,
-  Tbody,
-  Td,
-  Tr,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import { formatNumberToJPY } from '../../utils';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { useGetPaymentsQuery } from '@generated/graphql';
@@ -21,24 +12,17 @@ const Payments = ({
   setDeleteTarget: (deleteTarget: number | null) => void;
   onOpen: () => void;
 }) => {
-  const { isLoading, isError, data } = useGetPaymentsQuery({
-    eventId: id as string,
-  });
-  if (isLoading) {
-    return (
-      <Center mt="3">
-        <Spinner size="lg" />
-      </Center>
-    );
-  }
-
-  if (isError) {
-    return <Text data-testid="errorText">データ取得に失敗しました。</Text>;
-  }
+  const { data } = useGetPaymentsQuery(
+    {
+      eventId: id as string,
+    },
+    {
+      suspense: true,
+    },
+  );
   return (
     <Box>
-      {/* TODO: Suspenseでちゃんと対応する */}
-      {data!.payments.map((payment) => (
+      {data?.payments.map((payment) => (
         <Box
           key={payment.id}
           borderRadius="md"
