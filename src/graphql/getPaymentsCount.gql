@@ -1,0 +1,5 @@
+query getPaymentsCount($eventId: String!) {
+  getCount(eventId: $eventId) {
+    count
+  }
+}

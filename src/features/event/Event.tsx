@@ -1,6 +1,9 @@
 import { Text, Center, Flex, Button, Box, Spinner } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
-import { useGetPaymentsQuery, useGetEventNameQuery } from '@generated/graphql';
+import {
+  useGetPaymentsCountQuery,
+  useGetEventNameQuery,
+} from '@generated/graphql';
 import { LiffContext } from '@components/LiffProvider';
 import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';
@@ -19,7 +22,7 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
   const { data: eventNameData } = useGetEventNameQuery({
     eventId: id,
   });
-  const { data: paymentsData } = useGetPaymentsQuery({
+  const { data: paymentsCountData } = useGetPaymentsCountQuery({
     eventId: id,
   });
   const liff = useContext(LiffContext);
@@ -60,7 +63,7 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
         <Button
           colorScheme="blue"
           onClick={() => router.push(`${id}/calc`)}
-          disabled={!paymentsData?.payments.length}
+          disabled={!paymentsCountData?.getCount.count}
         >
           <CheckIcon mr="1" /> 現在の精算結果を表示
         </Button>
