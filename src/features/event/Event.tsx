@@ -52,13 +52,18 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <ErrorBoundary
-      fallback={<Text fontSize="lg">データ取得に失敗しました。</Text>}
+      fallback={
+        <Text fontSize="lg" data-testid="errorText">
+          データ取得に失敗しました。
+        </Text>
+      }
     >
       {renderDeleteModal()}
       <EventName id={id} />
       <Flex justifyContent="space-evenly" mt="3">
         <Button colorScheme="teal" onClick={() => router.push(`${id}/add`)}>
-          <PlusSquareIcon mr="1" /> 支払いを追加
+          <PlusSquareIcon mr="1" />
+          支払いを追加
         </Button>
         <Button
           colorScheme="blue"
