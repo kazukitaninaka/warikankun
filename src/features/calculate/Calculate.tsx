@@ -7,20 +7,46 @@ import { LiffContext } from '@components/LiffProvider';
 import SumPrice from '@components/SumPrice';
 import { useGetResultQuery } from '@generated/graphql';
 import { makeRefundString } from '@utils/index';
-import { useContext } from 'react';
+import { Suspense, useContext } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const Calculate: React.FC<{ id: string }> = ({ id }) => {
-  const { isLoading, isError, data } = useGetResultQuery({
-    eventId: id,
-  });
+  return (
+    <>
+      <EventName id={id} />
+      <Text textAlign="center" fontSize="2xl" mb="5">
+        精算
+      </Text>
+      <Box mb="2">
+        <SumPrice id={id} />
+      </Box>
+      <ErrorBoundary
+        fallback={<Text fontSize="lg">データ取得に失敗しました。</Text>}
+      >
+        <Suspense
+          fallback={
+            <Center>
+              <Calculating />
+            </Center>
+          }
+        >
+          <Result id={id} />
+        </Suspense>
+      </ErrorBoundary>
+    </>
+  );
+};
+
+const Result = ({ id }: { id: string }) => {
+  const { data } = useGetResultQuery(
+    {
+      eventId: id,
+    },
+    {
+      suspense: true,
+    },
+  );
   const liff = useContext(LiffContext);
-
-  if (isError) {
-    return (
-      <Text>エラーが発生しました。時間を置いて再度アクセスしてください。</Text>
-    );
-  }
-
   const result = data?.result;
 
   const handleShareResultClick = () => {
@@ -51,40 +77,27 @@ const Calculate: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <>
-      <EventName id={id} />
-      <Text textAlign="center" fontSize="2xl" mb="5">
-        精算
-      </Text>
-      <Box mb="2">
-        <SumPrice id={id} />
-      </Box>
       <Box mb="10">
-        {isLoading ? (
-          <Center>
-            <Calculating />
-          </Center>
-        ) : (
-          result?.transactions.map((transaction, index) => {
-            return (
-              <div key={`transaction-${index}`}>
-                <Box bgColor="gray.100">
-                  <Text p="1.5">{transaction.from.name}</Text>
-                </Box>
-                <Box my="2" pl="1">
-                  {transaction.to.length === 0 ? (
-                    <Text>精算なし</Text>
-                  ) : (
-                    transaction.to.map((el) => (
-                      <Text key={el.participantId}>
-                        {el.name}に{el.amount}円
-                      </Text>
-                    ))
-                  )}
-                </Box>
-              </div>
-            );
-          })
-        )}
+        {result?.transactions.map((transaction, index) => {
+          return (
+            <div key={`transaction-${index}`}>
+              <Box bgColor="gray.100">
+                <Text p="1.5">{transaction.from.name}</Text>
+              </Box>
+              <Box my="2" pl="1">
+                {transaction.to.length === 0 ? (
+                  <Text>精算なし</Text>
+                ) : (
+                  transaction.to.map((el) => (
+                    <Text key={el.participantId}>
+                      {el.name}に{el.amount}円
+                    </Text>
+                  ))
+                )}
+              </Box>
+            </div>
+          );
+        })}
       </Box>
       <Center>
         <Button

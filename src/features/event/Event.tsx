@@ -1,6 +1,9 @@
-import { Text, Center, Flex, Button, Box } from '@chakra-ui/react';
+import { Text, Center, Flex, Button, Box, Spinner } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
-import { useGetPaymentsQuery, useGetEventNameQuery } from '@generated/graphql';
+import {
+  useGetPaymentsCountQuery,
+  useGetEventNameQuery,
+} from '@generated/graphql';
 import { LiffContext } from '@components/LiffProvider';
 import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';
@@ -11,14 +14,15 @@ import Payments from '@features/event/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import useDeleteModal from '@features/event/useDeleteModal';
-import { useContext } from 'react';
+import { Suspense, useContext } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const Event: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter();
   const { data: eventNameData } = useGetEventNameQuery({
     eventId: id,
   });
-  const { data: paymentsData } = useGetPaymentsQuery({
+  const { data: paymentsCountData } = useGetPaymentsCountQuery({
     eventId: id,
   });
   const liff = useContext(LiffContext);
@@ -47,17 +51,24 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
   };
 
   return (
-    <>
+    <ErrorBoundary
+      fallback={
+        <Text fontSize="lg" data-testid="errorText">
+          データ取得に失敗しました。
+        </Text>
+      }
+    >
       {renderDeleteModal()}
       <EventName id={id} />
       <Flex justifyContent="space-evenly" mt="3">
         <Button colorScheme="teal" onClick={() => router.push(`${id}/add`)}>
-          <PlusSquareIcon mr="1" /> 支払いを追加
+          <PlusSquareIcon mr="1" />
+          支払いを追加
         </Button>
         <Button
           colorScheme="blue"
           onClick={() => router.push(`${id}/calc`)}
-          disabled={!paymentsData?.payments.length}
+          disabled={!paymentsCountData?.getCount.count}
         >
           <CheckIcon mr="1" /> 現在の精算結果を表示
         </Button>
@@ -69,11 +80,19 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
         <SumPrice id={id} />
       </Box>
       <Box mb="5">
-        <Payments
-          id={id}
-          setDeleteTarget={setDeleteTarget}
-          onOpen={openModal}
-        />
+        <Suspense
+          fallback={
+            <Center mt="3">
+              <Spinner size="lg" />
+            </Center>
+          }
+        >
+          <Payments
+            id={id}
+            setDeleteTarget={setDeleteTarget}
+            onOpen={openModal}
+          />
+        </Suspense>
       </Box>
       <Box mb="5">
         <Center>
@@ -99,7 +118,7 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
           <AddFriend />
         </Center>
       )}
-    </>
+    </ErrorBoundary>
   );
 };
 

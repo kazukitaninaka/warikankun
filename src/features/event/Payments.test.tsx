@@ -47,34 +47,6 @@ describe('SumPrice', () => {
     const table = screen.queryByRole('table');
     expect(table).not.toBeInTheDocument();
   });
-
-  test('ローディング時、金額を表示しない', () => {
-    (useGetPaymentsQuery as jest.Mock).mockImplementation(() => loadingResult);
-    const { container } = render(
-      <Payments
-        id="935ae70e-581c-4748-b8e1-503408a40f00" // 意味のないUUID
-        setDeleteTarget={() => {}}
-        onOpen={() => {}}
-      />,
-    );
-
-    const loadingNode = container.getElementsByClassName('chakra-spinner')[0];
-    expect(loadingNode).toBeInTheDocument();
-  });
-
-  test('値取得失敗時、エラーメッセージを表示する', () => {
-    (useGetPaymentsQuery as jest.Mock).mockImplementation(() => errorResult);
-    render(
-      <Payments
-        id="935ae70e-581c-4748-b8e1-503408a40f00" // 意味のないUUID
-        setDeleteTarget={() => {}}
-        onOpen={() => {}}
-      />,
-    );
-
-    const PaymentsNode = screen.getByTestId('errorText');
-    expect(PaymentsNode?.textContent).toContain('データ取得に失敗しました。');
-  });
 });
 
 type ResultType = Pick<
