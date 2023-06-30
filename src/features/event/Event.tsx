@@ -91,7 +91,7 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
           <Payments
             id={id}
             setDeleteTarget={setDeleteTarget}
-            onOpen={openDeleteModal}
+            onModalOpen={openDeleteModal}
           />
         </Suspense>
       </Box>

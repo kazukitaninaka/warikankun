@@ -1,16 +1,16 @@
 import { Box, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import { formatNumberToJPY } from '../../utils';
-import { DeleteIcon } from '@chakra-ui/icons';
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { useGetPaymentsQuery } from '@generated/graphql';
 
 const Payments = ({
   id,
   setDeleteTarget,
-  onOpen,
+  onModalOpen,
 }: {
   id: string | string[] | undefined;
   setDeleteTarget: (deleteTarget: number | null) => void;
-  onOpen: () => void;
+  onModalOpen: () => void;
 }) => {
   const { data } = useGetPaymentsQuery(
     {
@@ -31,6 +31,7 @@ const Payments = ({
           bgColor="gray.50"
         >
           <Box textAlign="right">
+            <EditIcon w={5} h={5} mt="3" mr="5" />
             <DeleteIcon
               w={5}
               h={5}
@@ -38,7 +39,7 @@ const Payments = ({
               mr="5"
               onClick={() => {
                 setDeleteTarget(payment.id);
-                onOpen();
+                onModalOpen();
               }}
             />
           </Box>
