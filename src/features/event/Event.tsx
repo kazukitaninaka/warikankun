@@ -27,7 +27,8 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
   });
   const liff = useContext(LiffContext);
   const { isFriend } = useFriendship();
-  const { renderDeleteModal, openModal, setDeleteTarget } = useDeleteModal();
+  const { renderDeleteModal, openDeleteModal, setDeleteTarget } =
+    useDeleteModal();
 
   const handleShareClick = () => {
     if (!liff?.isInClient() || !eventNameData?.event) return;
@@ -90,7 +91,7 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
           <Payments
             id={id}
             setDeleteTarget={setDeleteTarget}
-            onOpen={openModal}
+            onOpen={openDeleteModal}
           />
         </Suspense>
       </Box>

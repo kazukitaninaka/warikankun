@@ -66,7 +66,7 @@ const useDeleteModal = () => {
       </ModalContent>
     </Modal>
   );
-  return { openModal: onOpen, setDeleteTarget, renderDeleteModal };
+  return { openDeleteModal: onOpen, setDeleteTarget, renderDeleteModal };
 };
 
 export default useDeleteModal;
