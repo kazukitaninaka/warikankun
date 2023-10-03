@@ -14,13 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{matrix.node-version}}
         uses: actions/setup-node@v1
         with:
           node-version: ${{matrix.node-version}}
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - uses: actions/checkout@v1
       - name: pnpm install
         run: pnpm install
