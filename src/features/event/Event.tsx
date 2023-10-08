@@ -16,6 +16,7 @@ import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import useDeleteModal from '@features/event/useDeleteModal';
 import { Suspense, useContext } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import Link from 'next/link';
 
 const Event: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter();
@@ -61,17 +62,20 @@ const Event: React.FC<{ id: string }> = ({ id }) => {
       {renderDeleteModal()}
       <EventName id={id} />
       <Flex justifyContent="space-evenly" mt="3">
-        <Button colorScheme="teal" onClick={() => router.push(`${id}/add`)}>
-          <PlusSquareIcon mr="1" />
-          支払いを追加
-        </Button>
-        <Button
-          colorScheme="blue"
-          onClick={() => router.push(`${id}/calc`)}
-          disabled={!paymentsCountData?.getCount.count}
-        >
-          <CheckIcon mr="1" /> 現在の精算結果を表示
-        </Button>
+        <Link href={`${id}/add`} passHref>
+          <Button colorScheme="teal">
+            <PlusSquareIcon mr="1" />
+            支払いを追加
+          </Button>
+        </Link>
+        <Link href={`${id}/calc`} passHref>
+          <Button
+            colorScheme="blue"
+            disabled={!paymentsCountData?.getCount.count}
+          >
+            <CheckIcon mr="1" /> 現在の精算結果を表示
+          </Button>
+        </Link>
       </Flex>
       <Text fontSize="large" mt="8">
         今までの支払い情報
