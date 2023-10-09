@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Center, Button, Text } from '@chakra-ui/react';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
