@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useEffect, useState } from 'react';
 import Liff from '@line/liff';
 

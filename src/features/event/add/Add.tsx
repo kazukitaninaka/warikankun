@@ -1,3 +1,5 @@
+'use client';
+
 import { InfoIcon } from '@chakra-ui/icons';
 import {
   Text,
@@ -21,7 +23,7 @@ import {
   PopoverCloseButton,
   PopoverBody,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import EventName from '@components/EventName';
 import {
@@ -63,11 +65,13 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
   };
 
   const handleShouldPayChange = (i: number) => {
-    setDetails((prev) => {
-      const newDetails = [...prev];
-      newDetails[i].shouldPay = !prev[i].shouldPay;
-      return newDetails;
-    });
+    setDetails(
+      details.map((detail, index) => {
+        return index === i
+          ? { ...detail, shouldPay: !detail.shouldPay }
+          : detail;
+      }),
+    );
   };
 
   const addPayment = (e: React.FormEvent<HTMLFormElement>) => {
@@ -98,10 +102,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
       },
       {
         onSuccess: () => {
-          router.push({
-            pathname: '/event/[id]',
-            query: { id },
-          });
+          router.push(`/event/${id}`);
         },
       },
     );
@@ -117,8 +118,8 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>
-            <Text>ちょっと多め：通常の1.25倍の負担額</Text>
-            <Text>ちょっと少なめ：通常の0.75倍の負担額</Text>
+            <Text>ちょっと多め: 通常の1.25倍の負担額</Text>
+            <Text>ちょっと少なめ: 通常の0.75倍の負担額</Text>
           </PopoverBody>
         </PopoverContent>
       </Popover>

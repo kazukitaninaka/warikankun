@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": ["dom", "dom.iterable", "esnext", "esnext.asynciterable"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "esnext.asynciterable"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,15 +21,38 @@
     "incremental": true,
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@generated/*": ["src/generated/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@features/*": ["src/features/*"],
-      "@utils/*": ["src/utils/*"]
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@generated/*": [
+        "src/generated/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@features/*": [
+        "src/features/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ]
     },
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.config.js"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "jest.config.js",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

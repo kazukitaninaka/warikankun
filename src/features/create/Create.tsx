@@ -3,7 +3,7 @@ import { Input, Text, Button, Box, Flex, Center } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useCreateEventMutation } from '@generated/graphql';
 import { LiffContext } from '@components/LiffProvider';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const Create: React.FC = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ const Create: React.FC = () => {
   const liff = useContext(LiffContext);
   const isCreatingAllowed = useMemo(() => {
     const participantsWithNonEmptyName = participants.filter(
-      (participant) => participant.name,
+      (participant) => participant.name !== '',
     );
     return eventName !== '' && participantsWithNonEmptyName.length >= 2;
   }, [eventName, participants]);
@@ -25,7 +25,7 @@ const Create: React.FC = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && e.target.value !== '') {
       addParticipant();
     }
   };
