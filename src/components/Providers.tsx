@@ -1,7 +1,17 @@
 'use client';
 
 import { ChakraBaseProvider, extendBaseTheme } from '@chakra-ui/react';
-import { Button, Input, Heading, Table } from '@chakra-ui/theme/components';
+import {
+  Button,
+  Input,
+  Heading,
+  Table,
+  Checkbox,
+  Popover,
+  Select,
+  Spinner,
+  Modal,
+} from '@chakra-ui/theme/components';
 import { CacheProvider } from '@chakra-ui/next-js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LiffProvider from './LiffProvider';
@@ -12,6 +22,11 @@ const theme = extendBaseTheme({
     Input,
     Heading,
     Table,
+    Checkbox,
+    Popover,
+    Select,
+    Spinner,
+    Modal,
   },
 });
 

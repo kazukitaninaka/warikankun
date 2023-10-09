@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { GetParticipantsQuery } from '@generated/graphql';
 
 type Details = {
@@ -16,7 +16,7 @@ export const ratioEnum = {
 
 const useAddPaymentDetails = (
   participants: GetParticipantsQuery['participants'] | undefined,
-) => {
+): { details: Details; setDetails: Dispatch<SetStateAction<Details>> } => {
   const [details, setDetails] = useState<Details>([]);
 
   useEffect(() => {
