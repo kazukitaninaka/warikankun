@@ -1,9 +1,8 @@
 import { Box, Text, Button } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import React from 'react';
 
 const AddFriend = () => {
-  const router = useRouter();
   return (
     <Box>
       <Text mb="3" fontSize="sm">
@@ -11,9 +10,9 @@ const AddFriend = () => {
         <br />
         新規割り勘イベントを作成しよう！
       </Text>
-      <Button onClick={() => router.push('https://lin.ee/Tkc57gX')}>
-        割り勘くんと友達になる
-      </Button>
+      <Link href={'https://lin.ee/Tkc57gX'} passHref>
+        <Button>割り勘くんと友達になる</Button>
+      </Link>
     </Box>
   );
 };

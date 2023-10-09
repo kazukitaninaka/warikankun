@@ -1,3 +1,5 @@
+'use client';
+
 import { Text, Center, Flex, Button, Box, Spinner } from '@chakra-ui/react';
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import {
@@ -8,7 +10,6 @@ import { LiffContext } from '@components/LiffProvider';
 import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';
 import EventName from '@components/EventName';
-import { useRouter } from 'next/router';
 import SumPrice from '@components/SumPrice';
 import Payments from '@features/event/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +20,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Link from 'next/link';
 
 const Event: React.FC<{ id: string }> = ({ id }) => {
-  const router = useRouter();
   const { data: eventNameData } = useGetEventNameQuery({
     eventId: id,
   });
