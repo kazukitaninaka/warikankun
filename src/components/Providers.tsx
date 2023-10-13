@@ -11,6 +11,7 @@ import {
   Select,
   Spinner,
   Modal,
+  FormLabel,
 } from '@chakra-ui/theme/components';
 import { CacheProvider } from '@chakra-ui/next-js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -27,6 +28,7 @@ const theme = extendBaseTheme({
     Select,
     Spinner,
     Modal,
+    FormLabel,
   },
 });
 
