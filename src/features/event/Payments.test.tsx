@@ -2,7 +2,6 @@ import Payments from './Payments';
 import { render, screen } from '@testing-library/react';
 import { useGetPaymentsQuery, GetPaymentsQuery } from '@generated/graphql';
 import { UseQueryResult } from '@tanstack/react-query';
-import '@testing-library/jest-dom';
 
 jest.mock('@generated/graphql', () => ({
   __esModule: true,
