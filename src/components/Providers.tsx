@@ -17,7 +17,7 @@ import { CacheProvider } from '@chakra-ui/next-js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LiffProvider from './LiffProvider';
 
-const theme = extendBaseTheme({
+export const theme = extendBaseTheme({
   components: {
     Button,
     Input,

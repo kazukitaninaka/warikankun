@@ -22,82 +22,92 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverBody,
+  FormLabel,
+  FormControl,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 import EventName from '@components/EventName';
 import {
   useGetParticipantsQuery,
   useCreatePaymentMutation,
   WhoShouldPayInput,
 } from '@generated/graphql';
-import useAddPaymentDetails, {
-  ratioEnum,
-} from '@features/event/add/useAddPaymentDetails';
+import { useForm, SubmitHandler } from 'react-hook-form';
+
+const ratioEnum = {
+  ZERO: 0,
+  LITTLE_LESS: 0.75,
+  DEFAULT: 1,
+  LITTLE_MORE: 1.25,
+};
+
+type Detail = {
+  id: number;
+  name: string;
+  shouldPay: boolean;
+  ratio: typeof ratioEnum[keyof typeof ratioEnum];
+};
+
+interface AddInput {
+  name: string;
+  whoPaidId: number | undefined;
+  amount: string;
+  details: Detail[];
+}
 
 const Add: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter();
   const { isLoading, isError, data } = useGetParticipantsQuery({
     eventId: id,
   });
+  if (isError) {
+    <Text>エラーが発生しました。</Text>;
+  }
 
-  const [name, setName] = useState<string>('');
-  const [whoPaidId, setWhoPaidId] = useState<number | undefined>(undefined);
-  const [amount, setAmount] = useState<string>('');
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const { details, setDetails } = useAddPaymentDetails(data?.participants);
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm<AddInput>({
+    values: {
+      name: '',
+      whoPaidId: undefined,
+      amount: '',
+      details:
+        data?.participants.map((participant) => {
+          return {
+            id: participant.id,
+            name: participant.name,
+            shouldPay: true,
+            ratio: ratioEnum.DEFAULT,
+          };
+        }) || [],
+    },
+  });
 
   const createPaymentMutation = useCreatePaymentMutation();
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(e.target.value);
-  };
+  const onSubmit: SubmitHandler<AddInput> = (data) => {
+    if (data.whoPaidId === undefined) return;
 
-  const handleRatioChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    i: number,
-  ) => {
-    setDetails((prev) => {
-      const newDetails = [...prev];
-      newDetails[i].ratio = +e.target.value;
-      return newDetails;
-    });
-  };
-
-  const handleShouldPayChange = (i: number) => {
-    setDetails(
-      details.map((detail, index) => {
-        return index === i
-          ? { ...detail, shouldPay: !detail.shouldPay }
-          : detail;
-      }),
-    );
-  };
-
-  const addPayment = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    if (!amount || !whoPaidId) return;
-
-    const filteredDetails = details.filter(
-      (participant) => participant.shouldPay,
-    );
-
-    const whoShouldPay: WhoShouldPayInput[] = filteredDetails.map(
+    const whoShouldPay: WhoShouldPayInput[] = data.details.map(
       (participant) => {
         return {
           participantId: participant.id,
-          ratio: participant.ratio,
+          ratio: participant.shouldPay ? participant.ratio : ratioEnum.ZERO, // 割り勘対象でない場合は0
         };
       },
     );
 
     createPaymentMutation.mutate(
       {
-        eventId: id as string,
-        name,
-        amount: +amount, // convert string to number
-        whoPaidId,
+        eventId: id,
+        name: data.name,
+        amount: +data.amount, // convert string to number
+        whoPaidId: +data.whoPaidId, // convert string to number
         whoShouldPay,
       },
       {
@@ -107,6 +117,9 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
       },
     );
   };
+
+  const hasNoOneToSplit =
+    getValues().details.filter((detail) => detail.shouldPay).length < 1;
 
   const renderPopover = () => {
     return (
@@ -126,10 +139,6 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
     );
   };
 
-  if (isError) {
-    <Text>エラーが発生しました。</Text>;
-  }
-
   return (
     <>
       <EventName id={id} />
@@ -141,86 +150,115 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
           <Spinner size="lg" />
         </Center>
       ) : (
-        <form onSubmit={addPayment}>
-          <Text fontSize="lg" mb="1" mt="4">
-            支払い名
-          </Text>
-          <Input
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Text fontSize="lg" mb="1" mt="4">
-            支払った人
-          </Text>
-          <Select
-            value={whoPaidId}
-            required
-            onChange={(e) => {
-              setWhoPaidId(+e.target.value);
-            }}
-            placeholder="支払った人を選択"
-          >
-            {data?.participants?.map((participant) => (
-              <option key={participant.id} value={participant.id}>
-                {participant.name}
-              </option>
-            ))}
-          </Select>
-          <Text fontSize="lg" mb="1" mt="4">
-            金額
-          </Text>
-          <Input
-            required
-            value={amount}
-            type="text"
-            inputMode="numeric"
-            onChange={handleAmountChange}
-          />
-          <Text mb="1" mt="4" fontSize="lg">
-            割り勘設定
-          </Text>
-          <Box border="1px" borderColor="gray.200" borderRadius="md">
-            <Table size="sm" variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>割り勘対象</Th>
-                  <Th w="30%">名前</Th>
-                  <Th w="50%">負担割合 {renderPopover()}</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {details.map((participant, index) => {
-                  return (
-                    <Tr key={participant.id}>
-                      <Td>
-                        <Checkbox
-                          size="lg"
-                          onChange={() => handleShouldPayChange(index)}
-                          isChecked={participant.shouldPay}
-                        />
-                      </Td>
-                      <Td>{participant.name}</Td>
-                      <Td>
-                        <Select
-                          onChange={(e) => handleRatioChange(e, index)}
-                          size="sm"
-                        >
-                          <option value={ratioEnum.DEFAULT}>そのまま</option>
-                          <option value={ratioEnum.LITTLE_LESS}>
-                            ちょっと少なめ
-                          </option>
-                          <option value={ratioEnum.LITTLE_MORE}>
-                            ちょっと多め
-                          </option>
-                        </Select>
-                      </Td>
-                    </Tr>
-                  );
-                })}
-              </Tbody>
-            </Table>
-          </Box>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl isInvalid={errors.name !== undefined} mb="5">
+            <FormLabel fontSize="lg" mb="1" htmlFor="name">
+              支払い名
+            </FormLabel>
+            <Input id="name" {...register('name', { required: true })} />
+            {errors.name && (
+              <FormErrorMessage color="red.500" mt="1">
+                支払い名を入力してください。
+              </FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={errors.whoPaidId !== undefined} mb="5">
+            <FormLabel fontSize="lg" mb="1" htmlFor="whoPaidId">
+              支払った人
+            </FormLabel>
+            <Select
+              id="whoPaidId"
+              placeholder="支払った人を選択"
+              {...register('whoPaidId', { required: true })}
+            >
+              {data?.participants?.map((participant) => (
+                <option key={participant.id} value={participant.id}>
+                  {participant.name}
+                </option>
+              ))}
+            </Select>
+            {errors.whoPaidId && (
+              <FormErrorMessage color="red.500" mt="1">
+                支払った人を選択してください。
+              </FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={errors.amount !== undefined} mb="5">
+            <FormLabel fontSize="lg" mb="1" htmlFor="amount">
+              金額
+            </FormLabel>
+            <Input
+              id="amount"
+              type="text"
+              inputMode="numeric"
+              {...register('amount', { required: true })}
+            />
+            {errors.amount && (
+              <FormErrorMessage color="red.500" mt="1">
+                金額を入力してください。
+              </FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={hasNoOneToSplit} mb="5">
+            <FormLabel mb="1" mt="4" fontSize="lg">
+              割り勘設定
+            </FormLabel>
+            {hasNoOneToSplit && (
+              <FormErrorMessage color="red.500" mt="1">
+                割り勘対象がいません。
+              </FormErrorMessage>
+            )}
+            <Box border="1px" borderColor="gray.200" borderRadius="md">
+              <Table size="sm" variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>割り勘対象</Th>
+                    <Th w="30%">名前</Th>
+                    <Th w="50%">負担割合 {renderPopover()}</Th>
+                  </Tr>
+                </Thead>
+
+                <Tbody>
+                  {getValues().details.map((participant, index) => {
+                    return (
+                      <Tr key={participant.id}>
+                        <Td>
+                          <Checkbox
+                            size="lg"
+                            {...register(`details.${index}.shouldPay`, {
+                              validate: () => {
+                                return (
+                                  getValues().details.filter(
+                                    (detail) => detail.shouldPay,
+                                  ).length >= 1
+                                );
+                              },
+                            })}
+                          />
+                        </Td>
+                        <Td>{participant.name}</Td>
+                        <Td>
+                          <Select
+                            {...register(`details.${index}.ratio`)}
+                            isInvalid={false} // shouldPayのinvalid時にエラーのスタイルが適用されてしまうため
+                            size="sm"
+                          >
+                            <option value={ratioEnum.DEFAULT}>そのまま</option>
+                            <option value={ratioEnum.LITTLE_LESS}>
+                              ちょっと少なめ
+                            </option>
+                            <option value={ratioEnum.LITTLE_MORE}>
+                              ちょっと多め
+                            </option>
+                          </Select>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </Box>
+          </FormControl>
           <Center mt="5">
             <Button
               bgColor="blue.500"
