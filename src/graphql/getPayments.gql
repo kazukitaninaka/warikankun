@@ -7,6 +7,7 @@ query getPayments($eventId: String!) {
     whoShouldPay {
       id
       name
+      ratio
     }
     whoPaid {
       id

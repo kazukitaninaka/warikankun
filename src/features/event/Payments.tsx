@@ -59,9 +59,12 @@ const Payments = ({
               <Tr>
                 <Td>割り勘対象</Td>
                 <Td>
-                  {payment.whoShouldPay?.map((participant) => (
-                    <span key={participant.id}>{participant.name}　</span>
-                  ))}
+                  {payment.whoShouldPay?.map((participant) =>
+                    // ratioが0の時とnullの時は表示しない
+                    participant.ratio ? (
+                      <span key={participant.id}>{participant.name} </span>
+                    ) : null,
+                  )}
                 </Td>
               </Tr>
             </Tbody>
