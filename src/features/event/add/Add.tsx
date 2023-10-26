@@ -87,6 +87,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
         }) || [],
     },
   });
+  console.log({ isSubmitting });
 
   const createPaymentMutation = useCreatePaymentMutation();
 
@@ -264,9 +265,9 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
               bgColor="blue.500"
               color="white"
               type="submit"
-              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
             >
-              追加
+              {isSubmitting ? '追加中' : '追加'}
             </Button>
           </Center>
         </form>
