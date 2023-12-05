@@ -5,6 +5,10 @@ const title = '割り勘くん';
 const description = 'LINEでカンタンに割り勘できるアプリ。';
 
 export const metadata = {
+  metadataBase:
+    process.env.NODE_ENV === 'production'
+      ? 'https://warikankun.vercel.app'
+      : 'http://localhost:3000',
   title,
   description,
   openGraph: {
