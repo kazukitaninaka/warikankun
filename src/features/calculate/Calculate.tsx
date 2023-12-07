@@ -4,7 +4,7 @@ import { Box, Center, Button, Text } from '@chakra-ui/react';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Calculating from '@features/calculate/Calculating';
-import EventName from '@components/EventName';
+import EventName from '@components/event-name/EventName';
 import { LiffContext } from '@components/LiffProvider';
 import SumPrice from '@components/SumPrice';
 import { useGetResultQuery } from '@generated/graphql';
