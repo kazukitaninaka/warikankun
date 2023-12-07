@@ -19,9 +19,12 @@ module.exports = {
             headers: {
               'content-type': 'application/json',
             },
+            cache: 'no-cache', // Next.js v13のfetch overrideを無効化
           },
         },
         reactQueryVersion: 5,
+        exposeQueryKeys: true,
+        exposeFetcher: true,
       },
     },
   },
