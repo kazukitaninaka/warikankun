@@ -87,7 +87,6 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
         }) || [],
     },
   });
-  console.log({ isSubmitting });
 
   const createPaymentMutation = useCreatePaymentMutation();
 
