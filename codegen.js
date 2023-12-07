@@ -21,6 +21,7 @@ module.exports = {
             },
           },
         },
+        reactQueryVersion: 5,
       },
     },
   },
