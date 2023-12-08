@@ -5,7 +5,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 
 type ResultType = Pick<
   UseQueryResult<GetSumPriceQuery, unknown>,
-  'data' | 'isLoading' | 'isError'
+  'data' | 'isPending' | 'isError'
 >;
 
 const successfulResult: ResultType = {
@@ -15,19 +15,19 @@ const successfulResult: ResultType = {
       sumPrice: 21345,
     },
   },
-  isLoading: false,
+  isPending: false,
   isError: false,
 };
 
 const loadingResult: ResultType = {
   data: undefined,
-  isLoading: true,
+  isPending: true,
   isError: false,
 };
 
 const errorResult: ResultType = {
   data: undefined,
-  isLoading: false,
+  isPending: false,
   isError: true,
 };
 

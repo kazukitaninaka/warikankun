@@ -12,14 +12,9 @@ const Payments = ({
   setDeleteTarget: (deleteTarget: number | null) => void;
   onOpen: () => void;
 }) => {
-  const { data } = useGetPaymentsQuery(
-    {
-      eventId: id as string,
-    },
-    {
-      suspense: true,
-    },
-  );
+  const { data } = useGetPaymentsQuery({
+    eventId: id as string,
+  });
   return (
     <Box>
       {data?.payments.map((payment) => (

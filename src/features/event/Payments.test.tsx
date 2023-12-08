@@ -50,7 +50,7 @@ describe('SumPrice', () => {
 
 type ResultType = Pick<
   UseQueryResult<GetPaymentsQuery, unknown>,
-  'data' | 'isLoading' | 'isError'
+  'data' | 'isPending' | 'isError'
 >;
 
 const successfulResultWithTwoPayments: ResultType = {
@@ -69,14 +69,17 @@ const successfulResultWithTwoPayments: ResultType = {
           {
             id: 5,
             name: 'Takashi',
+            ratio: 1,
           },
           {
             id: 6,
             name: 'Satoshi',
+            ratio: 1,
           },
           {
             id: 7,
             name: 'Ken',
+            ratio: 1,
           },
         ],
       },
@@ -93,25 +96,29 @@ const successfulResultWithTwoPayments: ResultType = {
           {
             id: 5,
             name: 'Takashi',
+            ratio: 1,
           },
 
           {
             id: 6,
             name: 'Satoshi',
+            ratio: 1,
           },
           {
             id: 7,
             name: 'Ken',
+            ratio: 1,
           },
           {
             id: 8,
             name: 'Yoshiki',
+            ratio: 1,
           },
         ],
       },
     ],
   },
-  isLoading: false,
+  isPending: false,
   isError: false,
 };
 
@@ -119,18 +126,6 @@ const successfulResultWithNoPayments: ResultType = {
   data: {
     payments: [],
   },
-  isLoading: false,
+  isPending: false,
   isError: false,
-};
-
-const loadingResult: ResultType = {
-  data: undefined,
-  isLoading: true,
-  isError: false,
-};
-
-const errorResult: ResultType = {
-  data: undefined,
-  isLoading: false,
-  isError: true,
 };

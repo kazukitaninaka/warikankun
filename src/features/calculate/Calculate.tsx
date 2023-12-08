@@ -40,14 +40,9 @@ const Calculate: React.FC<{ id: string }> = ({ id }) => {
 };
 
 const Result = ({ id }: { id: string }) => {
-  const { data } = useGetResultQuery(
-    {
-      eventId: id,
-    },
-    {
-      suspense: true,
-    },
-  );
+  const { data } = useGetResultQuery({
+    eventId: id,
+  });
   const liff = useContext(LiffContext);
   const result = data?.result;
 
