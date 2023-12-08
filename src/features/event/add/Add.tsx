@@ -28,7 +28,6 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import EventName from '@components/event-name/EventName';
 import {
   useGetParticipantsQuery,
   useCreatePaymentMutation,
@@ -88,7 +87,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
     },
   });
 
-  const createPaymentMutation = useCreatePaymentMutation();
+  const { mutate, isPending: isMutating } = useCreatePaymentMutation();
 
   const onSubmit: SubmitHandler<AddInput> = (data) => {
     if (data.whoPaidId === undefined) return;
@@ -102,7 +101,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
       },
     );
 
-    createPaymentMutation.mutate(
+    mutate(
       {
         eventId: id,
         name: data.name,
@@ -141,10 +140,6 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <>
-      <EventName id={id} />
-      <Text textAlign="center" fontSize="x-large" mb="5">
-        支払い追加
-      </Text>
       {isPending ? (
         <Center>
           <Spinner size="lg" />
@@ -264,7 +259,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
               bgColor="blue.500"
               color="white"
               type="submit"
-              isLoading={isSubmitting}
+              isLoading={isSubmitting || isMutating}
               loadingText="追加中"
             >
               追加
