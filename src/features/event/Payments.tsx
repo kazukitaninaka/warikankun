@@ -1,23 +1,22 @@
+'use client';
+
 import { Box, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import { formatNumberToJPY } from '../../utils';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { useGetPaymentsQuery } from '@generated/graphql';
+import useDeleteModal from './useDeleteModal';
 
-const Payments = ({
-  id,
-  setDeleteTarget,
-  onOpen,
-}: {
-  id: string | string[] | undefined;
-  setDeleteTarget: (deleteTarget: number | null) => void;
-  onOpen: () => void;
-}) => {
+const Payments = ({ id }: { id: string }) => {
   const { data } = useGetPaymentsQuery({
     eventId: id as string,
+  });
+  const { renderDeleteModal, openModal, setDeleteTarget } = useDeleteModal({
+    id,
   });
 
   return (
     <Box>
+      {renderDeleteModal()}
       {data?.payments.map((payment) => (
         <Box
           key={payment.id}
@@ -34,7 +33,7 @@ const Payments = ({
               mr="5"
               onClick={() => {
                 setDeleteTarget(payment.id);
-                onOpen();
+                openModal();
               }}
             />
           </Box>

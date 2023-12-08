@@ -1,11 +1,18 @@
 import Payments from './Payments';
 import { render, screen } from '@testing-library/react';
-import { useGetPaymentsQuery, GetPaymentsQuery } from '@generated/graphql';
+import {
+  useGetPaymentsQuery,
+  GetPaymentsQuery,
+  useDeletePaymentMutation,
+} from '@generated/graphql';
 import { UseQueryResult } from '@tanstack/react-query';
+import { Providers } from 'src/testing/utils';
 
 jest.mock('@generated/graphql', () => ({
   __esModule: true,
   useGetPaymentsQuery: jest.fn(),
+  useDeletePaymentMutation: jest.fn(),
+  useQueryClient: jest.fn(),
 }));
 
 describe('SumPrice', () => {
@@ -13,12 +20,14 @@ describe('SumPrice', () => {
     (useGetPaymentsQuery as unknown as jest.Mock).mockImplementation(
       () => successfulResultWithTwoPayments,
     );
+    (useDeletePaymentMutation as unknown as jest.Mock).mockImplementation(
+      () => deletePaymentMutationReturnValue,
+    );
     render(
       <Payments
         id="935ae70e-581c-4748-b8e1-503408a40f00" // 意味のないUUID
-        setDeleteTarget={() => {}}
-        onOpen={() => {}}
       />,
+      { wrapper: Providers },
     );
 
     const tables = screen.getAllByRole('table');
@@ -35,12 +44,14 @@ describe('SumPrice', () => {
     (useGetPaymentsQuery as unknown as jest.Mock).mockImplementation(
       () => successfulResultWithNoPayments,
     );
+    (useDeletePaymentMutation as unknown as jest.Mock).mockImplementation(
+      () => deletePaymentMutationReturnValue,
+    );
     render(
       <Payments
         id="935ae70e-581c-4748-b8e1-503408a40f00" // 意味のないUUID
-        setDeleteTarget={() => {}}
-        onOpen={() => {}}
       />,
+      { wrapper: Providers },
     );
 
     const table = screen.queryByRole('table');
@@ -128,4 +139,10 @@ const successfulResultWithNoPayments: ResultType = {
   },
   isPending: false,
   isError: false,
+};
+
+const deletePaymentMutationReturnValue = {
+  isError: false,
+  isPending: false,
+  mutate: jest.fn(),
 };
