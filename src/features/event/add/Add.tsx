@@ -88,7 +88,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
     },
   });
 
-  const createPaymentMutation = useCreatePaymentMutation();
+  const { mutate, isPending: isMutating } = useCreatePaymentMutation();
 
   const onSubmit: SubmitHandler<AddInput> = (data) => {
     if (data.whoPaidId === undefined) return;
@@ -102,7 +102,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
       },
     );
 
-    createPaymentMutation.mutate(
+    mutate(
       {
         eventId: id,
         name: data.name,
@@ -264,7 +264,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
               bgColor="blue.500"
               color="white"
               type="submit"
-              isLoading={isSubmitting}
+              isLoading={isSubmitting || isMutating}
               loadingText="追加中"
             >
               追加
