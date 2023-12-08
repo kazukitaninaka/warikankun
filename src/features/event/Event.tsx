@@ -9,7 +9,7 @@ import {
 import { LiffContext } from '@components/LiffProvider';
 import AddFriend from '@features/event/AddFriend';
 import useFriendship from '@hooks/useFriendship';
-import EventName from '@components/EventName';
+import EventName from '@components/event-name/EventName';
 import SumPrice from '@components/SumPrice';
 import Payments from '@features/event/Payments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
