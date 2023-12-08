@@ -1,10 +1,11 @@
+'use client';
+
 import { Text } from '@chakra-ui/react';
 import { useGetSumPriceQuery } from '@generated/graphql';
-import { formatNumberToJPY } from '../utils';
+import { formatNumberToJPY } from '@utils/index';
 
-const SumPrice = ({ id }: { id: string | string[] | undefined }) => {
+const SumPrice = ({ id }: { id: string }) => {
   const { isPending, isError, data } = useGetSumPriceQuery({
-    // TODO: asを消す
     eventId: id as string,
   });
   if (isError) {
@@ -13,7 +14,6 @@ const SumPrice = ({ id }: { id: string | string[] | undefined }) => {
   return (
     <Text data-testid="text">
       支払い総額：
-      {/* TODO: Suspenseでちゃんと対応する */}
       {!isPending && formatNumberToJPY(data!.event.sumPrice)}
     </Text>
   );

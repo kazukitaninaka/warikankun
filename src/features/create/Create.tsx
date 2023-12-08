@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useContext, useMemo, useState } from 'react';
 import {
   Input,
@@ -87,19 +89,6 @@ const Create: React.FC = () => {
     });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const isMobile =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        window.navigator.userAgent,
-      );
-    if (isMobile && e.key === 'Enter') {
-      e.preventDefault();
-      if (e.target.value !== '') {
-        appendParticipant({ name: '' });
-      }
-    }
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {errorMessage !== '' && (
@@ -146,7 +135,6 @@ const Create: React.FC = () => {
                     })}
                     autoFocus={index >= 1} // 初回レンダー、すなわちindex0の場合のみfocusしないように
                     mb="2"
-                    onKeyDown={handleKeyDown}
                   />
                   {participantsFields.length > 1 && (
                     <CloseIcon mr="2" onClick={() => remove(index)} />

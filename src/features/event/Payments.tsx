@@ -12,23 +12,13 @@ const Payments = ({
   setDeleteTarget: (deleteTarget: number | null) => void;
   onOpen: () => void;
 }) => {
-  const { data } = useGetPaymentsQuery(
-    {
-      eventId: id as string,
-    },
-    {
-      select: (data) => {
-        return {
-          ...data,
-          payments: data.payments.reverse(), // 新しい順に並び替える
-        };
-      },
-    },
-  );
+  const { data } = useGetPaymentsQuery({
+    eventId: id as string,
+  });
 
   return (
     <Box>
-      {data?.payments.reverse().map((payment) => (
+      {data?.payments.map((payment) => (
         <Box
           key={payment.id}
           borderRadius="md"
