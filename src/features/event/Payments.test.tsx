@@ -9,7 +9,7 @@ jest.mock('@generated/graphql', () => ({
 }));
 
 describe('SumPrice', () => {
-  test('値取得成功時、2件の支払いが表示される', () => {
+  test('値取得成功時、2件の支払いが新しく追加された順で表示される', () => {
     (useGetPaymentsQuery as jest.Mock).mockImplementation(
       () => successfulResultWithTwoPayments,
     );
@@ -26,9 +26,9 @@ describe('SumPrice', () => {
 
     const tableRows = screen.getAllByRole('row');
     const firstPaymentNameNode = tableRows[0].lastChild;
-    expect(firstPaymentNameNode?.textContent).toBe('ガソリン代');
+    expect(firstPaymentNameNode?.textContent).toBe('夜ご飯代');
     const secondPaymentNameNode = tableRows[4].lastChild;
-    expect(secondPaymentNameNode?.textContent).toBe('夜ご飯代');
+    expect(secondPaymentNameNode?.textContent).toBe('ガソリン代');
   });
 
   test('値取得成功時、paymentsが0件の場合tableを表示しない', () => {
