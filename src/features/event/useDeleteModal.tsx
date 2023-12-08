@@ -18,7 +18,7 @@ import { useQueryClient } from '@tanstack/react-query';
 const useDeleteModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [deleteTarget, _setDeleteTarget] = useState<number | null>(null);
-  const { isError, isLoading, mutate } = useDeletePaymentMutation();
+  const { isError, isPending, mutate } = useDeletePaymentMutation();
   const queryClient = useQueryClient();
 
   const deletePayment = () => {
@@ -60,9 +60,9 @@ const useDeleteModal = () => {
             colorScheme="blue"
             mx="auto"
             onClick={deletePayment}
-            disabled={isLoading}
+            disabled={isPending}
           >
-            {isLoading ? '削除中…' : '削除'}
+            {isPending ? '削除中…' : '削除'}
           </Button>
         </ModalFooter>
       </ModalContent>

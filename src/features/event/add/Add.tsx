@@ -59,7 +59,7 @@ interface AddInput {
 
 const Add: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter();
-  const { isLoading, isError, data } = useGetParticipantsQuery({
+  const { isPending, isError, data } = useGetParticipantsQuery({
     eventId: id,
   });
   if (isError) {
@@ -145,7 +145,7 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
       <Text textAlign="center" fontSize="x-large" mb="5">
         支払い追加
       </Text>
-      {isLoading ? (
+      {isPending ? (
         <Center>
           <Spinner size="lg" />
         </Center>
