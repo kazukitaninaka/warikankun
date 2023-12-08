@@ -3,7 +3,7 @@ import { useGetSumPriceQuery } from '@generated/graphql';
 import { formatNumberToJPY } from '../utils';
 
 const SumPrice = ({ id }: { id: string | string[] | undefined }) => {
-  const { isLoading, isError, data } = useGetSumPriceQuery({
+  const { isPending, isError, data } = useGetSumPriceQuery({
     // TODO: asを消す
     eventId: id as string,
   });
@@ -14,7 +14,7 @@ const SumPrice = ({ id }: { id: string | string[] | undefined }) => {
     <Text data-testid="text">
       支払い総額：
       {/* TODO: Suspenseでちゃんと対応する */}
-      {!isLoading && formatNumberToJPY(data!.event.sumPrice)}
+      {!isPending && formatNumberToJPY(data!.event.sumPrice)}
     </Text>
   );
 };

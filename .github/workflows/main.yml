@@ -31,5 +31,7 @@ jobs:
         run: pnpm generate
       - name: Run eslint
         run: pnpm lint
+      - name: Run typecheck
+        run: pnpm typecheck
       - name: Run Jest
         run: pnpm test

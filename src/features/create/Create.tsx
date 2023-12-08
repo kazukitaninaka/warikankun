@@ -29,7 +29,7 @@ const Create: React.FC = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CreateInput>({
     defaultValues: {
       eventName: '',
@@ -51,6 +51,8 @@ const Create: React.FC = () => {
   const createEventMutation = useCreateEventMutation();
   const liff = useContext(LiffContext);
   const [errorMessage, setErrorMessage] = useState('');
+  const [afterOnSuccess, setAfterOnSuccess] = useState(false);
+  const isMutating = afterOnSuccess || createEventMutation.isPending;
 
   const onSubmit: SubmitHandler<CreateInput> = (data) => {
     createEventMutation.mutate(data, {
@@ -58,26 +60,26 @@ const Create: React.FC = () => {
         const id = data.createEvent.id;
         const name = data.createEvent.name;
 
-        if (!liff?.isInClient()) {
+        if (liff?.isInClient()) {
+          liff
+            ?.sendMessages([
+              {
+                type: 'text',
+                text:
+                  `割り勘イベント「${name}」が作成されました！\n` +
+                  '以下のリンクから支払いを追加していきましょう！\n' +
+                  `https://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}\n` +
+                  '---------------\n' +
+                  '割り勘くん',
+              },
+            ])
+            .then(() => {
+              liff.closeWindow();
+            });
+        } else {
           router.push(`/event/${id}`);
-          return;
         }
-
-        liff
-          ?.sendMessages([
-            {
-              type: 'text',
-              text:
-                `割り勘イベント「${name}」が作成されました！\n` +
-                '以下のリンクから支払いを追加していきましょう！\n' +
-                `https://liff.line.me/${process.env.NEXT_PUBLIC_LIFF_ID}/event/${id}\n` +
-                '---------------\n' +
-                '割り勘くん',
-            },
-          ])
-          .then(() => {
-            liff.closeWindow();
-          });
+        setAfterOnSuccess(true);
       },
       onError: () => {
         setErrorMessage('エラーが発生しました。もう一度お試しください。');
@@ -168,12 +170,8 @@ const Create: React.FC = () => {
       </FormControl>
 
       <Center mb="3">
-        <Button
-          colorScheme="teal"
-          type="submit"
-          disabled={createEventMutation.isLoading}
-        >
-          {createEventMutation.isLoading ? '作成中...' : 'イベント作成'}
+        <Button colorScheme="teal" type="submit" disabled={isMutating}>
+          {isMutating ? '作成中...' : 'イベント作成'}
         </Button>
       </Center>
     </form>

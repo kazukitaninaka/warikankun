@@ -9,7 +9,7 @@ jest.mock('@generated/graphql', () => ({
 }));
 
 describe('SumPrice', () => {
-  test('値取得成功時、2件の支払いが表示される', () => {
+  test('値取得成功時、2件の支払いが新しく追加された順で表示される', () => {
     (useGetPaymentsQuery as jest.Mock).mockImplementation(
       () => successfulResultWithTwoPayments,
     );
@@ -26,9 +26,9 @@ describe('SumPrice', () => {
 
     const tableRows = screen.getAllByRole('row');
     const firstPaymentNameNode = tableRows[0].lastChild;
-    expect(firstPaymentNameNode?.textContent).toBe('ガソリン代');
+    expect(firstPaymentNameNode?.textContent).toBe('夜ご飯代');
     const secondPaymentNameNode = tableRows[4].lastChild;
-    expect(secondPaymentNameNode?.textContent).toBe('夜ご飯代');
+    expect(secondPaymentNameNode?.textContent).toBe('ガソリン代');
   });
 
   test('値取得成功時、paymentsが0件の場合tableを表示しない', () => {
@@ -50,7 +50,7 @@ describe('SumPrice', () => {
 
 type ResultType = Pick<
   UseQueryResult<GetPaymentsQuery, unknown>,
-  'data' | 'isLoading' | 'isError'
+  'data' | 'isPending' | 'isError'
 >;
 
 const successfulResultWithTwoPayments: ResultType = {
@@ -69,14 +69,17 @@ const successfulResultWithTwoPayments: ResultType = {
           {
             id: 5,
             name: 'Takashi',
+            ratio: 1,
           },
           {
             id: 6,
             name: 'Satoshi',
+            ratio: 1,
           },
           {
             id: 7,
             name: 'Ken',
+            ratio: 1,
           },
         ],
       },
@@ -93,25 +96,29 @@ const successfulResultWithTwoPayments: ResultType = {
           {
             id: 5,
             name: 'Takashi',
+            ratio: 1,
           },
 
           {
             id: 6,
             name: 'Satoshi',
+            ratio: 1,
           },
           {
             id: 7,
             name: 'Ken',
+            ratio: 1,
           },
           {
             id: 8,
             name: 'Yoshiki',
+            ratio: 1,
           },
         ],
       },
     ],
   },
-  isLoading: false,
+  isPending: false,
   isError: false,
 };
 
@@ -119,18 +126,6 @@ const successfulResultWithNoPayments: ResultType = {
   data: {
     payments: [],
   },
-  isLoading: false,
+  isPending: false,
   isError: false,
-};
-
-const loadingResult: ResultType = {
-  data: undefined,
-  isLoading: true,
-  isError: false,
-};
-
-const errorResult: ResultType = {
-  data: undefined,
-  isLoading: false,
-  isError: true,
 };

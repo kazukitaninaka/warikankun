@@ -17,12 +17,18 @@ const Payments = ({
       eventId: id as string,
     },
     {
-      suspense: true,
+      select: (data) => {
+        return {
+          ...data,
+          payments: data.payments.reverse(), // 新しい順に並び替える
+        };
+      },
     },
   );
+
   return (
     <Box>
-      {data?.payments.map((payment) => (
+      {data?.payments.reverse().map((payment) => (
         <Box
           key={payment.id}
           borderRadius="md"
