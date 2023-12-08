@@ -28,7 +28,6 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import EventName from '@components/event-name/EventName';
 import {
   useGetParticipantsQuery,
   useCreatePaymentMutation,
@@ -141,10 +140,6 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <>
-      <EventName id={id} />
-      <Text textAlign="center" fontSize="x-large" mb="5">
-        支払い追加
-      </Text>
       {isPending ? (
         <Center>
           <Spinner size="lg" />
