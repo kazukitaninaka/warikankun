@@ -3,43 +3,12 @@
 import { Box, Center, Button, Text } from '@chakra-ui/react';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Calculating from '@features/calculate/Calculating';
-import EventName from '@components/event-name/EventName';
 import { LiffContext } from '@components/LiffProvider';
-import SumPrice from '@components/SumPrice';
 import { useGetResultQuery } from '@generated/graphql';
 import { makeRefundString } from '@utils/index';
-import { Suspense, useContext } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { useContext } from 'react';
 
-const Calculate: React.FC<{ id: string }> = ({ id }) => {
-  return (
-    <>
-      <EventName id={id} />
-      <Text textAlign="center" fontSize="2xl" mb="5">
-        精算
-      </Text>
-      <Box mb="2">
-        <SumPrice id={id} />
-      </Box>
-      <ErrorBoundary
-        fallback={<Text fontSize="lg">データ取得に失敗しました。</Text>}
-      >
-        <Suspense
-          fallback={
-            <Center>
-              <Calculating />
-            </Center>
-          }
-        >
-          <Result id={id} />
-        </Suspense>
-      </ErrorBoundary>
-    </>
-  );
-};
-
-const Result = ({ id }: { id: string }) => {
+const Calculate = ({ id }: { id: string }) => {
   const { data } = useGetResultQuery({
     eventId: id,
   });

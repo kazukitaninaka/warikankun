@@ -1,4 +1,4 @@
-import Calculate from '@features/calculate/Calculate';
+import Calculate from '@features/calculate/calculate-server';
 import {
   QueryClient,
   HydrationBoundary,
