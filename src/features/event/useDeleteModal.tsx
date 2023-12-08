@@ -15,6 +15,7 @@ import {
 import {
   useDeletePaymentMutation,
   useGetPaymentsQuery,
+  useGetSumPriceQuery,
 } from '@generated/graphql';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -32,6 +33,9 @@ const useDeleteModal = ({ id }: { id: string }) => {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: useGetPaymentsQuery.getKey({ eventId: id }),
+          });
+          queryClient.invalidateQueries({
+            queryKey: useGetSumPriceQuery.getKey({ eventId: id }),
           });
           onClose();
         },
