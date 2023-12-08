@@ -12,10 +12,13 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useDeletePaymentMutation } from '@generated/graphql';
+import {
+  useDeletePaymentMutation,
+  useGetPaymentsQuery,
+} from '@generated/graphql';
 import { useQueryClient } from '@tanstack/react-query';
 
-const useDeleteModal = () => {
+const useDeleteModal = ({ id }: { id: string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [deleteTarget, _setDeleteTarget] = useState<number | null>(null);
   const { isError, isPending, mutate } = useDeletePaymentMutation();
@@ -27,7 +30,9 @@ const useDeleteModal = () => {
       { paymentId: deleteTarget },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries();
+          queryClient.invalidateQueries({
+            queryKey: useGetPaymentsQuery.getKey({ eventId: id }),
+          });
           onClose();
         },
       },

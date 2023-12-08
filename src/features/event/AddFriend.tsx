@@ -1,8 +1,13 @@
+'use client';
+
 import { Box, Text, Button } from '@chakra-ui/react';
 import Link from 'next/link';
 import React from 'react';
+import useFriendship from '@hooks/useFriendship';
 
 const AddFriend = () => {
+  const { isFriend } = useFriendship();
+  if (!isFriend) return null;
   return (
     <Box>
       <Text mb="3" fontSize="sm">
