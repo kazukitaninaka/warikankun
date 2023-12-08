@@ -28,7 +28,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import EventName from '@components/event-name/event-name-server';
+import EventName from '@components/event-name/EventName';
 import {
   useGetParticipantsQuery,
   useCreatePaymentMutation,
