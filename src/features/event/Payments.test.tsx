@@ -10,7 +10,7 @@ jest.mock('@generated/graphql', () => ({
 
 describe('SumPrice', () => {
   test('値取得成功時、2件の支払いが新しく追加された順で表示される', () => {
-    (useGetPaymentsQuery as jest.Mock).mockImplementation(
+    (useGetPaymentsQuery as unknown as jest.Mock).mockImplementation(
       () => successfulResultWithTwoPayments,
     );
     render(
@@ -32,7 +32,7 @@ describe('SumPrice', () => {
   });
 
   test('値取得成功時、paymentsが0件の場合tableを表示しない', () => {
-    (useGetPaymentsQuery as jest.Mock).mockImplementation(
+    (useGetPaymentsQuery as unknown as jest.Mock).mockImplementation(
       () => successfulResultWithNoPayments,
     );
     render(

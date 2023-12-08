@@ -39,7 +39,7 @@ jest.mock('@generated/graphql', () => ({
 
 describe('SumPrice', () => {
   test('値取得成功時、イベント名が表示される', () => {
-    (useGetEventNameQuery as jest.Mock).mockImplementation(
+    (useGetEventNameQuery as unknown as jest.Mock).mockImplementation(
       () => successfulResult,
     );
     render(<EventName id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
@@ -48,14 +48,18 @@ describe('SumPrice', () => {
   });
 
   test('ローディング時、イベント名を表示しない', () => {
-    (useGetEventNameQuery as jest.Mock).mockImplementation(() => loadingResult);
+    (useGetEventNameQuery as unknown as jest.Mock).mockImplementation(
+      () => loadingResult,
+    );
     render(<EventName id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
 
     expect(screen.getByText('イベント名：')).toBeInTheDocument();
   });
 
   test('値取得失敗時、エラーメッセージを表示する', () => {
-    (useGetEventNameQuery as jest.Mock).mockImplementation(() => errorResult);
+    (useGetEventNameQuery as unknown as jest.Mock).mockImplementation(
+      () => errorResult,
+    );
     render(<EventName id="935ae70e-581c-4748-b8e1-503408a40f00" />); // 意味のないUUID
 
     expect(screen.getByText('データ取得に失敗しました。')).toBeInTheDocument();
