@@ -170,8 +170,13 @@ const Create: React.FC = () => {
       </FormControl>
 
       <Center mb="3">
-        <Button colorScheme="teal" type="submit" disabled={isMutating}>
-          {isMutating ? '作成中...' : 'イベント作成'}
+        <Button
+          colorScheme="teal"
+          type="submit"
+          isLoading={isMutating}
+          loadingText="作成中..."
+        >
+          イベント作成
         </Button>
       </Center>
     </form>

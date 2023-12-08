@@ -264,9 +264,10 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
               bgColor="blue.500"
               color="white"
               type="submit"
-              isDisabled={isSubmitting}
+              isLoading={isSubmitting}
+              loadingText="追加中"
             >
-              {isSubmitting ? '追加中' : '追加'}
+              追加
             </Button>
           </Center>
         </form>
