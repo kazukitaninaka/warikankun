@@ -16,7 +16,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { useCreateEventMutation } from '@generated/graphql';
 import { LiffContext } from '@components/LiffProvider';
 import { useRouter } from 'next/navigation';
-import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
+import { useForm, SubmitHandler, useFieldArray, set } from 'react-hook-form';
 
 interface CreateInput {
   eventName: string;
@@ -48,15 +48,15 @@ const Create: React.FC = () => {
       minLength: 2, // 参加者は2人以上
     },
   });
-  const createEventMutation = useCreateEventMutation();
+  const { mutate, isPending } = useCreateEventMutation();
   const liff = useContext(LiffContext);
   const [errorMessage, setErrorMessage] = useState('');
-  const [afterOnSuccess, setAfterOnSuccess] = useState(false);
-  const isMutating = afterOnSuccess || createEventMutation.isPending;
+  const [onSuccessRunning, setOnSuccessRunning] = useState(false);
 
   const onSubmit: SubmitHandler<CreateInput> = (data) => {
-    createEventMutation.mutate(data, {
+    mutate(data, {
       onSuccess: (data) => {
+        setOnSuccessRunning(true);
         const id = data.createEvent.id;
         const name = data.createEvent.name;
 
@@ -79,9 +79,9 @@ const Create: React.FC = () => {
         } else {
           router.push(`/event/${id}`);
         }
-        setAfterOnSuccess(true);
       },
       onError: () => {
+        setOnSuccessRunning(false);
         setErrorMessage('エラーが発生しました。もう一度お試しください。');
       },
     });
@@ -173,7 +173,7 @@ const Create: React.FC = () => {
         <Button
           colorScheme="teal"
           type="submit"
-          isLoading={isMutating}
+          isLoading={isPending || onSuccessRunning}
           loadingText="作成中..."
         >
           イベント作成
