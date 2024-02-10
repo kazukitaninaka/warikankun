@@ -1,11 +1,10 @@
 'use client';
 
 import { Box, Center, Text, Button } from '@chakra-ui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { useContext } from 'react';
 import { LiffContext } from '@components/LiffProvider';
 import { useGetEventNameQuery } from '@generated/graphql';
+import Image from 'next/image';
 
 export default function Share({ id }: { id: string }) {
   const liff = useContext(LiffContext);
@@ -45,10 +44,10 @@ export default function Share({ id }: { id: string }) {
           colorScheme="green"
           onClick={handleShareClick}
           disabled={!liff?.isInClient()}
+          leftIcon={
+            <Image src="/icons/share.svg" alt="" width="18" height="18" />
+          }
         >
-          <Box mr="1">
-            <FontAwesomeIcon icon={faShareSquare} />
-          </Box>
           LINEでグループに共有
         </Button>
       </Center>

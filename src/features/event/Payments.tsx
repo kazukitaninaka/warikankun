@@ -1,10 +1,10 @@
 'use client';
 
-import { Box, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+import { Box, Button, Flex, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import { formatNumberToJPY } from '../../utils';
-import { DeleteIcon } from '@chakra-ui/icons';
 import { useGetPaymentsQuery } from '@generated/graphql';
 import useDeleteModal from './useDeleteModal';
+import Image from 'next/image';
 
 const Payments = ({ id }: { id: string }) => {
   const { data } = useGetPaymentsQuery({
@@ -25,24 +25,23 @@ const Payments = ({ id }: { id: string }) => {
           my="3"
           bgColor="gray.50"
         >
-          <Box textAlign="right">
-            <DeleteIcon
-              w={5}
-              h={5}
-              mt="3"
-              mr="5"
+          <Flex justifyContent="space-between">
+            <Box as="p" ml="6" mt="2" fontSize="large" fontWeight="bold">
+              {payment.name}
+            </Box>
+            <Button
+              variant="ghost"
+              p="2"
               onClick={() => {
                 setDeleteTarget(payment.id);
                 openModal();
               }}
-            />
-          </Box>
+            >
+              <Image src="/icons/delete.svg" alt="" width="20" height="20" />
+            </Button>
+          </Flex>
           <Table variant="simple">
             <Tbody>
-              <Tr>
-                <Td>支払い名</Td>
-                <Td>{payment.name}</Td>
-              </Tr>
               <Tr>
                 <Td>支払った人</Td>
                 <Td>{payment.whoPaid?.name}</Td>

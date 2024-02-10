@@ -1,6 +1,5 @@
 'use client';
 
-import { InfoIcon } from '@chakra-ui/icons';
 import {
   Text,
   Input,
@@ -34,6 +33,7 @@ import {
   WhoShouldPayInput,
 } from '@generated/graphql';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import Image from 'next/image';
 
 const ratioEnum = {
   ZERO: 0,
@@ -124,7 +124,9 @@ const Add: React.FC<{ id: string }> = ({ id }) => {
     return (
       <Popover placement="top-start">
         <PopoverTrigger>
-          <InfoIcon />
+          <Button size="small" variant="ghost">
+            <Image src="/icons/info.svg" alt="info" width="12" height="12" />
+          </Button>
         </PopoverTrigger>
         <PopoverContent>
           <PopoverArrow />

@@ -12,10 +12,7 @@ export default async function EventServerComponent({ id }: { id: string }) {
     <>
       <EventName id={id} />
       <OperationButtons id={id} />
-      <Text fontSize="large" mt="8">
-        今までの支払い情報
-      </Text>
-      <Box mt="2">
+      <Box mt="8">
         <SumPrice id={id} />
       </Box>
       <Box mb="5">

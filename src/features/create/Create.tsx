@@ -14,11 +14,11 @@ import {
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
 import { useCreateEventMutation } from '@generated/graphql';
 import { LiffContext } from '@components/LiffProvider';
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, useFieldArray, set } from 'react-hook-form';
+import Image from 'next/image';
 
 interface CreateInput {
   eventName: string;
@@ -137,7 +137,18 @@ const Create: React.FC = () => {
                     mb="2"
                   />
                   {participantsFields.length > 1 && (
-                    <CloseIcon mr="2" onClick={() => remove(index)} />
+                    <Button
+                      variant="ghost"
+                      size="small"
+                      onClick={() => remove(index)}
+                    >
+                      <Image
+                        src="/icons/close.svg"
+                        alt=""
+                        width="18"
+                        height="18"
+                      />
+                    </Button>
                   )}
                 </Flex>
                 <FormErrorMessage color="red.500" mb="1">
