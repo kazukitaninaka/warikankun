@@ -1,12 +1,11 @@
 'use client';
 
 import { Box, Center, Button, Text } from '@chakra-ui/react';
-import { faShareSquare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LiffContext } from '@components/LiffProvider';
 import { useGetResultQuery } from '@generated/graphql';
 import { makeRefundString } from '@utils/index';
 import { useContext } from 'react';
+import Image from 'next/image';
 
 const Calculate = ({ id }: { id: string }) => {
   const { data } = useGetResultQuery({
@@ -70,11 +69,11 @@ const Calculate = ({ id }: { id: string }) => {
           colorScheme="green"
           onClick={handleShareResultClick}
           disabled={!liff?.isInClient()}
+          leftIcon={
+            <Image src="/icons/share.svg" alt="" width="18" height="18" />
+          }
         >
-          <Box mr="1">
-            <FontAwesomeIcon icon={faShareSquare} />
-          </Box>
-          精算結果をグループに共有
+          <Box as="span">精算結果をグループに共有</Box>
         </Button>
       </Center>
     </>
