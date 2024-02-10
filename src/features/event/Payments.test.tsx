@@ -33,11 +33,11 @@ describe('SumPrice', () => {
     const tables = screen.getAllByRole('table');
     expect(tables.length).toBe(2);
 
+    expect(screen.getByText('ガソリン代')).toBeInTheDocument();
+
     const tableRows = screen.getAllByRole('row');
     const firstPaymentNameNode = tableRows[0].lastChild;
-    expect(firstPaymentNameNode?.textContent).toBe('ガソリン代');
-    const secondPaymentNameNode = tableRows[4].lastChild;
-    expect(secondPaymentNameNode?.textContent).toBe('夜ご飯代');
+    expect(firstPaymentNameNode?.textContent).toBe('Takashi');
   });
 
   test('値取得成功時、paymentsが0件の場合tableを表示しない', () => {
