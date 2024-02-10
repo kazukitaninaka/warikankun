@@ -2,12 +2,13 @@
 
 import { Flex, Button } from '@chakra-ui/react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function OperationButtons({ id }: { id: string }) {
   return (
     <Flex justifyContent="space-evenly" mt="3">
       <Button
-        as="a"
+        as={Link}
         href={`${id}/add`}
         colorScheme="teal"
         leftIcon={<Image src="/icons/add.svg" alt="" width="18" height="18" />}
@@ -15,7 +16,7 @@ export default function OperationButtons({ id }: { id: string }) {
         支払いを追加
       </Button>
       <Button
-        as="a"
+        as={Link}
         href={`${id}/calc`}
         colorScheme="blue"
         leftIcon={
