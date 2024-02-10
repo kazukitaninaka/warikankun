@@ -59,7 +59,7 @@ const useDeleteModal = ({ id }: { id: string }) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
+        <ModalCloseButton p="2" />
         <ModalBody textAlign="center" mt="2">
           <Text>本当に削除しますか？</Text>
           {isError && <Text fontSize="lg">Error: 削除に失敗しました。</Text>}
