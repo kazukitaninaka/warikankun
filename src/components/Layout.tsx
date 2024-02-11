@@ -3,7 +3,7 @@ import { Box, Flex, Heading } from '@chakra-ui/react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Box maxW="1000px" mx="auto">
+    <Box maxW="500px" mx="auto">
       <Flex direction="column" minH="100vh">
         <header>
           <Box p={3}>

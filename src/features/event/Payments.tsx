@@ -37,7 +37,12 @@ const Payments = ({ id }: { id: string }) => {
                 openModal();
               }}
             >
-              <Image src="/icons/delete.svg" alt="" width="20" height="20" />
+              <Image
+                src="/icons/delete.svg"
+                alt="削除"
+                width="20"
+                height="20"
+              />
             </Button>
           </Flex>
           <Table variant="simple">
